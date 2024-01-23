@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-wrapper">
+        <img src="./images/logo.png" alt="" class="brand-img" />
+        <input type="text" class="search-box" placeholder="search" />
+        <div class="nav-items">
+          <img src="./images/home.png" alt="" class="icon" />
+          <img src="./images/messenger.png" alt="" class="icon" />
+          <img src="./images/add.png" alt="" class="icon" />
+          <img src="./images/explore.png" alt="" class="icon" />
+          <div class="icon user-profile"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="main">
+      <div class="wrapper">
+        <div class="left-col">
+          <div class="status-wrapper">
+            <div class="status-card">
+              <div class="profile-pic">
+                <img
+                  src="https://cdn.pixabay.com/photo/2015/05/07/11/02/guitar-756326_1280.jpg"
+                  alt=""
+                />
+              </div>
+              <p class="username">user_name_1</p>
+            </div>
+            <div class="status-card">
+              <div class="profile-pic">
+                <img
+                  src="https://cdn.pixabay.com/photo/2021/02/24/09/51/magical-6046020_640.jpg"
+                  alt=""
+                />
+              </div>
+              <p class="username">user_name_2</p>
+            </div>
+            <div class="status-card">
+              <div class="profile-pic">
+                <img
+                  src="https://cdn.pixabay.com/photo/2019/12/18/04/11/dj-4702977_640.jpg"
+                  alt=""
+                />
+              </div>
+              <p class="username">user_name_3</p>
+            </div>
+            <div class="status-card">
+              <div class="profile-pic">
+                <img
+                  src="https://cdn.pixabay.com/photo/2014/02/27/16/10/flowers-276014_640.jpg"
+                  alt=""
+                />
+              </div>
+              <p class="username">user_name_4</p>
+            </div>
+            <div class="status-card">
+              <div class="profile-pic">
+                <img
+                  src="https://cdn.pixabay.com/photo/2016/11/29/05/55/adult-1867665_640.jpg"
+                  alt=""
+                />
+              </div>
+              <p class="username">user_name_5</p>
+            </div>
+            <div class="status-card">
+              <div class="profile-pic">
+                <img
+                  src="https://cdn.pixabay.com/photo/2018/01/29/19/00/park-3116883_640.jpg"
+                  alt=""
+                />
+              </div>
+              <p class="username">user_name_6</p>
+            </div>
+            <div class="status-card">
+              <div class="profile-pic">
+                <img
+                  src="https://cdn.pixabay.com/photo/2017/01/28/02/24/japan-2014618_640.jpg"
+                  alt=""
+                />
+              </div>
+              <p class="username">user_name_7</p>
+            </div>
+            <div class="status-card">
+              <div class="profile-pic">
+                <img
+                  src="https://cdn.pixabay.com/photo/2016/11/29/06/20/blonde-1867768_640.jpg"
+                  alt=""
+                />
+              </div>
+              <p class="username">user_name_8</p>
+            </div>
+          </div>
+          <br />
+          <div class="comment-wrapper">
+            <img
+              src="./images/smile.png"
+              class="icon create-post-icon"
+              alt=""
+            />
+            <!-- <input
+              type="text"
+              class="comment-box"
+              id="create-post"
+              placeholder="What's on Your Mind..."
+            /> -->
+            <textarea rows="" cols="" class="comment-box" id="create-post" placeholder="What's on Your Mind...."></textarea>
+            <button class="comment-btn" id="post-submit-btn">Post</button>
+          </div>
+          <div id="post-wrapper">
+            <div class="post">
+              <div class="info">
+                <div class="user">
+                  <div class="profile-pic">
+                    <img
+                      src="https://cdn.pixabay.com/photo/2015/05/07/11/02/guitar-756326_1280.jpg"
+                      alt=""
+                    />
+                  </div>
+                  <p class="username">....</p>
+                </div>
+                <div class="dropdown">
+                    <img src="./images/option.png" class="options" alt="" />
+                    <div class="dropdown-content">
+                        <p>Repost</p>
+                        <p onclick="Delete()">Delete</p>
+                        <p>Report</p>
+                    </div>
+                </div>
+              </div>
+              <!-- <img src="https://cdn.pixabay.com/photo/2015/05/07/11/02/guitar-756326_1280.jpg" class="post-image" alt=""> -->
+              <div class="post-text-div">
+                <p class="text-div">....</p>
+              </div>
+              <div class="post-content">
+                <div class="reaction-wrapper">
+                  <img src="./images/Liike.png" class="icon" alt="" />
+                  <img src="./images/comment.png" class="icon" alt="" />
+                  <img src="./images/send.png" class="icon" alt="" />
+                  <img src="./images/save.png" class="save icon" alt="" />
+                </div>
+                <p class="likes">1,012 likes</p>
+                <p class="description">
+                  <span>username</span>Lorem ipsum dolor sit amet consectetur
+                  adipisicing elit. Qui, enim.
+                </p>
+                <p class="post-time">2 minutes ago</p>
+              </div>
+              <div class="comment-wrapper">
+                <img src="./images/smile.png" class="icon" alt="" />
+                <input
+                  type="text"
+                  class="comment-box"
+                  placeholder="Add a comment"
+                />
+                <button class="comment-btn">post</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-col">
+          <div class="profile-card">
+            <div class="profile-pic">
+              <img
+                src="https://cdn.pixabay.com/photo/2016/03/27/18/31/book-1283468_640.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <p class="username">fantasy_world</p>
+              <p class="sub-text">sachin singh</p>
+            </div>
+            <button class="action-btn">switch</button>
+          </div>
+          <p class="suggestion-text">Suggestions for you</p>
+          <div class="profile-card">
+            <div class="profile-pic">
+              <img
+                src="https://cdn.pixabay.com/photo/2015/03/05/01/46/sailing-ship-659758_640.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <p class="username">insta_addict_9</p>
+              <p class="sub-text">followed by someone</p>
+            </div>
+            <button class="action-btn">follow</button>
+          </div>
+          <div class="profile-card">
+            <div class="profile-pic">
+              <img
+                src="https://cdn.pixabay.com/photo/2015/03/05/01/46/sailing-ship-659758_640.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <p class="username">insta_addict_9</p>
+              <p class="sub-text">followed by someone</p>
+            </div>
+            <button class="action-btn">follow</button>
+          </div>
+          <div class="profile-card">
+            <div class="profile-pic">
+              <img
+                src="https://cdn.pixabay.com/photo/2015/02/09/14/31/blonde-629726_640.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <p class="username">insta_addict_9</p>
+              <p class="sub-text">followed by someone</p>
+            </div>
+            <button class="action-btn">follow</button>
+          </div>
+          <div class="profile-card">
+            <div class="profile-pic">
+              <img
+                src="https://cdn.pixabay.com/photo/2020/06/15/17/10/ancient-5302626_640.jpg"
+                alt=""
+              />
+            </div>
+            <div>
+              <p class="username">insta_addict_9</p>
+              <p class="sub-text">followed by someone</p>
+            </div>
+            <button class="action-btn">follow</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
+
+<script src="main.js"></script>
