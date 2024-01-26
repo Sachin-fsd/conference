@@ -8,7 +8,6 @@ const userRouter = express.Router();
 
 userRouter.post("/register", async (req, res) => {
   const { name, email, password} = req.body;
-  console.log("req.body=>",req.body);
   try {
     const users = await RegisterModel.find({ email });
     if (users.length > 0) {
@@ -16,7 +15,7 @@ userRouter.post("/register", async (req, res) => {
     } else {
       bcrypt.hash(password, 2, async (err, hashed) => {
         if (err) {
-          res.json({ err: "Error while registering" });
+          res.json({ err: "Error while hashing password" });
         } else {
           const user = new RegisterModel({ name, email, password: hashed});
           await user.save();
@@ -33,14 +32,13 @@ userRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await RegisterModel.findOne({ email });
-    if (user.length === 0) {
-      res.status(404).send({ msg: "Wrong credentials" });
+    if (Object.keys(user).length === 0) {
+      res.status(404).send({ msg: "Wrong credentials." });
     } else {
       bcrypt.compare(password, user.password, async (err, result) => {
         if (result) {
-          const UserDetails = {"UserID":user._id, "UserName":user.name}
-          console.log("UserDetails=>",UserDetails);
-          const token = jwt.sign({"UserDetails":UserDetails}, process.env.secret_key, {expiresIn:"7h"});
+          const UserDetails = {"UserID":user._id, "UserName":user.name, "UserEmail":user.email}
+          const token = jwt.sign({"UserDetails":UserDetails}, process.env.secret_key, {expiresIn:"7 days"});
           res.status(200).json({ msg: "Login Successfull", token, ok:true, UserDetails});
         } else {
           res.status(404).json({ msg: "Wrong Credentials" });
