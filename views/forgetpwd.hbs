@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Design by foolishdeveloper.com -->
+    <title>Conference</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles/login.css" />
+    <!--Stylesheet-->
+    <style media="screen"></style>
+  </head>
+  <body>
+    <div class="background">
+      <div class="shape"></div>
+      <div class="shape"></div>
+    </div>
+    <form id="pwd_forget_form">
+      <h3>Reset Password</h3>
+
+      <label for="username">Email ID</label>
+      <input type="text" placeholder="Email id" id="username" required />
+
+      <label for="password" id="otp_label">
+        OTP<input type="number" placeholder="Enter OTP" id="otp" />
+      </label>
+
+      <button id="submit">Get OTP</button>
+    </form>
+  </body>
+</html>
+<script src="./scripts/forgetpwd.js"></script>

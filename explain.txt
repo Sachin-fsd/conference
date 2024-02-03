@@ -1,0 +1,5 @@
+UserDetails = {UserID:12314124214, UserName:"kjbdk"};                                       written in user.router.js 40-41
+const UserDetails = {"UserID":user._id, "UserName":user.name}
+const token = jwt.sign({"UserDetails":UserDetails}, process.env.secret_key, {expiresIn:"7h"});
+
+redirect to login page once fronend is deployed; Oauth.github.js line 87 and oauth.google.js line 84

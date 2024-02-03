@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conference</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles/login.css" />
+    <!--Stylesheet-->
+    <style media="screen"></style>
+  </head>
+  <body>
+    <div class="background">
+      <div class="shape"></div>
+      <div class="shape"></div>
+    </div>
+    <form id="register_form">
+      <h3>Register Here</h3>
+
+      <label for="name">Name</label>
+      <input type="text" placeholder="Name" id="name" />
+
+      <label for="username">Email ID</label>
+      <input type="text" placeholder="Email id" id="username" />
+
+      <label for="password">Password</label>
+      <input type="password" placeholder="Password" id="password" />
+
+      <button>Register</button>
+      <div class="social">
+        <a href="http://localhost:8080/auth/google"
+          ><div class="go"><i class="fab fa-google"></i>Google</div></a
+        >
+        <a href="https://github.com/login/oauth/authorize?client_id=39521ba78547704f90d1&scope=user:email"
+          ><div class="fb"><i class="fab fa-github"></i>Github</div></a
+        >
+        
+      </div>
+      <p style="margin-top: 5px;">Already Registered? <a href="/login">Login</a></p>
+    </form>
+  </body>
+</html>
+<script src="./scripts/register.js"></script>
+

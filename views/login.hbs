@@ -1,0 +1,47 @@
+<html lang="en">
+  <head>
+    <!-- Design by foolishdeveloper.com -->
+    <title>Conference</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles/login.css" />
+    <!--Stylesheet-->
+    <style media="screen"></style>
+  </head>
+  <body>
+    <div class="background">
+      <div class="shape"></div>
+      <div class="shape"></div>
+    </div>
+    <form id="login_form">
+      <h3>Login Here</h3>
+
+      <label for="username">Username</label>
+      <input type="text" placeholder="Email id" id="username" />
+
+      <label for="password">Password</label>
+      <input type="password" placeholder="Password" id="password" />
+      <a href="/forgetpwd" id="forgot_password">Forgot Password</a>
+
+      <button>Log In</button>
+      <div class="social">
+        <a href="/auth/google"><div class="go"><i
+              class="fab fa-google"
+            ></i>Google</div></a>
+        <a
+          href="https://github.com/login/oauth/authorize?client_id=39521ba78547704f90d1&scope=user:email"
+        ><div class="fb"><i class="fab fa-github"></i>Github</div></a>
+      </div>
+      <p style="margin-top: 5px;">Not Registered? <a href="/register">Register</a></p>
+    </form>
+  </body>
+</html>
+<script src="./scripts/login.js"></script>
