@@ -370,13 +370,14 @@ main .container .left .profile {
   border-radius: var(--border-radius);
 }
 
-.middle .create-post input[type="text"] {
+.middle .create-post textarea {
   justify-self: flex-start;
   width: 100%;
   padding-left: 1rem;
   background-color: transparent;
   color: var(--color-dark);
   margin-right: 1rem;
+  resize: none;
 }
 
 /* FEED */

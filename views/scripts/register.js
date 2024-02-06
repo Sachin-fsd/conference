@@ -1,5 +1,8 @@
 document.getElementById("register_form").addEventListener("submit", (event) => {
   event.preventDefault();
+  const submit_btn = document.getElementById("submit-btn");
+  submit_btn.innerText = "Wait...";
+  submit_btn.setAttribute("disabled", true);
   const name = document.getElementById("name").value;
   const email = document.getElementById("username").value;
   const password = document.getElementById("password").value;
@@ -17,16 +20,15 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
       if (res.ok) {
         window.location.href = res.url;
       } else {
-        return res.json();
+        alert("Something is wrong");
+        submit_btn.innerText = "Log In";
+        submit_btn.removeAttribute("disabled");
       }
-    })
-    .then((res) => {
-        if(res?.msg){
-            alert(res.msg);
-        }
     })
     .catch((err) => {
       console.log(err);
       alert("Something went wrong");
+      submit_btn.innerText = "Log In";
+      submit_btn.removeAttribute("disabled");
     });
 });

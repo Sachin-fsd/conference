@@ -225,3 +225,13 @@ bg3.addEventListener('click', () => {
 	bg2.classList.remove('active');
 	changeBackground();
 });
+
+
+// const postbox = document.getElementById("create-post");
+// document.getElementById("post_form").addEventListener("submit",(e)=>{
+// 	e.preventDefault();
+
+// 	// console.log(postbox.value);
+// })
+
+

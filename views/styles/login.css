@@ -7,10 +7,16 @@
 }
 body {
   background-color: #080710;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 .background {
   width: 430px;
-  height: 520px;
+  height: 500px;
   position: absolute;
   transform: translate(-50%, -50%);
   left: 50%;
@@ -33,19 +39,22 @@ body {
   bottom: -80px;
 }
 form {
-  min-height: 520px;
-  max-height: max-content;
+  margin-top: 10px;
+  /* min-height: 520px; */
+  height: max-content;
   width: 400px;
+  /* width: fit-content; */
   background-color: rgba(255, 255, 255, 0.13);
-  position: absolute;
-  transform: translate(-50%, -50%);
+  /* position: absolute; */
+  /* transform: translate(-50%, -50%);
   top: 50%;
-  left: 50%;
+  left: 50%; */
   border-radius: 10px;
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
-  padding: 50px 35px;
+  padding: 45px 35px;
+  /* margin: auto; */
 }
 form * {
   font-family: "Poppins", sans-serif;
@@ -63,7 +72,7 @@ form h3 {
 
 label {
   display: block;
-  margin-top: 30px;
+  margin-top: 15px;
   font-size: 16px;
   font-weight: 500;
 }
@@ -82,7 +91,7 @@ input {
   color: #e5e5e5;
 }
 button {
-  margin-top: 50px;
+  margin-top: 30px;
   width: 100%;
   background-color: #ffffff;
   color: #080710;
@@ -140,12 +149,11 @@ input[type=number] {
 @media (max-width: 600px) {
   form {
     
-    border: 3px solid #000;
-    min-height: 520px;
-    max-height: fit-content;
+    /* border: 3px solid #000; */
+    height: fit-content;
     width: fit-content;
     background-color: rgba(255, 255, 255, 0.13);
-    position: absolute;
+    /* position: absolute; */
     /* transform: translate(-50%, -50%); */
     /* top: 50%;
     left: 50%; */
@@ -153,8 +161,12 @@ input[type=number] {
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
-    padding: 40px 35px;
-    margin: auto;
+    padding: 30px 35px;
+    /* margin: auto; */
+    /* margin-top: 30px;
+    margin-left: 30px; */
 
   }
 }
+
+

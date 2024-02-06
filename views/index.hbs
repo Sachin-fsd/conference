@@ -3,7 +3,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CatevikaSocial - Responsive Media Website</title>
+    <title>Conference</title>
     <!-- ICONSCOUT CDN -->
     <link
       rel="stylesheet"
@@ -27,7 +27,9 @@
         <div class="create">
           <label for="create-post" class="btn btn-primary">Create</label>
           <div class="profile-photo">
-            <img src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png" />
+            <img
+              src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+            />
           </div>
         </div>
       </div>
@@ -37,13 +39,15 @@
       <div class="container">
         <!-- LEFT -->
         <div class="left">
-          <a href="#" class="profile">
+          <a href="/:id" class="profile">
             <div class="profile-photo">
-              <img src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png" />
+              <img
+                src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+              />
             </div>
             <div class="handle">
               <h4>{{UserDetails.UserName}}</h4>
-              <p class="text-muted">@sachin_</p>
+              <p class="text-muted">@{{UserDetails.UserName}}</p>
             </div>
           </a>
           <!-- SIDEBAR -->
@@ -168,7 +172,9 @@
           <div class="stories">
             <div class="story">
               <div class="profile-photo">
-                <img src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png" />
+                <img
+                  src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+                />
               </div>
               <p class="name">Your story</p>
             </div>
@@ -214,81 +220,83 @@
             </div>
             <!-- END OF STORIES -->
           </div>
-          <form class="create-post">
+          <form class="create-post" id="post_form">
             <div class="profile-photo">
-              <img src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png" />
+              <img
+                src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+              />
             </div>
-            <input
-              type="text"
+            <textarea
               id="create-post"
               placeholder="What's on your mind, {{UserDetails.UserName}}?"
-            />
-            <input type="submit" value="Post" class="btn btn-primary" />
+            ></textarea>
+            <input type="submit" id="post-submit-btn" value="Post" class="btn btn-primary" />
+
           </form>
           <!-- FEEDS -->
           <div class="feeds">
             <!-- FEED 1 -->
             {{#each posts}}
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
+              <div class="feed">
+                <div class="head">
+                  <div class="user">
+                    <div class="profile-photo">
+                      <img
+                        src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
+                      />
+                    </div>
+                    <div class="info">
+                      <h3>{{this.UserDetails.UserName}}</h3>
+                      <small>{{formatDate this.CreatedAt}}</small>
+                    </div>
+                  </div>
+                  <span class="edit">
+                    <i class="uil uil-ellipsis-h"></i>
+                  </span>
+                </div>
+                <div class="photo">
+                  {{! <img
+                  src="https://cdn.pixabay.com/photo/2023/04/13/17/49/dare-7923106_640.jpg"
+                /> }}
+                  <p style="text-align: center;">{{formatText this.text}}</p>
+                </div>
+                <div class="action-buttons">
+                  <div class="interaction-buttons">
+                    <span><i class="uil uil-thumbs-up"></i></span>
+                    <span><i class="uil uil-comment-dots"></i></span>
+                    <span><i class="uil uil-share-alt"></i></span>
+                  </div>
+                  <div class="bookmark">
+                    <span><i class="uil uil-bookmark-full"></i></span>
+                  </div>
+                </div>
+                <div class="liked-by">
+                  <span>
                     <img
                       src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
                     />
-                  </div>
-                  <div class="info">
-                    <h3>{{this.UserDetails.UserName}}</h3>
-                    <small>{{formatDate this.CreatedAt}}</small>
-                  </div>
+                  </span>
+                  <span>
+                    <img
+                      src="https://cdn.pixabay.com/photo/2024/01/18/10/50/cormorant-8516719_640.jpg"
+                    />
+                  </span>
+                  <span>
+                    <img
+                      src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
+                    />
+                  </span>
+                  <p>Liked by <b>Ernest Achiever </b>and <b>2,323 others</b></p>
                 </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-              <div class="photo">
-                {{!-- <img
-                  src="https://cdn.pixabay.com/photo/2023/04/13/17/49/dare-7923106_640.jpg"
-                /> --}}
-                <p style="text-align: center;">{{this.text}}</p>
-              </div>
-              <div class="action-buttons">
-                <div class="interaction-buttons">
-                  <span><i class="uil uil-thumbs-up"></i></span>
-                  <span><i class="uil uil-comment-dots"></i></span>
-                  <span><i class="uil uil-share-alt"></i></span>
+                <div class="caption">
+                  <p>
+                    <b>Lana Rose</b>
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                    <span class="harsh-tag">#lifestyle</span>
+                  </p>
                 </div>
-                <div class="bookmark">
-                  <span><i class="uil uil-bookmark-full"></i></span>
-                </div>
+                <div class="comments text-muted">View all 277 comments</div>
               </div>
-              <div class="liked-by">
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2024/01/18/10/50/cormorant-8516719_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
-                  />
-                </span>
-                <p>Liked by <b>Ernest Achiever </b>and <b>2,323 others</b></p>
-              </div>
-              <div class="caption">
-                <p>
-                  <b>Lana Rose</b>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  <span class="harsh-tag">#lifestyle</span>
-                </p>
-              </div>
-              <div class="comments text-muted">View all 277 comments</div>
-            </div>
             {{/each}}
             <!-- END OF FEED 1 -->
             <!-- FEED 2 -->
@@ -847,7 +855,4 @@
   </body>
 </html>
 <script src="./scripts/index.js"></script>
-
-<script>
-  console.log({{json UserDetails}}); console.log({{json posts}});
-</script>
+<script src="./scripts/main.js"></script>

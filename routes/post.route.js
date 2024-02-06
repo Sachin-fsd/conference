@@ -8,24 +8,23 @@ const postRouter = express.Router();
 
 postRouter.get("/", async (req, res) => {
   try {
-    const UserID = req.body.UserDetails.UserID;
-    const Users = await RegisterModel.find({},{name:1, email:1, _id:1}).sort({CreatedAt: -1}).limit(7);
-    const userLikes = await LikeModel.find({ UserID }).limit(20);
+    // const UserID = req.body.UserDetails.UserID;
+    // const Users = await RegisterModel.find({},{name:1, email:1, _id:1}).sort({CreatedAt: -1}).limit(7);
+    // const userLikes = await LikeModel.find({ UserID }).limit(20);
 
-    const likedPostIds = new Set(
-      userLikes.map((like) => like.postID.toString())
-    );
+    // const likedPostIds = new Set(
+    //   userLikes.map((like) => like.postID.toString())
+    // );
 
     const posts = await PostModel.find().sort({ CreatedAt: -1 }).limit(20);
 
-    const postWithLikes = posts.map((post) => {
-      const liked = likedPostIds.has(post._id.toString());
-      return { ...post._doc, liked };
-    });
+    // const postWithLikes = posts.map((post) => {
+    //   const liked = likedPostIds.has(post._id.toString());
+    //   return { ...post._doc, liked };
+    // });
 
-    res
-      .status(200)
-      .send({ UserDetails: req.body.UserDetails, posts: postWithLikes, Users });
+    res.render("index",{ UserDetails: req.body.UserDetails, posts });
+
   } catch (error) {
     res.json({ err: error });
   }
@@ -40,16 +39,44 @@ postRouter.get("/", async (req, res) => {
 //   }
 // });
 
-postRouter.post("/post", async (req, res) => {
+postRouter.post("/", async (req, res) => {
   const payload = req.body;
   try {
     const post = new PostModel(payload);
     await post.save();
-    res.status(201).send({ msg: "Notes saved successfully!" });
+    // res.status(201).send({ msg: "Text saved successfully!" });
+    res.redirect("/")
   } catch (error) {
     res.json({ err: error });
   }
 });
+
+
+postRouter.get("/:id", async (req, res) => {
+  try {
+    const ID = req.params.id
+    // const UserID = req.body.UserDetails.UserID;
+    // const Users = await RegisterModel.find({},{name:1, email:1, _id:1}).sort({CreatedAt: -1}).limit(7);
+    // const userLikes = await LikeModel.find({ UserID }).limit(20);
+
+    // const likedPostIds = new Set(
+    //   userLikes.map((like) => like.postID.toString())
+    // );
+
+    const posts = await PostModel.find({_id:ID}).sort({ CreatedAt: -1 }).limit(20);
+
+    // const postWithLikes = posts.map((post) => {
+    //   const liked = likedPostIds.has(post._id.toString());
+    //   return { ...post._doc, liked };
+    // });
+
+    res.render("profile",{ UserDetails: req.body.UserDetails, posts });
+
+  } catch (error) {
+    res.json({ err: error });
+  }
+});
+
 
 postRouter.put("/like/:id/:authorID", async (req, res) => {
   try {
