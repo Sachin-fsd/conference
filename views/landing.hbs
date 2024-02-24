@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conference</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <! - ==== STYLE.CSS ==== → -->
+    <link rel="stylesheet" href="./styles/landing.css" />
+    <!-- <! - ==== REMIXICON CDN ==== → -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <!-- <! - ==== ANIMATE ON SCROLL CSS CDN ==== → -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- <! - ==== HEADER ==== → -->
+    <header class="container header">
+      <!-- <! - ==== NAVBAR ==== → -->
+      <nav class="nav">
+        <div class="logo">
+          <h2>CONFERENCE.</h2>
+        </div>
+        <div class="nav_menu" id="nav_menu">
+          <button class="close_btn" id="close_btn">
+            <i class="ri-close-fill"></i>
+          </button>
+          <ul class="nav_menu_list">
+            <li class="nav_menu_item">
+              <a href="/register" class="nav_menu_link">Sign Up</a>
+            </li>
+            <li class="nav_menu_item">
+              <a href="/login" class="nav_menu_link">Log In</a>
+            </li>
+            <li class="nav_menu_item">
+              <a href="#" class="nav_menu_link">About</a>
+            </li>
+            <li class="nav_menu_item">
+              <a href="#" class="nav_menu_link">Contact</a>
+            </li>
+          </ul>
+        </div>
+        <button class="toggle_btn" id="toggle_btn">
+          <i class="ri-menu-line"></i>
+        </button>
+      </nav>
+    </header>
+
+    <!-- <! - ==== HERO ==== → -->
+    <section class="wrapper">
+      <div class="container">
+        <div class="grid-cols-2">
+          <div class="grid-item-1">
+            <h1 class="main-heading">
+              Welcome to <span>CONFERENCE.</span>
+              <br />
+              Connect, Socialise, Explore
+            </h1>
+            <p class="info-text">
+              Connect to your University at single platform
+            </p>
+            <div class="btn_wrapper">
+              <a href="/register"><button class="btn view_more_btn">
+                Sign Up <i class="ri-arrow-right-line"></i>
+              </button></a>
+              <a href="/login"><button class="btn documentation_btn">Sign In</button></a>
+              
+            </div>
+          </div>
+          <div class="grid-item-2">
+            <div class="team_img_wrapper">
+              <img src="https://cdn.pixabay.com/photo/2013/07/12/17/51/businessmen-152572_1280.png" alt="team-img" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="wrapper">
+      <!-- <! - ==== ADDITION OF data- attribute ==== → -->
+      <div class="container" data-aos="fade-up" data-aos-duration="1000">
+        <div class="grid-cols-3">
+          <div class="grid-col-item">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <div class="featured_info">
+              <span>Built for Students </span>
+              <p>
+                Freedom to share thoughts, achievements with friends and faculties. Ask doubts and get info about college, and much more is waiting inside...
+              </p>
+            </div>
+          </div>
+          <div class="grid-col-item">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <div class="featured_info">
+              <span>Built for Faculties</span>
+              <p>
+                Share thoughts, rules, guidelines, notes, pdfs, homework, assignments and many more... all at single place to students of your class, batch, course, school
+              </p>
+            </div>
+          </div>
+          <div class="grid-col-item">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                />
+              </svg>
+            </div>
+            <div class="featured_info">
+              <span>Built for Admins</span>
+              <p>
+                Inform University about Events, fests, hackathons, ideathons, achievements, rules and many more...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    </section>
+    <section class="wrapper">
+      <!-- <! - ==== ADDITION OF data- attribute ==== → -->
+      <div class="container" data-aos="fade-up" data-aos-duration="1000">
+        <div class="grid-cols-3">
+          <div class="grid-col-item">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <div class="featured_info">
+              <span>Everyone at single platform</span>
+              <p>
+                Want to talk to someone of your University, Fed Up by asking insta id or phone numbers, want to talk but shy in asking for number. Go inside and chat with anyone you want
+              </p>
+            </div>
+          </div>
+          <div class="grid-col-item">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <div class="featured_info">
+              <span>Designed to share notes+assignments</span>
+              <p>
+                Trapped in hassle of long whatsapp contact lists, <br> save but forget where saved the files,<br> can't find documents when needed,<br> Go inside and whenever you will share anything it will be stored permanently
+              </p>
+            </div>
+          </div>
+          <div class="grid-col-item">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                />
+              </svg>
+            </div>
+            <div class="featured_info">
+              <span>Designed to inform</span>
+              <p>
+                Fed up by not finding right info at right time <br>
+                 No platform to serve everyone. Conference is the solution
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    </section>
+    <section class="wrapper">
+      <!-- <! - ==== ADDITION OF data- attribute ==== → -->
+      <div class="container" data-aos="fade-up" data-aos-duration="1000">
+        <div class="grid-cols-3">
+          <div class="grid-col-item">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <div class="featured_info">
+              <span>Built for achievers</span>
+              <p>
+                Show your achievemenst to everyone
+              </p>
+            </div>
+          </div>
+          <div class="grid-col-item">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <div class="featured_info">
+              <span>An interactive initiative for information</span>
+              <p>
+                Conference is designed in a way so that everyone of university can take advantage of it
+              </p>
+            </div>
+          </div>
+          <div class="grid-col-item">
+            <div class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                />
+              </svg>
+            </div>
+            <div class="featured_info">
+              <span>Fast Secure Reliable</span>
+              <p>
+                All the information you give is stored in hashed format <br>
+                not Even Conference team could read or listen to your messages
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer>
+        <div class="footer-content">
+            <h3>CONFERENCE</h3>
+            <p>A platform to connect to fellows, faculties, friends</p>
+            <ul class="socials">
+                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+                <li><a href="#"><i class="fa fa-linkedin-square"></i></a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            <p>made by &copy; <a href="#">Sachin Singh</a></p>
+                    <div class="footer-menu">
+                        <ul class="f-menu">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Blog</a></li>
+                          </ul>
+                    </div>
+        </div>
+
+    </footer>
+    <!-- <! - ==== ANIMATE ON SCROLL JS CDN → -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- <! - ==== GSAP CDN ==== → -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js"></script>
+    <!-- <! - ==== SCRIPT.JS ==== → -->
+    <script src="./scripts/landing.js" defer></script>
+  </body>
+</html>

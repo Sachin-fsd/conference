@@ -1,3 +1,2 @@
-# iconference
-
-Official Social Media Website.
+# conference
+A social-media site

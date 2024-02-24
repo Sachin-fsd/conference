@@ -22,7 +22,7 @@ forgetRouter.post("/getotp", async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.mail_user,
+        user: process.env.mail_admin,
         pass: process.env.mail_password,
       },
     });
@@ -30,18 +30,18 @@ forgetRouter.post("/getotp", async (req, res) => {
     transporter
       .sendMail({
         to: email,
-        from: process.env.mail_user,
-        headers: "OTP for Verification",
+        from: process.env.mail_admin,
+        headers: `OTP for Verification ${otp}`,
         text: `this is your OTP: ${otp}`,
       })
       .then(() => {
         console.log("mail send successfully!");
-        res.send({ msg: "mail is sent", ok: true });
+        res.status(201).send({ msg: "mail is sent", ok: true });
       })
       .catch((err) => {
         console.log("Error while sendig mail");
         console.log(err);
-        res.send({ err, ok: false });
+        res.status(400).send({ err, ok: false });
       });
   } else {
     res.send({ msg: "User Does't exist" });
@@ -65,9 +65,8 @@ forgetRouter.post("/forgetlogin", async (req, res) => {
   const { email, password } = req.body;
   try {
     let user = await RegisterModel.findOne({ email });
-    if (Object.keys(user).length == 0) {
-      res.status(404).send({ msg: "Wrong credentials." });
-    } else {
+    let otpUser = await OtpModel.find({email})
+    if(Object.keys(user).length !== 0 && otpUser.length !== 0) {
       bcrypt.hash(password, 2, async (err, hashed) => {
         if (err) {
           res.status(402).json({ err: "Error while hashing password" });
@@ -77,6 +76,8 @@ forgetRouter.post("/forgetlogin", async (req, res) => {
           res.status(201).redirect("/login");
         }
       });
+    }else {
+      res.status(404).send({ msg: "Wrong credentials." });
     }
   } catch (error) {
     res.status(401).json({ err: error });

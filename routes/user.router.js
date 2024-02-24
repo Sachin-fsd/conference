@@ -76,7 +76,7 @@ userRouter.post("/getotp", async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.mail_user,
+        user: process.env.mail_admin,
         pass: process.env.mail_password,
       },
     });
@@ -84,7 +84,7 @@ userRouter.post("/getotp", async (req, res) => {
     transporter
       .sendMail({
         to: email,
-        from: process.env.mail_user,
+        from: process.env.mail_admin,
         headers: "OTP for Verification",
         text: `this is your OTP: ${otp}`,
       })

@@ -4,17 +4,19 @@ document
     event.preventDefault();
   });
 
-let otp_label = document.getElementById("otp_label");
-otp_label.setAttribute("style", "display:none");
+let otp_div = document.getElementById("otp_div");
+otp_div.setAttribute("style", "display:none");
 
 let username = document.getElementById("username");
 let otp = document.getElementById("otp");
 
 let submit = document.getElementById("submit");
+
+
 submit.addEventListener("click", () => {
-  if (username.value !== "") {
-    if (submit.innerText == "Get OTP") {
-      submit.innerText = "Loading...";
+  if (username.value !== "" || username.value !== null) {
+    if (submit.value == "Get OTP") {
+      submit.value = "Loading...";
       submit.setAttribute("disabled",true)
       const email = username.value;
       fetch("/forgetpwd/getotp", {
@@ -24,20 +26,19 @@ submit.addEventListener("click", () => {
         body: JSON.stringify({ email }),
         method: "POST",
       })
-        .then((res) => res.json())
         .then((res) => {
-          if (res.ok) {
-            otp_label.setAttribute("style", "display:block");
+          if (res.ok==true) {
+            otp_div.setAttribute("style", "display:block");
             submit.removeAttribute("disabled")
-            submit.innerText = "Submit OTP";
+            submit.value = "Submit OTP";
           } else {
             alert("Something is Wrong");
           }
         })
         .catch((err) => console.log(err));
       return;
-    } else if (submit.innerText == "Submit OTP") {
-      submit.innerText = "Loading...";
+    } else if (submit.value == "Submit OTP") {
+      submit.value = "Loading...";
       submit.setAttribute("disabled",true)
 
       fetch("/forgetpwd/verifyotp", {
@@ -47,23 +48,31 @@ submit.addEventListener("click", () => {
         body: JSON.stringify({ email: username.value, otp: otp.value }),
         method: "POST",
       })
-        .then((res) => res.json())
         .then((res) => {
           console.log(res);
           if (res.ok) {
             alert("OTP verified");
-            otp_label.innerHTML = `New Password<input type="password" placeholder="Enter New Password" id="password"/>`;
-            submit.innerText = "Login";
-            submit.removeAttribute("disabled")
+            otp_div.innerHTML = `
+            <input
+            id="otp"
+            class="form-input"
+            placeholder="Enter New Password"
+            title="Enter New Password"
+            type="password"
+          />
+          <label class="floating-label" for="otp" id="otp_placeholder">Enter New Password</label>
+          `;
+            submit.value = "Login";
+            submit.removeAttribute("disabled");
           } else {
-            submit.innerText = "Submit OTP";
+            submit.value = "Submit OTP";
             alert("Something is Wrong");
           }
         })
         .catch((err) => console.log(err));
       return;
-    } else if (submit.innerText == "Login") {
-      let pass = document.getElementById("password");
+    } else if (submit.value == "Login") {
+      let pass = document.getElementById("otp");
       let obj = { email: username.value, password: pass.value };
 
       fetch("/forgetpwd/forgetlogin", {
@@ -77,20 +86,10 @@ submit.addEventListener("click", () => {
             if(res.redirected==true){
                 window.location.href = res.url
             }else{
-                res.json()
+                res.json();
+                console.log(res);
             }
-           
         })
-        .then((res) => {
-          if (res.ok) {
-            alert("Login Successfull");
-            // localStorage.setItem("token", res.token);
-            // window.location.href = "./index.html";
-          } else {
-            alert("Wrong Credentials");
-          }
-        })
-        .catch((err) => console.log(err));
     } else {
       alert("Something went wrong!");
     }

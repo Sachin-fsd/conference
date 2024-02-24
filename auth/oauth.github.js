@@ -67,7 +67,7 @@ githubAuthRouter.get("/github", async (req, res) => {
           process.env.secret_key,
           { expiresIn: "7 days" }
         );
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie('token', `Bearer ${token}`, { httpOnly: true });
         res.cookie('UserDetails', JSON.stringify(UserDetails));
         res.redirect("/");
       }else{
@@ -84,7 +84,7 @@ githubAuthRouter.get("/github", async (req, res) => {
           process.env.secret_key,
           { expiresIn: "7 days" }
         );
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie('token', `Bearer ${token}`, { httpOnly: true });
         res.cookie('UserDetails', JSON.stringify(UserDetails));
         res.redirect("/");
       }

@@ -9,102 +9,23 @@ window.onload = function () {
   }
 };
 
-// let dp = [
-//   "https://cdn.pixabay.com/photo/2023/12/12/16/15/winter-8445565_640.jpg",
-//   "https://cdn.pixabay.com/photo/2024/01/15/19/40/animal-8510775_1280.jpg",
-//   "https://cdn.pixabay.com/photo/2024/01/18/17/37/stalk-8517287_640.jpg",
-//   "https://cdn.pixabay.com/photo/2023/07/04/08/31/cats-8105667_640.jpg",
-// ];
+function myFunction(id) {
+  document.getElementById("myDropdown-" + id).classList.toggle("show");
+}
 
-// // async function home() {
-// //   fetch("http://localhost:8080/posts/", {
-// //     headers: {
-// //       "Content-Type": "application/json",
-// //       Authorization: `${localStorage.getItem("token")}`,
-// //     },
-// //     method: "GET",
-// //   })
-// //     .then((res) => res.json())
-// //     .then((res) => {
-// //       document.getElementsByClassName("status-wrapper")[0].innerHTML = `
-
-// //         ${res.Users.map((user) => {
-// //           return `
-
-// //           <div class="status-card" onclick=profile("${user._id}")>
-// //           <div class="profile-pic">
-// //             <img
-// //               src="${dp[Math.floor(Math.random()*dp.length)]}"
-// //               alt=""
-// //             />
-// //           </div>
-// //           <p class="username">${user.name}</p>
-// //         </div>
-// //           `;
-// //         }).join("")}
-
-// //       `;
-
-// //       document.getElementById("post-wrapper").innerHTML = `
-// //           ${res.posts
-// //             .map((item) => {
-// //               const ID = item._id;
-// //               const formattedTask = item.text.replace(/\n/g, "<br>");
-// //               return `<div class="post">
-// //               <div class="info">
-// //                   <div class="user" onclick=profile("${
-// //                     item.UserDetails.UserID
-// //                   }")>
-// //                       <div class="profile-pic"> <img src="https://cdn.pixabay.com/photo/2015/05/07/11/02/guitar-756326_1280.jpg" alt=""></div>
-// //                       <p class="username">${
-// //                         item.UserDetails?.UserName || "sachin_singh_channel"
-// //                       }</p>
-// //                   </div>
-// //                   <div class="dropdown" onclick=toogleDropdown(event,"${ID}")>
-// //                     <img src="./images/option.png" class="options" alt="" />
-// //                     <div class="dropdown-content" >
-// //                         <p>Delete</p>
-
-// //                     </div>
-// //                   </div>
-// //               </div>
-// //               <!-- <img src="https://cdn.pixabay.com/photo/2015/05/07/11/02/guitar-756326_1280.jpg" class="post-image" alt=""> -->
-// //               <div class="post-text-div">
-// //                   <p class="text-div">
-// //                       ${formattedTask}
-// //                   </p>
-
-// //               </div>
-// //               <div class="post-content">
-// //               <div class="reaction-wrapper">
-// //                 <div class="reaction" onclick = likePost(event) data-id=${
-// //                   item._id
-// //                 } data-author=${item.UserDetails.UserID}>
-// //                 ${
-// //                   item.liked
-// //                     ? `<span class="like">❤️</span>`
-// //                     : `<span class="unlike">🤍</span>`
-// //                 }
-// //                 </div>
-
-// //               </div>
-// //                   <p class="likes">${item.likeCount} likes</p>
-// //                   <p class="description"><span>username</span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, enim.</p>
-// //                   <p class="post-time">${item.CreatedAt}</p>
-// //               </div>
-// //               <div class="comment-wrapper">
-// //                   <img src="./images/smile.png" class="icon" alt="">
-// //                   <input type="text" class="comment-box" placeholder="Add a comment">
-// //                   <button class="comment-btn">post</button>
-// //               </div>
-// //           </div>`;
-// //             })
-// //             .join("")}
-
-// //           `;
-// //     })
-// //     .catch((err) => console.log(err));
-// // }
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
 
 document.getElementById("post_form").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -117,7 +38,7 @@ const post_submit_btn = document.getElementById("post-submit-btn");
 post_submit_btn.setAttribute("style", "opacity:0.8");
 
 post.oninput = () => {
-  if (post.value) {
+  if (post.value.trim().length) {
     post_submit_btn.setAttribute("style", "opacity:1");
   } else {
     post_submit_btn.setAttribute("style", "opacity:0.8");
@@ -125,32 +46,73 @@ post.oninput = () => {
 };
 
 post_submit_btn.onclick = async () => {
-  post.value && (await postText(post.value));
+  post.value.trim().length && (await postText(post.value.trim()));
   post.value = null;
 };
+
+let UserDetails = getCookie("UserDetails").substring(2);
 
 async function postText(text) {
   post_submit_btn.value = "Wait..";
   post_submit_btn.setAttribute("disabled", true);
   post_submit_btn.setAttribute("style", "opacity:0.8");
 
-  const obj = { text };
+  // Create a new FormData instance
+  const formData = new FormData();
+
+  // Append the text and UserDetails data to the form
+  formData.append("text", text);
+  formData.append("UserDetails", UserDetails);
+
+  // Check if an image file is being uploaded
+  const file = document.querySelector("#fileinput").files[0];
+  if (file) {
+    // If a file is being uploaded, append it to the form data
+    formData.append("file", file);
+  }
+
   const fetched = await fetch("/", {
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `${localStorage.getItem("token") || ""}`,
+      Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
     },
     method: "POST",
-    body: JSON.stringify(obj),
+    body: formData, // Send the form data
   });
   console.log(fetched);
-  if (fetched.ok == false) {
-    alert("Some error occured!");
-    return false;
-  } else {
-    window.location.href = fetched.url
+  if (fetched.ok === true) {
+    window.location.reload();
   }
+  const res = await fetched.json();
+  console.log(res);
 }
+
+// post_submit_btn.onclick = async () => {
+//   post.value.trim().length && (await postText(post.value.trim()));
+//   post.value = null;
+// };
+
+// async function postText(text) {
+//   post_submit_btn.value = "Wait..";
+//   post_submit_btn.setAttribute("disabled", true);
+//   post_submit_btn.setAttribute("style", "opacity:0.8");
+
+//   const obj = { text };
+//   const fetched = await fetch("/", {
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+//     },
+//     method: "POST",
+//     body: JSON.stringify(obj),
+//   });
+//   console.log(fetched);
+//   if (fetched.ok == false) {
+//     alert("Some error occured!");
+//     return false;
+//   } else {
+//     window.location.href = fetched.url
+//   }
+// }
 
 // // like js here
 
@@ -195,50 +157,27 @@ async function postText(text) {
 //     .catch((err) => console.log(err));
 // }
 
-// // cyclic = https://azure-tadpole-coat.cyclic.app
+function deletePost(id) {
+  fetch('/delete/' + id, {
+    method: 'DELETE',
+  })
+  .then(response => response.json())
+  .then(data => window.location.reload())
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
 
-// // dropdown is here
-// function toogleDropdown(event, ID) {
-//   if (event.target.innerText == "") {
-//     let dropdownContent = event.target.parentElement.children[1];
-//     if (
-//       dropdownContent.style &&
-//       (!dropdownContent.style.display ||
-//         dropdownContent.style.display == "none")
-//     ) {
-//       dropdownContent.style.display = "block";
-//     } else {
-//       dropdownContent.style.display = "none";
-//     }
-//   } else if (event.target.innerText == "Delete") {
-//     fetch(`http://localhost:8080/posts/delete/${ID}`, {
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `${localStorage.getItem("token")}`,
-//       },
-//       method: "DELETE",
-//     }).then((res) => {
-//       if (res.ok == false) {
-//         alert("Text Deletign Failed");
-//       }
-//       home();
-//     });
-//   }
-// }
+function getCookie(name) {
+  let cookieArr = document.cookie.split(";");
 
-// window.onclick = function (event) {
-//   // console.log(event.target.className);
-//   if (event.target.className !== "options") {
-//     var dropdowns = document.getElementsByClassName("dropdown-content");
-//     for (let item of dropdowns) {
-//       item.style.display = "none";
-//     }
-//   }
-// };
+  for (let i = 0; i < cookieArr.length; i++) {
+    let cookiePair = cookieArr[i].split("=");
 
-// // profile is here
+    if (name == cookiePair[0].trim()) {
+      return decodeURIComponent(cookiePair[1]);
+    }
+  }
 
-// function profile(ID) {
-//   sessionStorage.setItem("profileID", ID);
-//   window.location.href = "profile.html";
-// }
+  return null;
+}

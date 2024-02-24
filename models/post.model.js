@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const postSchema = mongoose.Schema({
     UserDetails:Object,
     text:{required:true, type:String},
+    photo:{type:String},
+    pdf:String,
     likeCount:{type:Number, default:0},
-    comments:Array,
     CreatedAt:{type:Date, default:Date.now}
 })
 

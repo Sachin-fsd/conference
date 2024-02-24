@@ -44,7 +44,7 @@ body {
   font-family: "Poppins", sans-serif;
   color: var(--color-dark);
   background-color: var(--color-light);
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 /* ----------- GENERAL STYLES ------------ */
@@ -91,7 +91,9 @@ img {
 .text-muted {
   color: var(--color-gray);
 }
-
+a {
+  color: inherit;
+}
 /* ------------ NAV BAR ------------ */
 
 nav {
@@ -288,6 +290,11 @@ main .container .left .profile {
 }
 
 /* ------------ MIDDLE ------------ */
+.middle{
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
 .middle .stories {
   display: flex;
   justify-content: space-between;
@@ -366,7 +373,7 @@ main .container .left .profile {
 
 /* ------------ CREATE POST ------------ */
 .middle .create-post {
-  width: 100%;
+  
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -374,6 +381,9 @@ main .container .left .profile {
   background-color: var(--color-white);
   padding: 0.4rem var(--card-padding);
   border-radius: var(--border-radius);
+  /* position: fixed;
+  bottom: 70px;
+  right: inherit; */
 }
 
 .middle .create-post textarea {
@@ -387,124 +397,22 @@ main .container .left .profile {
 }
 
 /* FEED */
-.IDprofile {
-    padding: 64 0;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: repeat(3, auto);
-    grid-column-gap: 3rem;
-    align-items: center;
-    grid-row-gap: 20px;
-  }
-  
-  .profile::after {
-    content: "";
-    display: none;
-    clear: both;
-  }
-  
-  .profile-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    grid-row: 1 / 2;
-  }
-  
-  .profile-image img {
-    border-radius: 50%;
-    width: 123.2px;
-  }
-  
-  .profile-user-settings,
-  .profile-stats,
-  .profile-bio {
-    float: none;
-    width: auto;
-  }
-  
-  .profile-user-settings {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-gap: 1rem;
-  }
-  
-  .profile-user-name {
-    display: inline-block;
-    font-weight: 300;
-    font-size: 36px;
-  }
-  
-  .profile-edit-btn {
-    font-size: 20px;
-    line-height: 1.8;
-    border: 5px solid #dbdbdb;
-    border-radius: 5px;
-    order: 1;
-    padding: 0;
-    text-align: center;
-    margin-left: 0;
-  }
-  
-  .profile-settings-btn {
-    font-size: 32px;
-    margin-left: 16px;
-  }
-  
-  .profile-stats {
-    order: 1;
-    margin-top: 20;
-  }
-  
-  .profile-stats li {
-    display: inline-block;
-    font-size: 20px;
-    line-height: 1.5;
-    margin-right: 0;
-    cursor: pointer;
-    flex: 1;
-  }
-  
-  .profile-bio {
-    font-size: 20;
-    margin-top: 20;
-    font-weight: 400;
-    line-height: 1.5;
-  }
-  
-  .profile-real-name,
-  .profile-stat-count,
-  .profile-edit-btn {
-    font-weight: 600;
-  }
-  
-  .profile-edit-btn,
-  .profile-bio,
-  .profile-stats {
-    flex-basis: 100%;
-    grid-column: 1 / -1;
-  }
-  
-  .profile-stats ul {
-    display: flex;
-    text-align: center;
-    padding: 20 0;
-    border-top: 1.6px solid #dadada;
-    border-bottom: 2px solid #dadada;
-  }
-  
-  .profile-stat-count {
-    display: block;
-  }
-  
+.active-post {
+  border: 1px solid #707070;
+  border-radius: 10px;
+  padding: 10px;
+  background: hsl(252, 30%, var(--white-color-lightness));
+}
 /* End of profile */
 
 .middle .feeds .feed {
-  background-color: var(--color-white);
+  background-color: none;
   border-radius: var(--card-border-radius);
   padding: var(--card-padding);
   margin: 1rem 0;
   font-size: 0.85rem;
   line-height: 1.5;
+  border: 1px solid #aaaaaa;
 }
 
 .middle .feed .head {
@@ -853,6 +761,24 @@ main .container .left .profile {
   scrollbar-width: none; /* Firefox */
 }
 
+.middle .content-only{
+  height: calc(100vh - 150px);
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+}
+
+.left{
+  padding-bottom: 100px;
+}
+.right{
+  padding-bottom: 100px;
+}
+
+.post-text {
+  font-size: 20px;
+  text-align: center;
+}
 /*====================================================================
 =            MEDIA QUERIES - SMALL LAPTOP AND BIG TABLETS            =
 =====================================================================*/
@@ -876,6 +802,13 @@ main .container .left .profile {
     display: none;
   }
 
+  .middle .content-only{
+    height: calc(100vh - 180px);
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+  }
+
   .sidebar h3 {
     display: none;
   }
@@ -883,6 +816,8 @@ main .container .left .profile {
   .left .btn {
     display: none;
   }
+
+  
 
   .customize-theme .card {
     width: 80vw;
@@ -961,7 +896,23 @@ main .container .left .profile {
   main .container .middle {
     grid-column: 1/-1;
   }
+  .middle .content-only{
+    height: calc(100vh - 220px);
+    overflow-y: scroll;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+  }
+  .post-text-active{
+    text-align: center;
+    margin-top: 20px;
+    font-family: "Courier New", Courier, monospace;
+    font-weight: 600;
+  }
 
+  .post-text {
+    font-size: 15px;
+    text-align: center;
+  }
   main .container .right {
     display: none;
   }

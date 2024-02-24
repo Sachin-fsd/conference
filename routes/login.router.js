@@ -18,7 +18,7 @@ loginRouter.post("/", async (req, res) => {
     try {
       const user = await RegisterModel.findOne({ email });
       if (Object.keys(user).length === 0) {
-        res.status(404).send({ msg: "Wrong credentials." });
+        res.status(401).send({ msg: "Wrong credentials." });
       } else {
         bcrypt.compare(password, user.password, async (err, result) => {
           if (result) {
@@ -32,9 +32,11 @@ loginRouter.post("/", async (req, res) => {
               process.env.secret_key,
               { expiresIn: "7 days" }
             );
-            res.cookie("token",token,{ httpOnly: true });
+            res.cookie("token",token,{ httpOnly: true }, {maxAge:60*60*24*7});
             res.cookie("UserDetails",UserDetails);
-            res.redirect("/")
+            // req.session.UserDetails = UserDetails
+            console.log("line 38");
+            res.status(200).redirect("/")
 
           } else {
             res.status(404).json({ msg: "Wrong Credentials" });

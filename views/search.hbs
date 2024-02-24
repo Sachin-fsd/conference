@@ -9,16 +9,8 @@
       rel="stylesheet"
       href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-    />
     <!-- STYLESHEET -->
-    <!-- <link rel="stylesheet" href="./styles/profile.css" /> -->
-
-    <link rel="stylesheet" href="./styles/profile.css" />
     <link rel="stylesheet" href="./styles/style.css" />
-
   </head>
 
   <body>
@@ -34,11 +26,12 @@
         </div>
         <div class="create">
           <label for="create-post" class="btn btn-primary">Create</label>
-          <div class="profile-photo">
-            <img
-              src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
-            />
-          </div>
+          <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
+              <img
+                src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+              />
+            </div></a>
+
         </div>
       </div>
     </nav>
@@ -61,12 +54,12 @@
           </a>
           <!-- SIDEBAR -->
           <div class="sidebar">
-            <a href="/" class="menu-item active"><span><i
+            <a href="/" class="menu-item"><span><i
                   class="uil uil-home"
                 ></i></span>
               <h3>Home</h3>
             </a>
-            <a href="/search" class="menu-item"><span><i
+            <a href="#" class="menu-item active"><span><i
                   class="uil uil-compass"
                 ></i></span>
               <h3>Explore</h3>
@@ -75,14 +68,13 @@
                   class="uil uil-bell"
                 ><small class="notification-count"></small></i></span>
               <h3>Notifications</h3>
+              <!-- NOTIFICATION POPUP -->
+              
+              <!-- END OF NOTIFICATION POPUP -->
             </a>
-            <a
-              href="/message"
-              class="menu-item"
-              id="messages-notification"
-            ><span><i class="uil uil-envelope-alt"><small
-                    class="notification-count"
-                  ></small></i></span>
+            <a href="/message" class="menu-item" id="messages-notification"><span><i
+                  class="uil uil-envelope-alt"
+                ><small class="notification-count"></small></i></span>
               <h3>Messages</h3>
             </a>
             <a href="#" class="menu-item"><span><i
@@ -112,161 +104,183 @@
         <!-- END OF LEFT -->
         <!-- MIDDLE -->
         <div class="middle">
-
-          <div class="IDprofile">
-
-            <div class="profile-image">
-
-              <img
-                src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces"
-                alt=""
-              />
-
-            </div>
-
-            <div class="profile-user-settings">
-
-              <h1 class="profile-user-name">{{ProfileDetails.UserName}}</h1>
-
-              <button
-                class="IDbtn profile-edit-btn"
-                id="message"
-              >Message</button>
-
-              <!-- <button
-                class="btn profile-settings-btn"
-                aria-label="profile settings"
-              ><i class="fas fa-cog" aria-hidden="true"></i></button> -->
-
-            </div>
-
-            <div class="profile-stats">
-
-              <ul>
-                <li><span class="profile-stat-count">164</span> posts</li>
-                <li><span class="profile-stat-count">188</span> followers</li>
-                <li><span class="profile-stat-count">206</span> following</li>
-              </ul>
-
-            </div>
-
-            <div class="profile-bio">
-
-              <p>
-                <!-- <span class="profile-real-name">Jhon Doe</span> -->
-                The only limit to our realization of tomorrow will be our doubts
-                of today. 📷✈️🏕️</p>
-            </div>
-
+          <div class="search-bar serach-page-top">
+            <i class="uil uil-search"></i>
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Search for creators, inspiration and projects"
+              onsearch="seachUser()"
+            />
           </div>
-          <div class="feeds">
-            <!-- FEED 1 -->
-            {{#each posts}}
+          <!-- FEEDS -->
+          <div class="feeds" id="results">
+
+            {{#each users}}
               <div class="feed">
-                <div class="head">
-                  <a href="/{{this.UserDetails.UserID}}"><div class="user">
+                <div class="head"><a href="/{{this._id}}">
+                    <div class="user">
                       <div class="profile-photo">
                         <img
-                          src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
+                          src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
                         />
                       </div>
                       <div class="info">
-                        <h3>{{this.UserDetails.UserName}}</h3>
-                        <small>{{formatDate this.CreatedAt}}</small>
+                        <h3>{{this.name}}</h3>
                       </div>
-                    </div></a>
-
-                    <span class="dropdown edit">
-                      <i onclick="myFunction('{{this._id}}')" class="dropbtn uil uil-ellipsis-h"></i>
-                      <div id="myDropdown-{{this._id}}" class="dropdown-content">
-                        {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}<a href="" onclick="deletePost('{{this._id}}')">Delete</a> {{else}}{{/if}}
-                        <a href="#about">Report</a>
-                        <a href="#contact">Profile</a>
-                      </div>
-                    </span>
-
-
-                </div>
-                <a href="/comment/{{this._id}}">
-                  <div class="photo">
-                    {{#if this.photo}}
-                      <img
-                        src="{{this.photo}}"
-                        onerror="this.style.display='none'"
-                      />
-                    {{/if}}
-                    {{#if this.pdf}}
-                      <div
-                        id="pdf-loader"
-                        style="width:475px; height:400px; display: flex; align-items: center; justify-content: center;"
-                      >
-                        <p>Loading PDF...</p>
-                      </div>
-                      <iframe
-                        id="pdf-preview"
-                        src="http://docs.google.com/gview?url={{this.pdf}}&embedded=true"
-                        style="width:475px; height:400px; display: none;"
-                        frameborder="0"
-                        onload="document.getElementById('pdf-loader').style.display='none'; this.style.display='block';"
-                      ></iframe>
-                      <a href="{{this.pdf}}" download>Download PDF</a>
-
-                    {{/if}}
-                    <p class="post-text">{{formatText this.text}}</p>
-                  </div>
-                </a>
-
-                <div class="action-buttons">
-                  <div class="interaction-buttons">
-                    <span><i class="uil uil-thumbs-up"></i></span>
-                    <span><a href="/comment/{{this._id}}"><i
-                          class="uil uil-comment-dots"
-                        ></i></a></span>
-                    <span><i class="uil uil-share-alt"></i></span>
-                  </div>
-                  <div class="bookmark">
-                    <span><i class="uil uil-bookmark-full"></i></span>
-                  </div>
+                    </div>
+                  </a>
+                  <span class="edit">
+                    <i class="uil uil-ellipsis-h"></i>
+                  </span>
                 </div>
 
-                <!-- <div class="liked-by">
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
-                    />
-                  </span>
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/10/50/cormorant-8516719_640.jpg"
-                    />
-                  </span>
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
-                    />
-                  </span>
-                  <p>Liked by
-                    <b>Ernest Achiever </b>and
-                    <b>2,323 others</b></p>
-                </div> -->
                 <div class="caption">
-                  <p>
-                    <b>B.tech CSE FSD</b>
-                    | Section 1 | Group 1 |
+                  <p><b>SOET</b>
+                    | B.tech CSE FSD | Section 1 | Group 1 |
                     <b>Roll No.</b>
                     2301350008
-
                   </p>
-                  <p><span class="harsh-tag">#lifestyle</span></p>
-                </div><a href="/comment/{{this._id}}"><div
-                    class="comments text-muted"
-                  >View all 277 comments</div></a>
-
+                </div>
               </div>
             {{/each}}
-            <!-- END OF FEED 1 -->
+            <!-- FEED 3 -->
+            <div class="feed">
+              <div class="head">
+                <div class="user">
+                  <div class="profile-photo">
+                    <img
+                      src="https://cdn.pixabay.com/photo/2023/11/20/16/37/snowflakes-8401477_640.png"
+                    />
+                  </div>
+                  <div class="info">
+                    <h3>Faculty 2</h3>
+                  </div>
+                </div>
+                <span class="edit">
+                  <i class="uil uil-ellipsis-h"></i>
+                </span>
+              </div>
 
+              <div class="caption">
+                <p><b>SOLS</b>
+                  | BBA | Section 1 | Group 1 |
+                  <b>Roll No.</b>
+                  2501350035
+                </p>
+              </div>
+            </div>
+            <!-- END OF FEED 3 -->
+            <!-- FEED 4 -->
+            <div class="feed">
+              <div class="head">
+                <div class="user">
+                  <div class="profile-photo">
+                    <img
+                      src="https://cdn.pixabay.com/photo/2023/10/26/17/16/spider-8343193_1280.jpg"
+                    />
+                  </div>
+                  <div class="info">
+                    <h3>Faculty 1</h3>
+                  </div>
+                </div>
+                <span class="edit">
+                  <i class="uil uil-ellipsis-h"></i>
+                </span>
+              </div>
+
+              <div class="caption">
+                <p><b>SOET</b>
+                  | B.tech CSE FSD | Section 1 | Group 1 |
+                  <b>Roll No.</b>
+                  2301350008
+                </p>
+              </div>
+            </div>
+            <!-- END OF FEED 4 -->
+            <!-- FEED 5 -->
+            <div class="feed">
+              <div class="head">
+                <div class="user">
+                  <div class="profile-photo">
+                    <img
+                      src="https://cdn.pixabay.com/photo/2023/10/23/07/43/winter-8335532_640.png"
+                    />
+                  </div>
+                  <div class="info">
+                    <h3>Faculty 1</h3>
+                  </div>
+                </div>
+                <span class="edit">
+                  <i class="uil uil-ellipsis-h"></i>
+                </span>
+              </div>
+
+              <div class="caption">
+                <p><b>SOET</b>
+                  | B.tech CSE FSD | Section 1 | Group 1 |
+                  <b>Roll No.</b>
+                  2301350008
+                </p>
+              </div>
+            </div>
+            <!-- END OF FEED 5 -->
+            <!-- FEED 6 -->
+            <div class="feed">
+              <div class="head">
+                <div class="user">
+                  <div class="profile-photo">
+                    <img
+                      src="https://cdn.pixabay.com/photo/2023/10/26/17/16/spider-8343193_1280.jpg"
+                    />
+                  </div>
+                  <div class="info">
+                    <h3>Faculty 1</h3>
+                  </div>
+                </div>
+                <span class="edit">
+                  <i class="uil uil-ellipsis-h"></i>
+                </span>
+              </div>
+
+              <div class="caption">
+                <p><b>SOET</b>
+                  | B.tech CSE FSD | Section 1 | Group 1 |
+                  <b>Roll No.</b>
+                  2301350008
+                </p>
+              </div>
+            </div>
+            <!-- END OF FEED 6 -->
+            <!-- FEED 7 -->
+            <div class="feed">
+              <div class="head">
+                <div class="user">
+                  <div class="profile-photo">
+                    <img
+                      src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                    />
+                  </div>
+                  <div class="info">
+                    <h3>Faculty 1</h3>
+                  </div>
+                </div>
+                <span class="edit">
+                  <i class="uil uil-ellipsis-h"></i>
+                </span>
+              </div>
+
+              <div class="caption">
+                <p><b>SOET</b>
+                  | B.tech CSE FSD | Section 1 | Group 1 |
+                  <b>Roll No.</b>
+                  2301350008
+                </p>
+              </div>
+            </div>
+            <!-- END OF FEED 7 -->
           </div>
+          <!-- END OF FEEDS-->
         </div>
         <!-- END OF MIDDLE -->
         <!-- RIGHT -->
@@ -457,7 +471,7 @@
             <!-- BACKGROUND COLORS -->
             <div class="background">
               <h4>Bacground</h4>
-              <div class="choose-bg">
+              <div class="choose-bg" style="border: 1px solid red;">
                 <div class="bg-1 active">
                   <span></span>
                   <h5 for="bg-1">Light</h5>
@@ -480,43 +494,4 @@
   </body>
 </html>
 <script src="./scripts/index.js"></script>
-
-<script>
-  document.getElementById("message").addEventListener('click',()=>{
-  console.log("message clicked"); const profileID =
-  window.location.pathname.split("/").pop();
-  fetch(`/chat/${profileID}`).then(res=>{ if(res.ok){ window.location.href =
-  res.url }else{ console.log(res); } }) })
-
-
-  function deletePost(id) {
-  fetch('/delete/' + id, {
-    method: 'DELETE',
-  })
-  .then(response => response.json())
-  .then(data => window.location.reload())
-  .catch((error) => {
-    console.error('Error:', error);
-  });
-}
-
-
-function myFunction(id) {
-  document.getElementById("myDropdown-" + id).classList.toggle("show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
-</script>
-<!-- <script src="./scripts/main.js"></script> -->
+<script src="./scripts/search.js"></script>

@@ -13,12 +13,8 @@
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
     />
-    <!-- STYLESHEET -->
-    <!-- <link rel="stylesheet" href="./styles/profile.css" /> -->
 
-    <link rel="stylesheet" href="./styles/profile.css" />
-    <link rel="stylesheet" href="./styles/style.css" />
-
+    <link rel="stylesheet" href="../styles/comment.css" />
   </head>
 
   <body>
@@ -46,6 +42,7 @@
     <main>
 
       <div class="container">
+
         <!-- LEFT -->
         <div class="left">
           <a href="/{{UserDetails.UserID}}" class="profile">
@@ -73,16 +70,81 @@
             </a>
             <a href="#" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
-                ><small class="notification-count"></small></i></span>
+                ><small class="notification-count">6</small></i></span>
               <h3>Notifications</h3>
+              <!-- NOTIFICATION POPUP -->
+              <div class="notifications-popup">
+                <div>
+                  <div class="profile-photo">
+                    <img
+                      src="https://cdn.pixabay.com/photo/2023/11/11/08/23/woman-8380758_640.jpg"
+                    />
+                  </div>
+                  <div class="notification-body">
+                    <b>Keke Benjamin</b>
+                    accepted your friend request
+                    <small class="text-muted">2 DAYS AGO</small>
+                  </div>
+                </div>
+                <div>
+                  <div class="profile-photo">
+                    <img src="./images/profile-3.jpg" />
+                  </div>
+                  <div class="notification-body">
+                    <b>John Doe</b>
+                    commented your post
+                    <small class="text-muted">1 HOUR AGO</small>
+                  </div>
+                </div>
+                <div>
+                  <div class="profile-photo">
+                    <img src="./images/profile-4.jpg" />
+                  </div>
+                  <div class="notification-body">
+                    <b>Mary Oppong </b>and
+                    <b>283 others</b>
+                    liked your post
+                    <small class="text-muted">4 MINUTES AGO</small>
+                  </div>
+                </div>
+                <div>
+                  <div class="profile-photo">
+                    <img src="./images/profile-5.jpg" />
+                  </div>
+                  <div class="notification-body">
+                    <b>Doris Y. Lartey</b>
+                    commented on a post you are tagged in
+                    <small class="text-muted">2 DAYS AGO</small>
+                  </div>
+                </div>
+                <div>
+                  <div class="profile-photo">
+                    <img src="./images/profile-6.jpg" />
+                  </div>
+                  <div class="notification-body">
+                    <b>Lisa Trump</b>
+                    commented on a post you are tagged in
+                    <small class="text-muted">1 HOUR AGO</small>
+                  </div>
+                </div>
+                <div>
+                  <div class="profile-photo">
+                    <img
+                      src="https://cdn.pixabay.com/photo/2023/11/07/12/33/owl-8372237_640.jpg"
+                    />
+                  </div>
+                  <div class="notification-body">
+                    <b>Jane Doe</b>
+                    commented your post
+                    <small class="text-muted">1 HOUR AGO</small>
+                  </div>
+                </div>
+              </div>
+              <!-- END OF NOTIFICATION POPUP -->
             </a>
-            <a
-              href="/message"
-              class="menu-item"
-              id="messages-notification"
-            ><span><i class="uil uil-envelope-alt"><small
-                    class="notification-count"
-                  ></small></i></span>
+            <a href="#" class="menu-item" id="messages-notification"><span><i
+                  class="uil uil-envelope-alt"
+                ><small class="notification-count">6</small></i></span>
               <h3>Messages</h3>
             </a>
             <a href="#" class="menu-item"><span><i
@@ -112,161 +174,101 @@
         <!-- END OF LEFT -->
         <!-- MIDDLE -->
         <div class="middle">
-
-          <div class="IDprofile">
-
-            <div class="profile-image">
-
-              <img
-                src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces"
-                alt=""
-              />
-
-            </div>
-
-            <div class="profile-user-settings">
-
-              <h1 class="profile-user-name">{{ProfileDetails.UserName}}</h1>
-
-              <button
-                class="IDbtn profile-edit-btn"
-                id="message"
-              >Message</button>
-
-              <!-- <button
-                class="btn profile-settings-btn"
-                aria-label="profile settings"
-              ><i class="fas fa-cog" aria-hidden="true"></i></button> -->
-
-            </div>
-
-            <div class="profile-stats">
-
-              <ul>
-                <li><span class="profile-stat-count">164</span> posts</li>
-                <li><span class="profile-stat-count">188</span> followers</li>
-                <li><span class="profile-stat-count">206</span> following</li>
-              </ul>
-
-            </div>
-
-            <div class="profile-bio">
-
-              <p>
-                <!-- <span class="profile-real-name">Jhon Doe</span> -->
-                The only limit to our realization of tomorrow will be our doubts
-                of today. 📷✈️🏕️</p>
-            </div>
-
-          </div>
-          <div class="feeds">
-            <!-- FEED 1 -->
-            {{#each posts}}
-              <div class="feed">
-                <div class="head">
-                  <a href="/{{this.UserDetails.UserID}}"><div class="user">
-                      <div class="profile-photo">
-                        <img
-                          src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
-                        />
-                      </div>
-                      <div class="info">
-                        <h3>{{this.UserDetails.UserName}}</h3>
-                        <small>{{formatDate this.CreatedAt}}</small>
-                      </div>
-                    </div></a>
-
-                    <span class="dropdown edit">
-                      <i onclick="myFunction('{{this._id}}')" class="dropbtn uil uil-ellipsis-h"></i>
-                      <div id="myDropdown-{{this._id}}" class="dropdown-content">
-                        {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}<a href="" onclick="deletePost('{{this._id}}')">Delete</a> {{else}}{{/if}}
-                        <a href="#about">Report</a>
-                        <a href="#contact">Profile</a>
-                      </div>
-                    </span>
-
-
-                </div>
-                <a href="/comment/{{this._id}}">
-                  <div class="photo">
-                    {{#if this.photo}}
-                      <img
-                        src="{{this.photo}}"
-                        onerror="this.style.display='none'"
-                      />
-                    {{/if}}
-                    {{#if this.pdf}}
-                      <div
-                        id="pdf-loader"
-                        style="width:475px; height:400px; display: flex; align-items: center; justify-content: center;"
-                      >
-                        <p>Loading PDF...</p>
-                      </div>
-                      <iframe
-                        id="pdf-preview"
-                        src="http://docs.google.com/gview?url={{this.pdf}}&embedded=true"
-                        style="width:475px; height:400px; display: none;"
-                        frameborder="0"
-                        onload="document.getElementById('pdf-loader').style.display='none'; this.style.display='block';"
-                      ></iframe>
-                      <a href="{{this.pdf}}" download>Download PDF</a>
-
-                    {{/if}}
-                    <p class="post-text">{{formatText this.text}}</p>
-                  </div>
-                </a>
-
-                <div class="action-buttons">
-                  <div class="interaction-buttons">
-                    <span><i class="uil uil-thumbs-up"></i></span>
-                    <span><a href="/comment/{{this._id}}"><i
-                          class="uil uil-comment-dots"
-                        ></i></a></span>
-                    <span><i class="uil uil-share-alt"></i></span>
-                  </div>
-                  <div class="bookmark">
-                    <span><i class="uil uil-bookmark-full"></i></span>
-                  </div>
-                </div>
-
-                <!-- <div class="liked-by">
-                  <span>
+          <div class="content-only">
+            <div class="feed active-post">
+              <div class="head">
+                <div class="user">
+                  <div class="profile-photo">
                     <img
                       src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
                     />
-                  </span>
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/10/50/cormorant-8516719_640.jpg"
-                    />
-                  </span>
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
-                    />
-                  </span>
-                  <p>Liked by
-                    <b>Ernest Achiever </b>and
-                    <b>2,323 others</b></p>
-                </div> -->
-                <div class="caption">
-                  <p>
-                    <b>B.tech CSE FSD</b>
-                    | Section 1 | Group 1 |
-                    <b>Roll No.</b>
-                    2301350008
-
-                  </p>
-                  <p><span class="harsh-tag">#lifestyle</span></p>
-                </div><a href="/comment/{{this._id}}"><div
-                    class="comments text-muted"
-                  >View all 277 comments</div></a>
-
+                  </div>
+                  <div class="info">
+                    <h3>{{activePost.Username}}</h3>
+                    <small>{{formatDate activePost.CreatedAt}}</small>
+                  </div>
+                </div>
+                <span class="edit">
+                  <i class="uil uil-ellipsis-h"></i>
+                </span>
               </div>
-            {{/each}}
-            <!-- END OF FEED 1 -->
+              <div class="photo">
+                {{#if activePost.photo}}
+                  <img src="{{activePost.photo}}" />
+                {{/if}}
+                <!-- {{! <img
+                src="https://cdn.pixabay.com/photo/2023/04/13/17/49/dare-7923106_640.jpg"
+              /> }} -->
+                <p class="post-text">{{formatText activePost.text}}</p>
+              </div>
+              <div class="action-buttons">
+                <div class="interaction-buttons">
+                  <span><i class="uil uil-thumbs-up"></i></span>
+                  <span><i class="uil uil-comment-dots"></i></span>
+                  <span><i class="uil uil-share-alt"></i></span>
+                </div>
+                <div class="bookmark">
+                  <span><i class="uil uil-bookmark-full"></i></span>
+                </div>
+              </div>
+
+            </div>
+            <p class="post-text">Comments</p>
+            <div class="feeds" id="feeds">
+              <!-- FEED 1 -->
+              {{#each comments}}
+                <div class="feed">
+                  <div class="head">
+                    <a href="/{{this.UserDetails.UserID}}"><div class="user">
+                        <div class="profile-photo">
+                          <img
+                            src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
+                          />
+                        </div>
+                        <div class="info">
+                          <h3>{{this.UserDetails.UserName}}</h3>
+                          <small>{{formatDate this.CreatedAt}}</small>
+                        </div>
+                      </div></a>
+                    <span class="edit">
+                      <i class="uil uil-ellipsis-h"></i>
+                    </span>
+                  </div>
+                  <div class="photo">
+                    <!-- {{! <img
+                    src="https://cdn.pixabay.com/photo/2023/04/13/17/49/dare-7923106_640.jpg"
+                  /> }} -->
+                    <p class="post-text">{{formatText this.text}}</p>
+                  </div>
+                </div>
+              {{/each}}
+              <!-- END OF FEED 1 -->
+
+            </div>
 
           </div>
+          <div class="form-only">
+            <form class="create-post" id="post_form">
+              <div class="profile-photo">
+                <img
+                  src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+                />
+              </div>
+              <textarea
+                id="create-post"
+                placeholder="Write a comment."
+              ></textarea>
+              <input
+                type="submit"
+                id="post-submit-btn"
+                value="Post"
+                class="btn btn-primary"
+                data-postID="{{activePost.UserID}}"
+              />
+
+            </form>
+          </div>
+
         </div>
         <!-- END OF MIDDLE -->
         <!-- RIGHT -->
@@ -479,44 +481,9 @@
     </main>
   </body>
 </html>
-<script src="./scripts/index.js"></script>
 
-<script>
-  document.getElementById("message").addEventListener('click',()=>{
-  console.log("message clicked"); const profileID =
-  window.location.pathname.split("/").pop();
-  fetch(`/chat/${profileID}`).then(res=>{ if(res.ok){ window.location.href =
-  res.url }else{ console.log(res); } }) })
+<script src="/socket.io/socket.io.js"></script>
+<script src="../scripts/comment.js"></script>
+<script src="../scripts/index.js"></script>
 
-
-  function deletePost(id) {
-  fetch('/delete/' + id, {
-    method: 'DELETE',
-  })
-  .then(response => response.json())
-  .then(data => window.location.reload())
-  .catch((error) => {
-    console.error('Error:', error);
-  });
-}
-
-
-function myFunction(id) {
-  document.getElementById("myDropdown-" + id).classList.toggle("show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
-</script>
 <!-- <script src="./scripts/main.js"></script> -->

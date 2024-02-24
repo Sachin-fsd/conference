@@ -44,7 +44,7 @@ body {
   font-family: "Poppins", sans-serif;
   color: var(--color-dark);
   background-color: var(--color-light);
-  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* ----------- GENERAL STYLES ------------ */
@@ -90,6 +90,10 @@ img {
 
 .text-muted {
   color: var(--color-gray);
+}
+
+a {
+  color: inherit;
 }
 
 /* ------------ NAV BAR ------------ */
@@ -152,7 +156,7 @@ main .container {
 main .container .left {
   height: -webkit-max-content;
   height: -moz-max-content;
-  height: max-content;
+  height: 100vh;
   position: -webkit-sticky;
   position: sticky;
   top: var(-sticky-top-left);
@@ -288,6 +292,10 @@ main .container .left .profile {
 }
 
 /* ------------ MIDDLE ------------ */
+.middle{
+  padding-bottom: 100px;
+}
+
 .middle .stories {
   display: flex;
   justify-content: space-between;
@@ -325,30 +333,36 @@ main .container .left .profile {
 }
 
 .middle .stories .story:nth-child(1) {
-  background: url("https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg") no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg")
+    no-repeat center center/cover;
 }
 
 .middle .stories .story:nth-child(2) {
-  background: url("https://cdn.pixabay.com/photo/2023/10/24/21/15/nature-8339115_640.jpg") no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2023/10/24/21/15/nature-8339115_640.jpg")
+    no-repeat center center/cover;
 }
 /* .middle .stories .story:nth-child(2) {
   background: url("./images/story-2.jpg") no-repeat center center/cover;
 } */
 
 .middle .stories .story:nth-child(3) {
-  background: url("https://cdn.pixabay.com/photo/2023/12/12/16/15/winter-8445565_640.jpg") no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2023/12/12/16/15/winter-8445565_640.jpg")
+    no-repeat center center/cover;
 }
 
 .middle .stories .story:nth-child(4) {
-  background: url("https://cdn.pixabay.com/photo/2024/01/15/21/16/dog-8510901_640.jpg") no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2024/01/15/21/16/dog-8510901_640.jpg")
+    no-repeat center center/cover;
 }
 
 .middle .stories .story:nth-child(5) {
-  background: url("https://cdn.pixabay.com/photo/2023/05/07/11/57/surfboard-7976219_640.jpg") no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2023/05/07/11/57/surfboard-7976219_640.jpg")
+    no-repeat center center/cover;
 }
 
 .middle .stories .story:nth-child(6) {
-  background: url("https://cdn.pixabay.com/photo/2023/11/11/08/23/woman-8380758_640.jpg") no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2023/11/11/08/23/woman-8380758_640.jpg")
+    no-repeat center center/cover;
 }
 
 .middle .stories .story .profile-photo {
@@ -400,10 +414,48 @@ main .container .left .profile {
   gap: 1rem;
 }
 
+
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right:100%;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
+
 .middle .feed .photo {
+  text-align: center;
   border-radius: var(--card-border-radius);
   overflow: hidden;
   margin: 0.7rem 0;
+}
+
+.post-text {
+  font-size: 20px;
+  text-align: center;
 }
 
 .middle .feed .action-buttons {
@@ -712,25 +764,40 @@ main .container .left .profile {
   margin-right: 1rem;
 }
 
-.left, .middle, .right {
+.left,
+.middle,
+.right {
   overflow: auto;
-  height: 100vh; 
+  height: 100vh;
   scrollbar-width: 0;
-  
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
-*::-webkit-scrollbar, .left::-webkit-scrollbar, .middle::-webkit-scrollbar, .right::-webkit-scrollbar {
+*::-webkit-scrollbar,
+.left::-webkit-scrollbar,
+.middle::-webkit-scrollbar,
+.right::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
-*, .left, .middle, .right {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+*,
+.left,
+.middle,
+.right {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
+.serach-page-top {
+  border: 1px solid #444444;
+  display: flex;
+  justify-content: left;
+}
 
-
+.serach-page-top input {
+  /* border: 1px solid #000; */
+  width: 100% !important;
+}
 
 /*====================================================================
 =            MEDIA QUERIES - SMALL LAPTOP AND BIG TABLETS            =
@@ -739,6 +806,7 @@ main .container .left .profile {
 @media screen and (max-width: 1200px) {
   .container {
     width: 96%;
+    overflow: hidden !important;
   }
 
   main .container {
@@ -763,6 +831,10 @@ main .container .left .profile {
     display: none;
   }
 
+  /* .middle{
+    padding-bottom: 50px;
+  } */
+
   .customize-theme .card {
     width: 80vw;
   }
@@ -785,13 +857,13 @@ main .container .left .profile {
   main .container .left {
     grid-column: 1/-1;
     position: fixed;
-    /* top: 4.25rem; */
-	bottom: 0;
+    bottom: 0;
     right: 0;
+    left: 0;
   }
 
   main .container .left .sidebar {
-	width: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -800,15 +872,14 @@ main .container .left .profile {
     left: 0;
   }
 
-  main .container .left .sidebar a{
-	justify-content: center;
-	align-items: center;
-	flex: 1 ;
+  main .container .left .sidebar a {
+    justify-content: center;
+    align-items: center;
+    flex: 1;
   }
 
-  main .container .left .sidebar .active{
-	border-bottom: 5px solid var(--color-primary);
-
+  main .container .left .sidebar .active {
+    border-bottom: 5px solid var(--color-primary);
   }
 
   .left .sidebar i {
@@ -817,21 +888,21 @@ main .container .left .profile {
     margin-left: 1rem;
     margin-right: 1rem;
     position: relative;
-	margin: auto auto;
+    margin: auto auto;
   }
 
   .left .sidebar .menu-item:first-child.active {
-	border-top-left-radius: 0;
-	overflow: hidden;
+    border-top-left-radius: 0;
+    overflow: hidden;
   }
-  
+
   .left .sidebar .menu-item:last-child.active {
-	border-bottom-left-radius: 0;
-	overflow: hidden;
+    border-bottom-left-radius: 0;
+    overflow: hidden;
   }
-  
+
   .left .sidebar .active::before {
-	display: none !important;
+    display: none !important;
   }
 
   .left .notifications-popup {
@@ -851,26 +922,49 @@ main .container .left .profile {
   }
 
   .middle .stories {
-	width: 100%;
-	overflow-x: scroll;
-	display: flex;
-	justify-content: space-between;
-	height: 12rem;
-	gap: 0.5rem;
+    width: 100%;
+    overflow-x: scroll;
+    display: flex;
+    justify-content: space-between;
+    height: 12rem;
+    gap: 0.5rem;
   }
-  
+
   .middle .stories .story {
-	padding: var(--card-padding);
-	border-radius: var(--card-border-radius);
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-	color: white;
-	font-size: 0.75rem;
-	width: 100%;
-	position: relative;
-	overflow: hidden;
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-size: 0.75rem;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
   }
+
+  .middle {
+    padding-bottom: 50px;
+  }
+
+  .post-text {
+    font-size: 17px;
+    text-align: center;
+    
+  }
+
   
+
+  .customize-theme .card {
+    width: 80vw;
+  }
+  .customize-theme h5,
+  .customize-theme .card .background .choose-bg span {
+    display: none;
+  }
+
+  .customize-theme .card .background .choose-bg div {
+    width: 50px;
+  }
 }

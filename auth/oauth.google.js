@@ -58,7 +58,7 @@ googleAuthRouter.get(
       // res
       //   .status(200)
       //   .json({ msg: "Login Successfull", token, ok: true, UserDetails });
-      res.cookie('token', token, { httpOnly: true });
+      res.cookie('token', `Bearer ${token}`, { httpOnly: true });
       res.cookie('UserDetails', JSON.stringify(UserDetails), { httpOnly: true });
       // Redirect to login page
       // console.log("successfull..");
@@ -80,7 +80,7 @@ googleAuthRouter.get(
       // res
       //   .status(200)
       //   .json({ msg: "Login Successfull", token, ok: true, UserDetails });
-      res.cookie('token', token, { httpOnly: true });
+      res.cookie('token', `Bearer ${token}`, { httpOnly: true });
       res.cookie('UserDetails', JSON.stringify(UserDetails));
       // Redirect to login page
       // console.log("Successful");

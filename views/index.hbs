@@ -26,11 +26,12 @@
         </div>
         <div class="create">
           <label for="create-post" class="btn btn-primary">Create</label>
-          <div class="profile-photo">
-            <img
-              src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
-            />
-          </div>
+          <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
+              <img
+                src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+              />
+            </div></a>
+
         </div>
       </div>
     </nav>
@@ -39,7 +40,7 @@
       <div class="container">
         <!-- LEFT -->
         <div class="left">
-          <a href="/:id" class="profile">
+          <a href="/{{UserDetails.UserID}}" class="profile">
             <div class="profile-photo">
               <img
                 src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
@@ -52,93 +53,29 @@
           </a>
           <!-- SIDEBAR -->
           <div class="sidebar">
-            <a href="#" class="menu-item active"><span><i
+            <a href="/" class="menu-item active"><span><i
                   class="uil uil-home"
                 ></i></span>
               <h3>Home</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/search" class="menu-item"><span><i
                   class="uil uil-compass"
                 ></i></span>
               <h3>Explore</h3>
             </a>
             <a href="#" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
-                ><small class="notification-count">6</small></i></span>
+                ><small class="notification-count"></small></i></span>
               <h3>Notifications</h3>
-              <!-- NOTIFICATION POPUP -->
-              <div class="notifications-popup">
-                <div>
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/11/11/08/23/woman-8380758_640.jpg"
-                    />
-                  </div>
-                  <div class="notification-body">
-                    <b>Keke Benjamin</b>
-                    accepted your friend request
-                    <small class="text-muted">2 DAYS AGO</small>
-                  </div>
-                </div>
-                <div>
-                  <div class="profile-photo">
-                    <img src="./images/profile-3.jpg" />
-                  </div>
-                  <div class="notification-body">
-                    <b>John Doe</b>
-                    commented your post
-                    <small class="text-muted">1 HOUR AGO</small>
-                  </div>
-                </div>
-                <div>
-                  <div class="profile-photo">
-                    <img src="./images/profile-4.jpg" />
-                  </div>
-                  <div class="notification-body">
-                    <b>Mary Oppong </b>and
-                    <b>283 others</b>
-                    liked your post
-                    <small class="text-muted">4 MINUTES AGO</small>
-                  </div>
-                </div>
-                <div>
-                  <div class="profile-photo">
-                    <img src="./images/profile-5.jpg" />
-                  </div>
-                  <div class="notification-body">
-                    <b>Doris Y. Lartey</b>
-                    commented on a post you are tagged in
-                    <small class="text-muted">2 DAYS AGO</small>
-                  </div>
-                </div>
-                <div>
-                  <div class="profile-photo">
-                    <img src="./images/profile-6.jpg" />
-                  </div>
-                  <div class="notification-body">
-                    <b>Lisa Trump</b>
-                    commented on a post you are tagged in
-                    <small class="text-muted">1 HOUR AGO</small>
-                  </div>
-                </div>
-                <div>
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/11/07/12/33/owl-8372237_640.jpg"
-                    />
-                  </div>
-                  <div class="notification-body">
-                    <b>Jane Doe</b>
-                    commented your post
-                    <small class="text-muted">1 HOUR AGO</small>
-                  </div>
-                </div>
-              </div>
-              <!-- END OF NOTIFICATION POPUP -->
+
             </a>
-            <a href="#" class="menu-item" id="messages-notification"><span><i
-                  class="uil uil-envelope-alt"
-                ><small class="notification-count">6</small></i></span>
+            <a
+              href="/message"
+              class="menu-item"
+              id="messages-notification"
+            ><span><i class="uil uil-envelope-alt"><small
+                    class="notification-count"
+                  ></small></i></span>
               <h3>Messages</h3>
             </a>
             <a href="#" class="menu-item"><span><i
@@ -169,7 +106,7 @@
         <!-- MIDDLE -->
         <div class="middle">
           <!-- STORIES -->
-          <div class="stories">
+          <!-- <div class="stories">
             <div class="story">
               <div class="profile-photo">
                 <img
@@ -218,9 +155,14 @@
               </div>
               <p class="name">Tina White</p>
             </div>
-            <!-- END OF STORIES -->
-          </div>
-          <form class="create-post" id="post_form">
+
+          </div> -->
+         
+          <form
+            class="create-post"
+            id="post_form"
+            enctype="multipart/form-data"
+          >
             <div class="profile-photo">
               <img
                 src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
@@ -230,72 +172,137 @@
               id="create-post"
               placeholder="What's on your mind, {{UserDetails.UserName}}?"
             ></textarea>
-            <input type="submit" id="post-submit-btn" value="Post" class="btn btn-primary" />
 
+            <input
+              type="file"
+              id="fileinput"
+              name="fileinput"
+              accept="image/*,application/pdf"
+              style="display: none;"
+            />
+
+            <label for="fileinput" class="btn">
+              <i class="uil uil-upload"></i>
+            </label>
+
+            <input
+              type="submit"
+              id="post-submit-btn"
+              value="Post"
+              class="btn btn-primary"
+            />
           </form>
+
           <!-- FEEDS -->
           <div class="feeds">
             <!-- FEED 1 -->
             {{#each posts}}
               <div class="feed">
                 <div class="head">
-                  <div class="user">
-                    <div class="profile-photo">
-                      <img
-                        src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
-                      />
-                    </div>
-                    <div class="info">
-                      <h3>{{this.UserDetails.UserName}}</h3>
-                      <small>{{formatDate this.CreatedAt}}</small>
-                    </div>
-                  </div>
-                  <span class="edit">
+                  <a href="/{{this.UserDetails.UserID}}"><div class="user">
+                      <div class="profile-photo">
+                        <img
+                          src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
+                        />
+                      </div>
+                      <div class="info">
+                        <h3>{{this.UserDetails.UserName}}</h3>
+                        <small>{{formatDate this.CreatedAt}}</small>
+                      </div>
+                    </div></a>
+
+                  <!-- <span class="edit">
                     <i class="uil uil-ellipsis-h"></i>
+                  </span> -->
+                  
+                  <span class="dropdown edit">
+                    <i onclick="myFunction('{{this._id}}')" class="dropbtn uil uil-ellipsis-h"></i>
+                    <div id="myDropdown-{{this._id}}" class="dropdown-content">
+                      {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}<a href="" onclick="deletePost('{{this._id}}')">Delete</a> {{else}}{{/if}}
+                      <a href="#about">Report</a>
+                      <a href="#contact">Profile</a>
+                    </div>
                   </span>
+
+
+
                 </div>
-                <div class="photo">
-                  {{! <img
-                  src="https://cdn.pixabay.com/photo/2023/04/13/17/49/dare-7923106_640.jpg"
-                /> }}
-                  <p style="text-align: center;">{{formatText this.text}}</p>
-                </div>
+                <a href="/comment/{{this._id}}">
+                  <div class="photo">
+                    {{#if this.photo}}
+                      <img
+                        src="{{this.photo}}"
+                        onerror="this.style.display='none'"
+                      />
+                    {{/if}}
+                    {{#if this.pdf}}
+                      <div
+                        id="pdf-loader"
+                        style="width:475px; height:400px; display: flex; align-items: center; justify-content: center;"
+                      >
+                        <p>Loading PDF...</p>
+                      </div>
+                      <iframe
+                        id="pdf-preview"
+                        src="http://docs.google.com/gview?url={{this.pdf}}&embedded=true"
+                        style="width:475px; height:400px; display: none;"
+                        frameborder="0"
+                        onload="document.getElementById('pdf-loader').style.display='none'; this.style.display='block';"
+                      ></iframe>
+                      <a href="{{this.pdf}}" download>Download PDF</a>
+
+                    {{/if}}
+
+                    <p class="post-text">{{formatText this.text}}</p>
+                  </div>
+                </a>
+
                 <div class="action-buttons">
                   <div class="interaction-buttons">
                     <span><i class="uil uil-thumbs-up"></i></span>
-                    <span><i class="uil uil-comment-dots"></i></span>
+                    <span><a href="/comment/{{this._id}}"><i
+                          class="uil uil-comment-dots"
+                        ></i></a></span>
                     <span><i class="uil uil-share-alt"></i></span>
                   </div>
                   <div class="bookmark">
                     <span><i class="uil uil-bookmark-full"></i></span>
                   </div>
                 </div>
-                <div class="liked-by">
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
-                    />
-                  </span>
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/10/50/cormorant-8516719_640.jpg"
-                    />
-                  </span>
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
-                    />
-                  </span>
-                  <p>Liked by <b>Ernest Achiever </b>and <b>2,323 others</b></p>
-                </div>
+
+                <!-- <div class="liked-by">
+                    <span>
+                      <img
+                        src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
+                      />
+                    </span>
+                    <span>
+                      <img
+                        src="https://cdn.pixabay.com/photo/2024/01/18/10/50/cormorant-8516719_640.jpg"
+                      />
+                    </span>
+                    <span>
+                      <img
+                        src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
+                      />
+                    </span>
+                    <p>Liked by
+                      <b>Ernest Achiever </b>and
+                      <b>2,323 others</b></p>
+                  </div> -->
                 <div class="caption">
                   <p>
-                    <b>Lana Rose</b>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    <span class="harsh-tag">#lifestyle</span>
+                    <b>B.tech CSE FSD</b>
+                    | Section 1 | Group 1 |
+                    <b>Roll No.</b>
+                    2301350008
+
                   </p>
-                </div>
-                <div class="comments text-muted">View all 277 comments</div>
+                  <p><span class="harsh-tag">#lifestyle</span></p>
+                </div><a href="/comment/{{this._id}}"><div
+                    class="comments text-muted"
+                  >View all comments</div></a>
+
               </div>
             {{/each}}
             <!-- END OF FEED 1 -->
@@ -319,7 +326,7 @@
               </div>
               <div class="photo">
                 <!-- <img src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg" /> -->
-                <p style="text-align: center;">Hello everyone,
+                <p class="post-text">Hello everyone,
                   <br />
                   a new developmental program is being organised by our
                   university,<br />
@@ -348,7 +355,9 @@
                   />
                 </span>
                 <span>
-                  <img src="./images/profile-5.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <p>Liked by <b>Jane Doe </b>and <b>1,500 others</b></p>
               </div>
@@ -397,13 +406,19 @@
               </div>
               <div class="liked-by">
                 <span>
-                  <img src="./images/profile-10.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <span>
-                  <img src="./images/profile-4.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <span>
-                  <img src="./images/profile-15.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <p>Liked by <b>Winnie Hale </b>and <b>3,001 others</b></p>
               </div>
@@ -458,10 +473,14 @@
                   />
                 </span>
                 <span>
-                  <img src="./images/profile-17.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <span>
-                  <img src="./images/profile-3.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <p>Liked by <b>Tina White </b>and <b>2,323 others</b></p>
               </div>
@@ -511,13 +530,19 @@
               </div>
               <div class="liked-by">
                 <span>
-                  <img src="./images/profile-2.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <span>
-                  <img src="./images/profile-9.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <span>
-                  <img src="./images/profile-14.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <p>Liked by <b>Daniel Jones </b>and <b>1,250 others</b></p>
               </div>
@@ -566,13 +591,19 @@
               </div>
               <div class="liked-by">
                 <span>
-                  <img src="./images/profile-10.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <span>
-                  <img src="./images/profile-4.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <span>
-                  <img src="./images/profile-15.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <p>Liked by <b>Jane Doe </b>and <b>403 others</b></p>
               </div>
@@ -620,13 +651,19 @@
               </div>
               <div class="liked-by">
                 <span>
-                  <img src="./images/profile-1.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <span>
-                  <img src="./images/profile-9.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <span>
-                  <img src="./images/profile-12.jpg" />
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
+                  />
                 </span>
                 <p>Liked by <b>Jane Doe </b>and <b>507 others</b></p>
               </div>
@@ -832,7 +869,7 @@
             <!-- BACKGROUND COLORS -->
             <div class="background">
               <h4>Bacground</h4>
-              <div class="choose-bg">
+              <div class="choose-bg" style="border: 1px solid red;">
                 <div class="bg-1 active">
                   <span></span>
                   <h5 for="bg-1">Light</h5>

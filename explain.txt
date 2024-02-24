@@ -3,3 +3,10 @@ const UserDetails = {"UserID":user._id, "UserName":user.name}
 const token = jwt.sign({"UserDetails":UserDetails}, process.env.secret_key, {expiresIn:"7h"});
 
 redirect to login page once fronend is deployed; Oauth.github.js line 87 and oauth.google.js line 84
+
+mongoose.connection.once('open', async () => {
+  const indexExists = await mongoose.connection.db.collection('users').indexExists('name_text');
+  if (!indexExists) {
+    await mongoose.connection.db.collection('users').createIndex({ name: 'text' });
+  }
+});
