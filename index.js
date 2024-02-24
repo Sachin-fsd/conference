@@ -1,36 +1,35 @@
-const express = require("express");
-const cors = require("cors");
-const cookieParser = require("cookie-parser");
-const { connection } = require("./configs/db");
-const { RegisterModel } = require("./models/register.model");
-const app = express();
-const jwt = require("jsonwebtoken");
-const { userRouter } = require("./routes/user.router");
-const { authenticator } = require("./middleware/authenticator.middleware");
-const { postRouter } = require("./routes/post.router.js");
-const { googleAuthRouter } = require("./auth/oauth.google");
-const path = require("path");
-const hbs = require("hbs");
-const { registerRouter } = require("./routes/register.router");
-const { loginRouter } = require("./routes/login.router");
-const { forgetRouter } = require("./routes/forget_pwd.route");
-const { Server } = require("socket.io");
-const http = require("http");
-const session = require("express-session");
-const connectDB = require("./configs/db");
-const { searchRouter } = require("./routes/search.router.js");
-const { commentRouter } = require("./routes/comment.router.js");
-const { chatRouter } = require("./routes/chat.router.js");
-const { messageRouter } = require("./routes/message.router.js");
-const { MessageModel } = require("./models/message.model.js");
-const { ChatModel } = require("./models/chat.model.js");
-const { PostModel } = require("./models/post.model.js");
-require("dotenv").config();
+const express = require('express')
+const cors = require('cors')
+const cookieParser = require('cookie-parser')
+// const { RegisterModel } = require('./models/register.model')
+const app = express()
+// const jwt = require('jsonwebtoken')
+// const { userRouter } = require('./routes/user.router')
+const { authenticator } = require('./middleware/authenticator.middleware')
+const { postRouter } = require('./routes/post.router.js')
+// const { googleAuthRouter } = require('./auth/oauth.google')
+const path = require('path')
+const hbs = require('hbs')
+const { registerRouter } = require('./routes/register.router')
+const { loginRouter } = require('./routes/login.router')
+const { forgetRouter } = require('./routes/forget_pwd.route')
+const { Server } = require('socket.io')
+const http = require('http')
+// const session = require('express-session')
+const connectDB = require('./configs/db')
+const { searchRouter } = require('./routes/search.router.js')
+const { commentRouter } = require('./routes/comment.router.js')
+const { chatRouter } = require('./routes/chat.router.js')
+const { messageRouter } = require('./routes/message.router.js')
+const { MessageModel } = require('./models/message.model.js')
+const { ChatModel } = require('./models/chat.model.js')
+const { PostModel } = require('./models/post.model.js')
+require('dotenv').config()
 
-const server = http.createServer(app);
-app.use(cors());
-app.use(cookieParser());
-app.use(express.json());
+const server = http.createServer(app)
+app.use(cors())
+app.use(cookieParser())
+app.use(express.json())
 
 // app.set('trust proxy', 1) // trust first proxy
 // app.use(
@@ -42,43 +41,43 @@ app.use(express.json());
 //   })
 // );
 
-app.set("view engine", "hbs");
-app.set("views", path.join(__dirname, "/views"));
-app.use("/styles", express.static(__dirname + "/views/styles"));
-app.use("/scripts", express.static(__dirname + "/views/scripts"));
-hbs.registerHelper("json", function (context) {
-  return JSON.stringify(context);
-});
-hbs.registerHelper("formatDate", function (date) {
-  return date.toString().substring(0, 24);
-});
-hbs.registerHelper("formatText", function (text) {
-  return new hbs.SafeString(text.replace(/\n/g, "<br>"));
-});
-hbs.registerHelper("eq", function (a, b) {
-  return a === b;
-});
+app.set('view engine', 'hbs')
+app.set('views', path.join(__dirname, '/views'))
+app.use('/styles', express.static(path.resolve(__dirname, 'views', 'styles')))
+app.use('/scripts', express.static(path.resolve(__dirname, 'views', 'scripts')))
+hbs.registerHelper('json', function (context) {
+  return JSON.stringify(context)
+})
+hbs.registerHelper('formatDate', function (date) {
+  return date.toString().substring(0, 24)
+})
+hbs.registerHelper('formatText', function (text) {
+  return new hbs.SafeString(text.replace(/\n/g, '<br>'))
+})
+hbs.registerHelper('eq', function (a, b) {
+  return a === b
+})
 
 // app.get("/usersList", async (req, res) => {
 //   const users = await RegisterModel.find();
 //   res.send(users);
 // });
-app.get("/messagesList", async (req, res) => {
-  const users = await MessageModel.find();
-  res.send(users);
-});
-app.get("/chatList", async (req, res) => {
-  const users = await ChatModel.find();
-  res.send(users);
-});
-app.get("/postList", async (req, res) => {
-  const users = await PostModel.find();
-  res.send(users);
-});
+app.get('/messagesList', async (req, res) => {
+  const users = await MessageModel.find()
+  res.send(users)
+})
+app.get('/chatList', async (req, res) => {
+  const users = await ChatModel.find()
+  res.send(users)
+})
+app.get('/postList', async (req, res) => {
+  const users = await PostModel.find()
+  res.send(users)
+})
 
-app.use("/register", registerRouter);
-app.use("/login", loginRouter);
-app.use("/forgetpwd", forgetRouter);
+app.use('/register', registerRouter)
+app.use('/login', loginRouter)
+app.use('/forgetpwd', forgetRouter)
 
 // app.use("/user", userRouter);
 
@@ -172,21 +171,21 @@ app.use("/forgetpwd", forgetRouter);
 //   }
 // });
 
-app.get("/welcome", (req, res) => {
-  res.render("landing");
-});
+app.get('/welcome', (req, res) => {
+  res.render('landing')
+})
 
 // app.use(authenticator)
 
-app.use("/search", authenticator, searchRouter);
-app.use("/comment", authenticator, commentRouter);
-app.use("/chat", authenticator, chatRouter);
-app.use("/message", authenticator, messageRouter);
+app.use('/search', authenticator, searchRouter)
+app.use('/comment', authenticator, commentRouter)
+app.use('/chat', authenticator, chatRouter)
+app.use('/message', authenticator, messageRouter)
 // (async()=>{
 //   await ChatModel.deleteMany({})
 // })()
 
-app.use("/", authenticator, postRouter);
+app.use('/', authenticator, postRouter)
 // app.use("/post", postRouter);
 // app.use(authenticator);
 
@@ -201,36 +200,36 @@ app.use("/", authenticator, postRouter);
 //   });
 // });
 
-const io = new Server(server);
-io.on("connection", (socket) => {
-  console.log("user connected");
+const io = new Server(server)
+io.on('connection', (socket) => {
+  console.log('user connected')
 
-  socket.on("join room", (postID) => {
-    socket.join(postID);
-  });
+  socket.on('join room', (postID) => {
+    socket.join(postID)
+  })
   // socket.on("join message room", (receiverID) => {
   //   socket.join(receiverID);
   // });
 
-  socket.on("leave room", (postID) => {
-    socket.leave(postID);
-  });
+  socket.on('leave room', (postID) => {
+    socket.leave(postID)
+  })
 
-  socket.on("new comment", (comment) => {
-    io.to(comment.postID).emit("new comment", comment);
-  });
+  socket.on('new comment', (comment) => {
+    io.to(comment.postID).emit('new comment', comment)
+  })
 
-  socket.on("new chat", (comment) => {
-    socket.to(comment.postID).emit("new chat", comment);
-    socket.to(comment.receiverID).emit("new chat", comment);
-  });
+  socket.on('new chat', (comment) => {
+    socket.to(comment.postID).emit('new chat', comment)
+    socket.to(comment.receiverID).emit('new chat', comment)
+  })
 
-  socket.on("done reading", (comment) => {
-    socket.to(comment.postID).emit("done reading", comment);
-  });
-});
+  socket.on('done reading', (comment) => {
+    socket.to(comment.postID).emit('done reading', comment)
+  })
+})
 
-const PORT = process.env.port || 8080;
+const PORT = process.env.port || 8080
 
 // const connectDB = async () => {
 //   try {
@@ -244,30 +243,30 @@ const PORT = process.env.port || 8080;
 
 connectDB().then(() => {
   server.listen(PORT, () => {
-    console.log("listening for requests");
+    console.log('listening for requests')
     // dlt()
-  });
-});
+  })
+})
 
-function dlt() {
-  PostModel.find()
-    .sort({ CreatedAt: -1 })
-    .limit(1)
-    .then((docs) => {
-      docs.forEach((doc) => {
-        PostModel.findByIdAndDelete(doc._id)
-          .then((deletedDoc) => {
-            console.log("Deleted document:", deletedDoc);
-          })
-          .catch((err) => {
-            console.error("Error deleting document:", err);
-          });
-      });
-    })
-    .catch((err) => {
-      console.error("Error finding documents:", err);
-    });
-}
+// function dlt () {
+//   PostModel.find()
+//     .sort({ CreatedAt: -1 })
+//     .limit(1)
+//     .then((docs) => {
+//       docs.forEach((doc) => {
+//         PostModel.findByIdAndDelete(doc._id)
+//           .then((deletedDoc) => {
+//             console.log('Deleted document:', deletedDoc)
+//           })
+//           .catch((err) => {
+//             console.error('Error deleting document:', err)
+//           })
+//       })
+//     })
+//     .catch((err) => {
+//       console.error('Error finding documents:', err)
+//     })
+// }
 // app.listen(process.env.port, async () => {
 //   try {
 //     await connection;
