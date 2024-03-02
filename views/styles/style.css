@@ -292,9 +292,9 @@ main .container .left .profile {
 }
 
 /* ------------ MIDDLE ------------ */
-.middle{
+/* .middle{
   padding-bottom: 100px;
-}
+} */
 
 .middle .stories {
   display: flex;
@@ -373,6 +373,35 @@ main .container .left .profile {
 }
 
 /* ------------ CREATE POST ------------ */
+.preview {
+  width: 100%;
+  margin-top: 1rem;
+  background-color: var(--color-white);
+  padding: 0.4rem var(--card-padding);
+  border-radius: var(--card-border-radius);
+  max-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-photo {
+  max-height: 200px;
+  width: auto;
+  object-fit: contain;
+}
+
+.preview-video {
+  max-height: 200px;
+  width: auto;
+  object-fit: contain;
+}
+
+.pdf-name {
+  margin: 1rem 0;
+  font-size: 0.85rem;
+}
+
 .middle .create-post {
   width: 100%;
   display: flex;
@@ -395,6 +424,10 @@ main .container .left .profile {
 }
 
 /* FEED */
+.middle{
+  z-index: 1;
+}
+
 .middle .feeds .feed {
   background-color: var(--color-white);
   border-radius: var(--card-border-radius);
@@ -464,6 +497,12 @@ main .container .left .profile {
   align-items: center;
   font-size: 1.4rem;
   margin: 0.6rem;
+}
+
+.like-post{
+  cursor: pointer;
+  position:sticky;
+  z-index: 10;
 }
 
 .middle .liked-by {
@@ -850,6 +889,7 @@ main .container .left .profile {
   }
 
   main .container {
+    margin-top: -18px;
     grid-template-columns: 0 auto;
     gap: 0;
   }
@@ -860,6 +900,11 @@ main .container .left .profile {
     bottom: 0;
     right: 0;
     left: 0;
+  }
+
+  .left {
+    width: 1rem;
+    z-index: 5;
   }
 
   main .container .left .sidebar {
@@ -953,8 +998,6 @@ main .container .left .profile {
     text-align: center;
     
   }
-
-  
 
   .customize-theme .card {
     width: 80vw;

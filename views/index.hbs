@@ -4,6 +4,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Conference</title>
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <!-- ICONSCOUT CDN -->
     <link
       rel="stylesheet"
@@ -61,7 +64,7 @@
             <a href="/search" class="menu-item"><span><i
                   class="uil uil-compass"
                 ></i></span>
-              <h3>Explore</h3>
+              <h3>SEARCH</h3>
             </a>
             <a href="#" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
@@ -157,7 +160,12 @@
             </div>
 
           </div> -->
-         
+          <div class="preview" id="preview" style="display: none;" >
+            <img id="preview-photo" style="display: none;" class="preview-photo">
+            <video id="preview-video" style="display: none;" class="preview-video"></video>
+            <p id="file-name" style="display: none;" class="pdf-name"></p>
+          </div>
+          
           <form
             class="create-post"
             id="post_form"
@@ -168,16 +176,20 @@
                 src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
               />
             </div>
+
+            
+
             <textarea
               id="create-post"
               placeholder="What's on your mind, {{UserDetails.UserName}}?"
+              required
             ></textarea>
 
             <input
               type="file"
               id="fileinput"
               name="fileinput"
-              accept="image/*,application/pdf"
+              accept="image/*,application/pdf,video/*"
               style="display: none;"
             />
 
@@ -219,8 +231,8 @@
                     <i onclick="myFunction('{{this._id}}')" class="dropbtn uil uil-ellipsis-h"></i>
                     <div id="myDropdown-{{this._id}}" class="dropdown-content">
                       {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}<a href="" onclick="deletePost('{{this._id}}')">Delete</a> {{else}}{{/if}}
-                      <a href="#about">Report</a>
-                      <a href="#contact">Profile</a>
+                      <a href="/comment/{{this._id}}">Comment</a>
+                      <a href="/{{this.UserDetails.UserID}}">Profile</a>
                     </div>
                   </span>
 
@@ -233,7 +245,13 @@
                       <img
                         src="{{this.photo}}"
                         onerror="this.style.display='none'"
+                        
                       />
+                    {{/if}}
+                    {{#if this.video}}
+                    <video width="" height="" controls src="{{this.video}}" onerror="this.style.display='none'" class="preview-video">
+                      
+                    </video>
                     {{/if}}
                     {{#if this.pdf}}
                       <div
@@ -259,9 +277,12 @@
 
                 <div class="action-buttons">
                   <div class="interaction-buttons">
-                    <span><i class="uil uil-thumbs-up"></i></span>
+                    <!-- <span><i class="uil uil-thumbs-up"></i></span> -->
+                    <span class="like-post" onclick="likePost(event,'{{this._id}}','{{this.UserDetails.UserID}}')">
+                    {{#if (eq this.liked 1)}}<i class='bx bxs-like' style="color: #f54a6c;"></i>{{else}}<i class='bx bx-like' style="color: #f54a6c"></i>{{/if}}
+                    </span>
                     <span><a href="/comment/{{this._id}}"><i
-                          class="uil uil-comment-dots"
+                          class="uil uil-comment-dots" style="color: rgb(51, 100, 51);"
                         ></i></a></span>
                     <span><i class="uil uil-share-alt"></i></span>
                   </div>
@@ -306,73 +327,9 @@
               </div>
             {{/each}}
             <!-- END OF FEED 1 -->
-            <!-- FEED 2 -->
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
-                    />
-                  </div>
-                  <div class="info">
-                    <h3>Faculty 1</h3>
-                    <small>SoET, 35 MINUTES AGO</small>
-                  </div>
-                </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-              <div class="photo">
-                <!-- <img src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg" /> -->
-                <p class="post-text">Hello everyone,
-                  <br />
-                  a new developmental program is being organised by our
-                  university,<br />
-                  further information will be shared soon👍
-                </p>
-              </div>
-              <div class="action-buttons">
-                <div class="interaction-buttons">
-                  <span><i class="uil uil-thumbs-up"></i></span>
-                  <span><i class="uil uil-comment-dots"></i></span>
-                  <span><i class="uil uil-share-alt"></i></span>
-                </div>
-                <div class="bookmark">
-                  <span><i class="uil uil-bookmark-full"></i></span>
-                </div>
-              </div>
-              <div class="liked-by">
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2024/01/15/08/56/women-8509637_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2024/01/18/10/50/cormorant-8516719_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <p>Liked by <b>Jane Doe </b>and <b>1,500 others</b></p>
-              </div>
-              <div class="caption">
-                <p>
-                  <b>Lilla James</b>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  <span class="harsh-tag">#mood</span>
-                </p>
-              </div>
-              <div class="comments text-muted">View all 315 comments</div>
-            </div>
-            <!-- END OF FEED 2 -->
+            
             <!-- FEED 3 -->
-            <div class="feed">
+            <!-- <div class="feed">
               <div class="head">
                 <div class="user">
                   <div class="profile-photo">
@@ -430,253 +387,8 @@
                 </p>
               </div>
               <div class="comments text-muted">View all 1,300 comments</div>
-            </div>
+            </div> -->
             <!-- END OF FEED 3 -->
-            <!-- FEED 4 -->
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/10/26/17/16/spider-8343193_1280.jpg"
-                    />
-                  </div>
-                  <div class="info">
-                    <h3>Lana Rose</h3>
-                    <small>Dubai, 15 MINUTES AGO</small>
-                  </div>
-                </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-              <div class="photo">
-                <!-- <img src="./images/feed-4.jpg" /> -->
-                <p>Today was end of the exam.
-                  <br />
-                  Can't tell how much happy am i !!!</p>
-              </div>
-              <div class="action-buttons">
-                <div class="interaction-buttons">
-                  <span><i class="uil uil-thumbs-up"></i></span>
-                  <span><i class="uil uil-comment-dots"></i></span>
-                  <span><i class="uil uil-share-alt"></i></span>
-                </div>
-                <div class="bookmark">
-                  <span><i class="uil uil-bookmark-full"></i></span>
-                </div>
-              </div>
-              <div class="liked-by">
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/10/23/07/43/winter-8335532_640.png"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <p>Liked by <b>Tina White </b>and <b>2,323 others</b></p>
-              </div>
-              <div class="caption">
-                <p>
-                  <b>Lana Rose</b>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  <span class="harsh-tag">#lifestyle</span>
-                </p>
-              </div>
-              <div class="comments text-muted">View all 154 comments</div>
-            </div>
-            <!-- END OF FEED 4 -->
-            <!-- FEED 5 -->
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/10/23/07/43/winter-8335532_640.png"
-                    />
-                  </div>
-                  <div class="info">
-                    <h3>Tina White</h3>
-                    <small>California, 2.5 HOURS AGO</small>
-                  </div>
-                </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-              <div class="photo">
-                <p>Visited California today, virtually😁</p>
-                <img
-                  src="https://cdn.pixabay.com/photo/2023/11/24/17/22/city-8410353_640.jpg"
-                />
-              </div>
-              <div class="action-buttons">
-                <div class="interaction-buttons">
-                  <span><i class="uil uil-thumbs-up"></i></span>
-                  <span><i class="uil uil-comment-dots"></i></span>
-                  <span><i class="uil uil-share-alt"></i></span>
-                </div>
-                <div class="bookmark">
-                  <span><i class="uil uil-bookmark-full"></i></span>
-                </div>
-              </div>
-              <div class="liked-by">
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <p>Liked by <b>Daniel Jones </b>and <b>1,250 others</b></p>
-              </div>
-              <div class="caption">
-                <p>
-                  <b>Tina White</b>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  <span class="harsh-tag">#street</span>
-                </p>
-              </div>
-              <div class="comments text-muted">View all 753 comments</div>
-            </div>
-            <!-- END OF FEED 5 -->
-            <!-- FEED 6 -->
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/03/15/16/17/feather-7854908_640.jpg"
-                    />
-                  </div>
-                  <div class="info">
-                    <h3>Lilla James</h3>
-                    <small>France, 6 HOURS AGO</small>
-                  </div>
-                </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-              <div class="photo">
-                <img
-                  src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                />
-              </div>
-              <div class="action-buttons">
-                <div class="interaction-buttons">
-                  <span><i class="uil uil-thumbs-up"></i></span>
-                  <span><i class="uil uil-comment-dots"></i></span>
-                  <span><i class="uil uil-share-alt"></i></span>
-                </div>
-                <div class="bookmark">
-                  <span><i class="uil uil-bookmark-full"></i></span>
-                </div>
-              </div>
-              <div class="liked-by">
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <p>Liked by <b>Jane Doe </b>and <b>403 others</b></p>
-              </div>
-              <div class="caption">
-                <p>
-                  <b>Lilla James</b>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  <span class="harsh-tag">#work</span>
-                </p>
-              </div>
-              <div class="comments text-muted">View all 56 comments</div>
-            </div>
-            <!-- END OF FEED 6 -->
-            <!-- FEED 7 -->
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                    />
-                  </div>
-                  <div class="info">
-                    <h3>Lilla James</h3>
-                    <small>France, 6 HOURS AGO</small>
-                  </div>
-                </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-              <div class="photo">
-                <!-- <img src="./images/feed-7.jpg" /> -->
-                <p>Got a new Bike,will upload its photo later</p>
-              </div>
-              <div class="action-buttons">
-                <div class="interaction-buttons">
-                  <span><i class="uil uil-thumbs-up"></i></span>
-                  <span><i class="uil uil-comment-dots"></i></span>
-                  <span><i class="uil uil-share-alt"></i></span>
-                </div>
-                <div class="bookmark">
-                  <span><i class="uil uil-bookmark-full"></i></span>
-                </div>
-              </div>
-              <div class="liked-by">
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <span>
-                  <img
-                    src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                  />
-                </span>
-                <p>Liked by <b>Jane Doe </b>and <b>507 others</b></p>
-              </div>
-              <div class="caption">
-                <p>
-                  <b>Lilla James</b>
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  <span class="harsh-tag">#work</span>
-                </p>
-              </div>
-              <div class="comments text-muted">View all 53 comments</div>
-            </div>
-            <!-- END OF FEED 7 -->
           </div>
           <!-- END OF FEEDS-->
         </div>

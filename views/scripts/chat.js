@@ -3,6 +3,7 @@ window.onload = function () {
   textarea.addEventListener("input", autoResize, false);
 
   function autoResize() {
+    console.log("hello")
     this.style.height = "auto";
     this.style.height = this.scrollHeight + "px";
     this.setAttribute("style", "max-height:300px");
@@ -21,6 +22,15 @@ function getCookie(name) {
   }
 
   return null;
+}
+
+function toggleTime(id) {
+  var timeElement = document.getElementById(id);
+  if (timeElement.style.display === "none") {
+      timeElement.style.display = "block";
+  } else {
+      timeElement.style.display = "none";
+  }
 }
 
 document.getElementById("chat_form").addEventListener("submit", (e) => {

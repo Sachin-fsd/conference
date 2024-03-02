@@ -22,8 +22,9 @@ chatRouter.get("/:id", async (req, res) => {
     const ProfileUser = await RegisterModel.findOne({ _id: ID });
     let chats = await ChatModel.find({ room })
       .sort({ CreatedAt: -1 })
-      .limit(20);
-    chats = chats.reverse()
+      .limit(20).sort({CreatedAt:1});
+    
+      // console.log(read)
     res.render("chat", {
       UserDetails: req.body.UserDetails,
       ProfileUser: {

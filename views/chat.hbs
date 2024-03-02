@@ -66,7 +66,7 @@
             <a href="/search" class="menu-item"><span><i
                   class="uil uil-compass"
                 ></i></span>
-              <h3>Explore</h3>
+              <h3>SEARCH</h3>
             </a>
             <a href="#" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
@@ -120,7 +120,8 @@
           </a>
           <div class="content-only" id="feeds">
             {{#each chats}}
-            <div class="chat-message {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}} chat-right {{else}} chat-left {{/if}}"> {{formatText this.text}}</div>
+            <div class="chat-message {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}} chat-right {{else}} chat-left {{/if}}" onclick="toggleTime('chat-time-{{this._id}}')"> {{formatText this.text}}</div>
+            <p id="chat-time-{{this._id}}" class="chat-time {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}} chat-right {{else}} chat-left {{/if}}" style="display: none;">{{formatDate this.CreatedAt}}</p>
             {{/each}}
             
           </div>
@@ -133,7 +134,7 @@
               </div>
               <textarea
                 id="create-post"
-                placeholder="Write a comment."
+                placeholder="Message"
               ></textarea>
               <input
                 type="submit"

@@ -5,11 +5,23 @@
         "es2021": true,
         "node": true
     },
-    "extends": "standard",
+    "extends": ["eslint:recommended","prettier"],
     "parserOptions": {
         "ecmaVersion": "latest"
     },
     "rules": {
-        "quotes":"off"
+        "indent": [
+            "error",
+            4
+        ],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-unused-vars":"warn"
     }
 }

@@ -358,6 +358,11 @@ main .container .middle .profile {
   background-color: rgb(114, 114, 247);
 }
 
+.chat-time{
+  background-color: transparent;
+  font-size: 12px;
+}
+
 .middle .feeds .feed {
   background-color: none;
   border-radius: var(--card-border-radius);
@@ -787,6 +792,7 @@ main .container .middle .profile {
   }
 
   main .container {
+    margin-top: -18px;
     grid-template-columns: 0 auto;
     gap: 0;
   }
@@ -798,6 +804,10 @@ main .container .middle .profile {
     bottom: 0;
     right: 0;
   }
+  .left {
+    width: 1rem;
+    z-index: 5;
+}
 
   main .container .left .sidebar {
     width: 100%;
@@ -808,6 +818,11 @@ main .container .middle .profile {
     bottom: 0;
     left: 0;
   }
+  .left .sidebar {
+    margin-top: 0.2rem;
+    background-color: var(--color-white);
+    border-radius: var(--card-border-radius);
+}
 
   main .container .left .sidebar a {
     justify-content: center;

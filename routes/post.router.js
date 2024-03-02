@@ -1,9 +1,7 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
+const mongoose = require("mongoose")
 const { RegisterModel } = require("../models/register.model");
 const { PostModel, LikeModel } = require("../models/post.model");
-const { CommentModel } = require("../models/comment.model");
 const multer = require("multer");
 const Aws = require("aws-sdk");
 require("dotenv").config();
@@ -12,23 +10,41 @@ const postRouter = express.Router();
 
 postRouter.get("/", async (req, res) => {
   try {
-    // const UserID = req.body.UserDetails.UserID;
-    // const Users = await RegisterModel.find({},{name:1, email:1, _id:1}).sort({CreatedAt: -1}).limit(7);
-    // const userLikes = await LikeModel.find({ UserID }).limit(20);
+    // const posts = await PostModel.find().sort({ CreatedAt: -1 }).limit(20);
 
-    // const likedPostIds = new Set(
-    //   userLikes.map((like) => like.postID.toString())
-    // );
+    const UserID = req.body.UserDetails.UserID;
 
-    const posts = await PostModel.find().sort({ CreatedAt: -1 }).limit(20);
+    const posts = await PostModel.aggregate([
+      {
+        $lookup: {
+          from: "likes", 
+          let: { post_id: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$UserID",new mongoose.Types.ObjectId(UserID)] },
+                    { $eq: ["$postID", "$$post_id"] },
+                  ],
+                },
+              },
+            },
+            { $project: { _id: 0 } },
+          ],
+          as: "likes",
+        },
+      },
+      { $addFields: { liked: { $size: "$likes" } } },
+      { $sort: { CreatedAt: -1 } },
+      { $limit: 20 },
+    ]);
 
-    // const postWithLikes = posts.map((post) => {
-    //   const liked = likedPostIds.has(post._id.toString());
-    //   return { ...post._doc, liked };
-    // });
     console.log(req.route.path, "line 27");
+    console.log(posts[0]);
     res.render("index", { UserDetails: req.body.UserDetails, posts });
   } catch (error) {
+    console.log(error);
     res.json({ err: error });
   }
 });
@@ -41,8 +57,7 @@ const storage = multer.memoryStorage({
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype === "image/jpeg" ||
-    file.mimetype === "image/jpg" ||
+    file.mimetype.startsWith("image/") ||
     file.mimetype == "application/pdf" ||
     file.mimetype == "video/mp4"
   ) {
@@ -59,18 +74,6 @@ const s3 = new Aws.S3({
   secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
 });
 
-// postRouter.post("/", async (req, res) => {
-//   const payload = req.body;
-//   try {
-//     const post = new PostModel(payload);
-//     await post.save();
-//     // res.status(201).send({ msg: "Text saved successfully!" });
-//     res.redirect("/");
-//   } catch (error) {
-//     res.json({ err: error });
-//   }
-// });
-
 postRouter.post("/", upload.single("file"), (req, res) => {
   // Check if a file was uploaded
   if (req.file) {
@@ -80,7 +83,7 @@ postRouter.post("/", upload.single("file"), (req, res) => {
       Key: req.file.originalname,
       Body: req.file.buffer,
       ContentType: req.file.mimetype, //ContentDisposition: 'inline' for online opening
-      ContentDisposotion: "inline"
+      ContentDisposotion: "inline",
     };
 
     s3.upload(params, (error, data) => {
@@ -168,38 +171,6 @@ postRouter.get("/:id", async (req, res) => {
   }
 });
 
-// postRouter.get("/post/:id", async (req, res) => {
-//   try {
-//     const ID = req.params.id;
-//     const post = await PostModel.findOne(
-//       { _id: ID },
-//       { _id: 1, text: 1, CreatedAt: 1, UserDetails: 1}
-//     );
-//     const comments = await CommentModel.find({ parentPost: ID })
-//       .sort({ CreatedAt: -1 })
-//       .limit(20);
-
-//     res.render("comment", {
-//       UserDetails:req.body.UserDetails,
-//       activePost: {UserID:post._id, Username:post.UserDetails.UserName, CreatedAt:post.CreatedAt, text:post.text, },
-//       comments
-//     });
-//   } catch (error) {
-//     res.json({ err: error });
-//   }
-// })
-
-// postRouter.post("/post/:id", async (req, res) => {
-//   const payload = {UserDetails:req.body.UserDetails, text:req.body.text, parentPost:req.params.id};
-//   try {
-//     const comment = new CommentModel(payload);
-//     await comment.save();
-//     res.status(201).json({ok:true});
-//   } catch (error) {
-//     res.status(400).json({ err: error });
-//   }
-// });
-
 postRouter.put("/like/:id/:authorID", async (req, res) => {
   try {
     const UserID = req.body.UserDetails.UserID;
@@ -243,36 +214,36 @@ postRouter.delete("/delete/:id", async (req, res) => {
   }
 });
 
-postRouter.get("/:id", async (req, res) => {
-  try {
-    const UserID = req.body.UserDetails.UserID;
+// postRouter.get("/:id", async (req, res) => {
+//   try {
+//     const UserID = req.body.UserDetails.UserID;
 
-    // const userLikes = await LikeModel.find({ UserID }).limit(20);
-    const userLikes = await LikeModel.find({ UserID, authorID: req.params.id });
-    const likedPostIds = new Set(
-      userLikes.map((like) => like.postID.toString())
-    );
+//     // const userLikes = await LikeModel.find({ UserID }).limit(20);
+//     const userLikes = await LikeModel.find({ UserID, authorID: req.params.id });
+//     const likedPostIds = new Set(
+//       userLikes.map((like) => like.postID.toString())
+//     );
 
-    const UserDetails = await RegisterModel.findOne(
-      { _id: req.params.id },
-      { name: 1, email: 1, _id: 1 }
-    );
-    // console.log(authorDetails);
-    const posts = await PostModel.find({ "UserDetails.UserID": req.params.id })
-      .sort({ CreatedAt: -1 })
-      .limit(20);
-    const postCount = posts.length;
-    UserDetails.postCount = postCount;
-    const postWithLikes = posts.map((post) => {
-      const liked = likedPostIds.has(post._id.toString());
-      return { ...post._doc, liked };
-    });
+//     const UserDetails = await RegisterModel.findOne(
+//       { _id: req.params.id },
+//       { name: 1, email: 1, _id: 1 }
+//     );
+//     // console.log(authorDetails);
+//     const posts = await PostModel.find({ "UserDetails.UserID": req.params.id })
+//       .sort({ CreatedAt: -1 })
+//       .limit(20);
+//     const postCount = posts.length;
+//     UserDetails.postCount = postCount;
+//     const postWithLikes = posts.map((post) => {
+//       const liked = likedPostIds.has(post._id.toString());
+//       return { ...post._doc, liked };
+//     });
 
-    res.status(200).send({ UserDetails, posts: postWithLikes });
-  } catch (error) {
-    res.json({ err: error });
-  }
-});
+//     res.status(200).send({ UserDetails, posts: postWithLikes });
+//   } catch (error) {
+//     res.json({ err: error });
+//   }
+// });
 
 module.exports = { postRouter };
 

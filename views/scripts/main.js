@@ -1,6 +1,6 @@
 window.onload = function () {
   // home();
-  var textarea = document.querySelector("#create-post");
+  const textarea = document.querySelector("#create-post");
   textarea.addEventListener("input", autoResize, false);
 
   function autoResize() {
@@ -14,18 +14,18 @@ function myFunction(id) {
 }
 
 // Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
+window.onclick = function (event) {
+  if (!event.target.matches(".dropbtn")) {
+    const dropdowns = document.getElementsByClassName("dropdown-content");
+    let i;
     for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
+      const openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains("show")) {
+        openDropdown.classList.remove("show");
       }
     }
   }
-}
+};
 
 document.getElementById("post_form").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -49,8 +49,49 @@ post_submit_btn.onclick = async () => {
   post.value.trim().length && (await postText(post.value.trim()));
   post.value = null;
 };
+const UserDetails = getCookie("UserDetails").substring(2);
 
-let UserDetails = getCookie("UserDetails").substring(2);
+document.getElementById("fileinput").addEventListener("change", function (e) {
+  const file = e.target.files[0];
+
+  const fileSize = file.size / 1024 / 1024; // in MB
+  if (fileSize > 10) {
+    alert("File size exceeds 10MB. Please select a smaller file.");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  if (file.type.startsWith("image/")) {
+    reader.onload = function (e) {
+      document.getElementById("preview").style.display = "flex";
+      document.getElementById("preview-photo").style.display = "block";
+      document.getElementById("preview-photo").src = e.target.result;
+      document.getElementById("file-name").style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  } else if (file.type.startsWith("video/")) {
+    reader.onload = function (e) {
+      var video = document.getElementById("preview-video");
+      video.style.display = "block";
+      video.src = e.target.result;
+      video.controls = true;
+      // video.style.maxHeight = "300px";
+      // video.style.objectFit = "contain"; // Maintain aspect ratio
+      document.getElementById("preview").style.display = "flex";
+      document.getElementById("preview-photo").style.display = "none";
+      document.getElementById("file-name").style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  } else {
+    // For non-image and non-video files, just display the file name
+    document.getElementById("file-name").textContent = file.name;
+    document.getElementById("preview").style.display = "flex";
+
+    document.getElementById("file-name").style.display = "block";
+    document.getElementById("preview-photo").style.display = "none";
+  }
+});
 
 async function postText(text) {
   post_submit_btn.value = "Wait..";
@@ -86,93 +127,44 @@ async function postText(text) {
   console.log(res);
 }
 
-// post_submit_btn.onclick = async () => {
-//   post.value.trim().length && (await postText(post.value.trim()));
-//   post.value = null;
-// };
+function likePost(event, postID, authorID) {
+  console.log(event, postID, authorID);
 
-// async function postText(text) {
-//   post_submit_btn.value = "Wait..";
-//   post_submit_btn.setAttribute("disabled", true);
-//   post_submit_btn.setAttribute("style", "opacity:0.8");
+  if (event.target.className == "bx bx-like") {
+    event.target.className = "bx bxs-like";
+    event.target.setAttribute("style","color: #f54a6c")
+  } else {
+    event.target.className = "bx bx-like";
+  }
 
-//   const obj = { text };
-//   const fetched = await fetch("/", {
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-//     },
-//     method: "POST",
-//     body: JSON.stringify(obj),
-//   });
-//   console.log(fetched);
-//   if (fetched.ok == false) {
-//     alert("Some error occured!");
-//     return false;
-//   } else {
-//     window.location.href = fetched.url
-//   }
-// }
-
-// // like js here
-
-// function likePost(event) {
-//   let postID = event.target.parentElement.dataset.id;
-//   let authorID = event.target.parentElement.dataset.author;
-
-//   let likes =
-//     event.target.parentElement.parentElement.parentElement.children[1]
-//       .childNodes[0];
-//   let count = Number(likes.textContent.split(" ")[0]);
-//   let liked = event.target.parentElement.dataset.liked;
-
-//   if (event.target.classList[0] == "unlike") {
-//     liked = false;
-//   } else {
-//     liked = true;
-//   }
-
-//   if (!liked) {
-//     event.target.parentElement.innerHTML = `<span class="like">❤️</span>`;
-//     count++;
-//     liked = true;
-//   } else {
-//     event.target.parentElement.innerHTML = `<span class="unlike">🤍</span>`;
-//     if (count > 0) {
-//       count--;
-//     }
-//     liked = false;
-//   }
-
-//   likes.textContent = `${count} likes`;
-//   fetch(`http://localhost:8080/posts/like/${postID}/${authorID}`, {
-//     method: "PUT",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `${localStorage.getItem("token")}`,
-//     },
-//   })
-//     .then((res) => res.json())
-//     .then((res) => console.log(res))
-//     .catch((err) => console.log(err));
-// }
+  fetch(`http://localhost:8080/like/${postID}/${authorID}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${localStorage.getItem("token")}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
+}
 
 function deletePost(id) {
-  fetch('/delete/' + id, {
-    method: 'DELETE',
+  fetch("/delete/" + id, {
+    method: "DELETE",
   })
-  .then(response => response.json())
-  .then(data => window.location.reload())
-  .catch((error) => {
-    console.error('Error:', error);
-  });
+    .then((response) => response.json())
+    .then(() => window.location.reload())
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
 
 function getCookie(name) {
-  let cookieArr = document.cookie.split(";");
+  const cookieArr = document.cookie.split(";");
 
   for (let i = 0; i < cookieArr.length; i++) {
-    let cookiePair = cookieArr[i].split("=");
+    const cookiePair = cookieArr[i].split("=");
 
     if (name == cookiePair[0].trim()) {
       return decodeURIComponent(cookiePair[1]);

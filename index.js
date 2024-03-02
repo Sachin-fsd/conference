@@ -250,8 +250,8 @@ connectDB().then(() => {
 
 // function dlt () {
 //   PostModel.find()
-//     .sort({ CreatedAt: -1 })
-//     .limit(1)
+//     .sort({ CreatedAt: 1 })
+//     .limit(5)
 //     .then((docs) => {
 //       docs.forEach((doc) => {
 //         PostModel.findByIdAndDelete(doc._id)
@@ -267,12 +267,4 @@ connectDB().then(() => {
 //       console.error('Error finding documents:', err)
 //     })
 // }
-// app.listen(process.env.port, async () => {
-//   try {
-//     await connection;
-//     console.log("Connected to db");
-//   } catch (error) {
-//     console.log(error);
-//   }
-//   console.log(`Server running at ${process.env.port}`);
-// });
+
