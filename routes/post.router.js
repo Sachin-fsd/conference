@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose")
 const { RegisterModel } = require("../models/register.model");
 const { PostModel, LikeModel } = require("../models/post.model");
+const { MessageModel } = require("../models/message.model");
 const multer = require("multer");
 const Aws = require("aws-sdk");
 require("dotenv").config();
@@ -40,9 +41,12 @@ postRouter.get("/", async (req, res) => {
       { $limit: 20 },
     ]);
 
-    console.log(req.route.path, "line 27");
-    console.log(posts[0]);
-    res.render("index", { UserDetails: req.body.UserDetails, posts });
+    const messages = await MessageModel.find({
+      $or: [{ "sender.UserID": UserID }, { "receiver.UserID": UserID }],
+    }).sort({ CreatedAt: -1 });
+
+
+    res.render("index", { UserDetails: req.body.UserDetails, posts,  messages});
   } catch (error) {
     console.log(error);
     res.json({ err: error });

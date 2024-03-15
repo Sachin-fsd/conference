@@ -25,6 +25,10 @@ chatRouter.get("/:id", async (req, res) => {
       .limit(20).sort({CreatedAt:1});
     
       // console.log(read)
+      const messages = await MessageModel.find({
+        $or: [{ "sender.UserID": UserID }, { "receiver.UserID": UserID }],
+      }).sort({ CreatedAt: -1 });
+  
     res.render("chat", {
       UserDetails: req.body.UserDetails,
       ProfileUser: {
@@ -33,7 +37,8 @@ chatRouter.get("/:id", async (req, res) => {
       },
       room,
       chats,
-      read
+      read,
+      messages
     });
   } catch (error) {
     res.status(401).json({ err: error });

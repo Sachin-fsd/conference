@@ -4,6 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Conference</title>
+    <link rel="icon" type="image/png" href="images/icon.png">
     <!-- ICONSCOUT CDN -->
     <link
       rel="stylesheet"
@@ -172,6 +173,21 @@
               <h6 class="message-requests">Requests{3}</h6>
             </div>
             <!-- MESSAGE -->
+            {{#each messages}}
+            <div class="message">
+              <div class="profile-photo">
+                <img
+                  src="https://cdn.pixabay.com/photo/2023/11/19/14/10/hangzhou-8398789_640.jpg"
+                />
+              </div>
+              <div class="message-body">
+                <a href="/chat/{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserID}}{{else}}{{this.sender.UserID}}{{/if}}" class="profile {{#if (eq this.read false)}}unread{{else}}{{/if}} users-profile">
+                <h5>{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserName}} {{else}} {{this.sender.UserName}} {{/if}}</h5>
+                <p class="text-muted">new Message</p>
+                </a>
+              </div>
+            </div>
+            {{/each}}
             <div class="message">
               <div class="profile-photo">
                 <img
