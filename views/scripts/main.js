@@ -137,7 +137,7 @@ function likePost(event, postID, authorID) {
     event.target.className = "bx bx-like";
   }
 
-  fetch(`http://localhost:8080/like/${postID}/${authorID}`, {
+  fetch(`/like/${postID}/${authorID}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

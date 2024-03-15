@@ -28,7 +28,7 @@ function likePost(event) {
   }
 
   likes.textContent = `${count} likes`;
-  fetch(`http://localhost:8080/posts/like/${postID}/${authorID}`, {
+  fetch(`/posts/like/${postID}/${authorID}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -52,7 +52,7 @@ function toogleDropdown(event, ID) {
       dropdownContent.style.display = "none";
     }
   } else if (event.target.innerText == "Delete") {
-    fetch(`http://localhost:8080/posts/delete/${ID}`, {
+    fetch(`/posts/delete/${ID}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
