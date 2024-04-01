@@ -181,7 +181,7 @@
                 />
               </div>
               <div class="message-body">
-                <a href="/chat/{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserID}}{{else}}{{this.sender.UserID}}{{/if}}" class="profile {{#if (eq this.read false)}}unread{{else}}{{/if}} users-profile">
+                <a href="/chat/{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserID}}{{else}}{{this.sender.UserID}}{{/if}}" class="profile  users-profile">
                 <h5>{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserName}} {{else}} {{this.sender.UserName}} {{/if}}</h5>
                 <p class="text-muted">new Message</p>
                 </a>
