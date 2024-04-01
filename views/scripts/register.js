@@ -49,9 +49,8 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
   const name = document.getElementById("name").value
   const email = document.getElementById("username").value
   const password = document.getElementById("password").value
-  const dp = document.getElementById("dp_url").value
 
-  const obj = { name, email, password, dp }
+  const obj = { name, email, password }
 
   fetch("/register", {
     headers: {
