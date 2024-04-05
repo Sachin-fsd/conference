@@ -34,7 +34,7 @@
           <label for="create-post" class="btn btn-primary">Create</label>
           <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
               />
             </div></a>
 
@@ -49,7 +49,7 @@
           <a href="/{{UserDetails.UserID}}" class="profile">
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
               />
             </div>
             <div class="handle">
@@ -116,7 +116,7 @@
             <div class="story">
               <div class="profile-photo">
                 <img
-                  src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+                  src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
                 />
               </div>
               <p class="name">Your story</p>
@@ -124,7 +124,7 @@
             <div class="story">
               <div class="profile-photo">
                 <img
-                  src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+                  src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
                 />
               </div>
               <p class="name">Lilla James</p>
@@ -176,7 +176,7 @@
           >
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
               />
             </div>
 
@@ -430,58 +430,31 @@
               <div class="message-body">
                 <a href="/chat/{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserID}}{{else}}{{this.sender.UserID}}{{/if}}" class="profile unread users-profile">
                 <h5>{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserName}} {{else}} {{this.sender.UserName}} {{/if}}</h5>
-                <p class="text-muted">new Message</p>
+                <p class="text-muted">user at conference</p>
                 </a>
               </div>
             </div>
             {{/each}}
-            <div class="message">
-              <div class="profile-photo">
-                <img
-                  src="https://cdn.pixabay.com/photo/2023/03/06/06/40/backpack-7832746_640.jpg"
-                />
-                <div class="active"></div>
-              </div>
-              <div class="message-body">
-                <h5>Lana Rose</h5>
-                <p class="text-bold">Well received! Thanks</p>
-              </div>
+            <p class="text-muted">New Users</p>
+            {{#if (eq users.length 0)}}{{else}}
+            {{#each users}}
+           <div class="message">
+            <div class="profile-photo">
+              <img
+                src="https://cdn.pixabay.com/photo/2023/11/19/14/10/hangzhou-8398789_640.jpg"
+              />
             </div>
-            <div class="message">
-              <div class="profile-photo">
-                <img
-                  src="https://cdn.pixabay.com/photo/2023/09/29/07/58/mango-8283268_640.jpg"
-                />
-              </div>
-              <div class="message-body">
-                <h5>John Doe</h5>
-                <p class="text-muted">Ok</p>
-              </div>
+            <div class="message-body">
+              <a href="/{{this._id}}" class="profile unread users-profile">
+              <h5>{{this.name}}</h5>
+              <p class="text-muted">user at conference</p>
+              </a>
             </div>
-            <div class="message">
-              <div class="profile-photo">
-                <img
-                  src="https://cdn.pixabay.com/photo/2024/01/07/14/12/man-8493244_640.jpg"
-                />
-                <div class="active"></div>
-              </div>
-              <div class="message-body">
-                <h5>Daniela Jackson</h5>
-                <p class="text-muted">2 new messages</p>
-              </div>
-            </div>
-            <div class="message">
-              <div class="profile-photo">
-                <img
-                  src="https://cdn.pixabay.com/photo/2023/09/10/11/44/tulip-8244705_640.jpg"
-                />
-              </div>
-              <div class="message-body">
-                <h5>Juliet Makarey</h5>
-                <p class="text-muted">Lol, u right</p>
-              </div>
-            </div>
-            <div class="message">
+          </div>
+           {{/each}}
+            {{/if}}
+           
+            <!-- <div class="message">
               <div class="profile-photo">
                 <img
                   src="https://cdn.pixabay.com/photo/2023/12/15/15/52/bird-8450958_640.png"
@@ -492,13 +465,14 @@
                 <h5>Chantal Msiza</h5>
                 <p class="text-bold">Birthday tomorrow!</p>
               </div>
-            </div>
+            </div> -->
           </div>
           <!-- END OF MESSAGES -->
           <!-- FRIEND REQUSTS -->
           <div class="friend-requests">
             <h4>Requests</h4>
-            <div class="request">
+            <p class="text-muted">No requests at the moment</p>
+            <!-- <div class="request">
               <div class="info">
                 <div class="profile-photo">
                   <img
@@ -548,7 +522,7 @@
                 <button class="btn btn-primary">Accept</button>
                 <button class="btn">Decline</button>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <!-- END OF RIGHT -->

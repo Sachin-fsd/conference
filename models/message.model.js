@@ -10,4 +10,12 @@ const messageSchema = mongoose.Schema({
 
 const MessageModel = mongoose.model("message", messageSchema);
 
-module.exports = { MessageModel };
+const followSchema = mongoose.Schema({
+  follower: {type:mongoose.Schema.Types.ObjectId, ref:"user"},
+  following: {type:mongoose.Schema.Types.ObjectId, ref:"user"},
+  CreatedAt: { type: Date, default: Date.now }
+});
+
+const FollowModel = mongoose.model("follow", followSchema);
+
+module.exports = { MessageModel, FollowModel };

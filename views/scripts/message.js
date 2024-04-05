@@ -40,7 +40,7 @@ function append(details){
     a.classList.add("users-profile");
     a.innerHTML = `<div class="profile-photo">
     <img
-      src="https://cdn.pixabay.com/photo/2023/09/01/14/43/handsome-8227124_640.png"
+      src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
     />
   </div>
   <div class="handle">

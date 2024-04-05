@@ -5,9 +5,10 @@ const registerSchema = mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    dp: { type: String }
+    dp: { type: String },
+    bio: { type: String, default: "The only limit to our realization of tomorrow will be our doubts of today. 📷✈️🏕️" }
   },
-  { timestapms: true }
+  { timestamps: true }
 )
 
 const RegisterModel = mongoose.model("user", registerSchema)

@@ -50,7 +50,7 @@ document.getElementById("post_form").addEventListener("submit", (e) => {
 const post = document.getElementById("create-post");
 
 const post_submit_btn = document.getElementById("post-submit-btn");
-const postID = window.location.pathname.split("/").pop();
+const postID = post_submit_btn.dataset.postid
 
 const feeds = document.querySelector("#feeds");
 

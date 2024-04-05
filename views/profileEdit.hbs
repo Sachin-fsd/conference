@@ -9,7 +9,6 @@
       rel="stylesheet"
       href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css"
     />
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
@@ -17,8 +16,8 @@
     <!-- STYLESHEET -->
     <!-- <link rel="stylesheet" href="./styles/profile.css" /> -->
 
-    <link rel="stylesheet" href="./styles/profile.css" />
-    <link rel="stylesheet" href="./styles/style.css" />
+    <link rel="stylesheet" href="../styles/profile.css" />
+    <link rel="stylesheet" href="../styles/style.css" />
 
   </head>
 
@@ -120,152 +119,36 @@
                 alt=""
               />
             </div>
-            <div class="profile-user-settings">
-              <h1 class="profile-user-name">{{ProfileDetails.UserName}}</h1>
-             
-              {{#if (eq UserDetails.UserID ProfileDetails.UserID)}}
-              <button onclick="profileEdit('{{ProfileDetails.UserID}}')"
-              class="IDbtn profile-edit-btn"
-              id="message"
-            >Edit</button>
-              {{else}}
-              <div>
-                <button
-                  class="IDbtn profile-edit-btn"
-                  id="message"
-                >Message</button>
-                <button
-                  class="IDbtn profile-edit-btn"
-                  id="follow"
-                  onclick="follow('{{ProfileDetails.UserID}}','{{follow}}')"
-                >{{follow}}</button>
-              </div>
-              
-              {{/if}}
+            <div class="form-only">
+                <form class="create-post" id="chat_form">
+                  <input
+                    id="UserName"
+                    placeholder="Enter Name"
+                    value="{{UserDetails.UserName}}"
+                  />
+                </form>
+           
+              <form class="create-post" id="chat_form">
+                <textarea
+                style="height: 70px;"
+                id="UserBio"
+                placeholder="Enter Bio"
+              >{{UserDetails.UserBio}}</textarea>
+                
+              </form>
+              <hr>
+              <br>
+                <input
+                  type="submit"
+                  id="profile-submit-btn"
+                  value="Save"
+                  class="btn btn-primary"
+                  onclick="editProfile('{{UserDetails.UserID}}')"
+                />
             </div>
-            <div class="profile-stats">
-              <ul>
-                <li><span class="profile-stat-count">{{posts.length}}</span> posts</li>
-                <li><span class="profile-stat-count" id="followers">{{followers}}</span> followers</li>
-                <li><span class="profile-stat-count" id="following">{{following}}</span> following</li>
-              </ul>
-            </div>
-            <div class="profile-bio">
-              <p>
-                <!-- <span class="profile-real-name">Jhon Doe</span> -->
-                {{ProfileDetails.UserBio}}</p>
-            </div>
+            
           </div>
-          <div class="feeds">
-            <!-- FEED 1 -->
-            {{#each posts}}
-              <div class="feed">
-                <div class="head">
-                  <a href="/{{this.UserDetails.UserID}}"><div class="user">
-                      <div class="profile-photo">
-                        <img
-                          src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
-                        />
-                      </div>
-                      <div class="info">
-                        <h3>{{this.UserDetails.UserName}}</h3>
-                        <small>{{formatDate this.CreatedAt}}</small>
-                      </div>
-                    </div></a>
-
-                    <span class="dropdown edit">
-                      <i onclick="myFunction('{{this._id}}')" class="dropbtn uil uil-ellipsis-h"></i>
-                      <div id="myDropdown-{{this._id}}" class="dropdown-content">
-                        {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}<a href="" onclick="deletePost('{{this._id}}')">Delete</a> {{else}}{{/if}}
-                        <a href="#about">Report</a>
-                        <a href="#contact">Profile</a>
-                      </div>
-                    </span>
-
-
-                </div>
-                <a href="/comment/{{this._id}}">
-                  <div class="photo">
-                    {{#if this.photo}}
-                      <img
-                        src="{{this.photo}}"
-                        onerror="this.style.display='none'"
-                      />
-                    {{/if}}
-                    {{#if this.pdf}}
-                      <div
-                        id="pdf-loader"
-                        style="width:475px; height:400px; display: flex; align-items: center; justify-content: center;"
-                      >
-                        <p>Loading PDF...</p>
-                      </div>
-                      <iframe
-                        id="pdf-preview"
-                        src="http://docs.google.com/gview?url={{this.pdf}}&embedded=true"
-                        style="width:475px; height:400px; display: none;"
-                        frameborder="0"
-                        onload="document.getElementById('pdf-loader').style.display='none'; this.style.display='block';"
-                      ></iframe>
-                      <a href="{{this.pdf}}" download>Download PDF</a>
-
-                    {{/if}}
-                    <p class="post-text">{{formatText this.text}}</p>
-                  </div>
-                </a>
-
-                <div class="action-buttons">
-                  <div class="interaction-buttons">
-                    <span class="like-post" onclick="likePost(event,'{{this._id}}','{{../UserDetails.UserID}}')">
-                      {{#if (eq this.likeCount 0)}}<i class='bx bx-like' style="color: #f54a6c;"></i>{{else}}<i class='bx bxs-like' style="color: #f54a6c"></i>{{/if}}
-                    </span>
-                    <span><a href="/comment/{{this._id}}"><i
-                          class="uil uil-comment-dots"
-                        ></i></a></span>
-                    <span><i class="uil uil-share-alt"></i></span>
-                  </div>
-                  <div class="bookmark">
-                    <span><i class="uil uil-bookmark-full"></i></span>
-                  </div>
-                </div>
-
-                <!-- <div class="liked-by">
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
-                    />
-                  </span>
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/10/50/cormorant-8516719_640.jpg"
-                    />
-                  </span>
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
-                    />
-                  </span>
-                  <p>Liked by
-                    <b>Ernest Achiever </b>and
-                    <b>2,323 others</b></p>
-                </div> -->
-                <div class="caption">
-                  <p>
-                    <b>B.tech CSE FSD</b>
-                    | Section 1 | Group 1 |
-                    <b>Roll No.</b>
-                    2301350008
-
-                  </p>
-                  <p><span class="harsh-tag">#lifestyle</span></p>
-                </div><a href="/comment/{{this._id}}"><div
-                    class="comments text-muted"
-                  >View all comments</div></a>
-
-              </div>
-            {{/each}}
-            <!-- END OF FEED 1 -->
-
-          </div>
+          
         </div>
         <!-- END OF MIDDLE -->
         <!-- RIGHT -->
@@ -478,93 +361,42 @@
     </main>
   </body>
 </html>
-<script src="./scripts/index.js"></script>
+<script src="../scripts/index.js"></script>
 
 <script>
-  document.getElementById("message").addEventListener('click',()=>{
-  console.log("message clicked"); 
-  const profileID = window.location.pathname.split("/").pop();
-  fetch(`/chat/${profileID}`)
-  .then(res=>
-  { if(res.ok)
-    { window.location.href = res.url }
-    else{ 
-      console.log(res); 
-    } 
-  }) 
-  })
 
- function likePost(event, postID, authorID) {
+const textarea = document.querySelector("#UserBio");
+  textarea.addEventListener("input", autoResize, false);
 
-  if (event.target.className == "bx bx-like") {
-    event.target.className = "bx bxs-like";
-    event.target.setAttribute("style","color: #f54a6c")
-  } else {
-    event.target.className = "bx bx-like";
+  function autoResize() {
+    this.style.height = "auto";
+    this.style.height = this.scrollHeight + "px";
   }
+async function editProfile(ID){
+    let UserName = document.getElementById("UserName").value
+    let UserBio = document.getElementById("UserBio").value
+    if(!UserName){
+      alert("Enter correct Username")
+    }
+    if(!UserBio){
+      alert("Enter correct UserBio")
+    }
+    if(UserName && UserBio){
+      let obj = {UserName, UserBio}
+      console.log(obj)
 
-  fetch(`/like/${postID}/${authorID}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${localStorage.getItem("token")}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
-}
-
-  function profileEdit(ID){
-    window.location.href = `/profileEdit/${ID}`
-  }
-
-  function deletePost(id) {
-  fetch('/delete/' + id, {
-    method: 'DELETE',
-  })
-  .then(response => response.json())
-  .then(data => window.location.reload())
-  .catch((error) => {
-    console.error('Error:', error);
-  });
-}
-
-
-function myFunction(id) {
-  document.getElementById("myDropdown-" + id).classList.toggle("show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
+      const fetched = await fetch(`/profileEdit/${ID}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token") ||sessionStorage.getItem("token") ||""}`,
+        },
+        method: "PUT",
+        body: JSON.stringify(obj),
+      });
+      if(fetched.ok){
+        window.location.href = `/${ID}`
       }
     }
   }
-}
-
-async function follow(ID){
-
-  let follow = document.getElementById("follow")
-  follow.setAttribute("disabled",true)
-  let followerCount = Number(document.getElementById("followers").innerText)
-  const fetched = await fetch(`/follow/${ID}`)
-  if(fetched.ok){
-
-    if(follow.innerText=="Following"){
-      document.getElementById("follow").innerText = "Follow"
-      document.getElementById("followers").innerText = Number(followerCount-1)
-    }else{
-      document.getElementById("follow").innerText = "Following"
-      document.getElementById("followers").innerText = Number(followerCount+1)
-    }
-  }
-  follow.removeAttribute("disabled")
-}
 </script>
+<!-- <script src="./scripts/main.js"></script> -->

@@ -1,8 +1,8 @@
 const express = require("express");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 const { RegisterModel } = require("../models/register.model");
 const { PostModel, LikeModel } = require("../models/post.model");
-const { MessageModel } = require("../models/message.model");
+const { MessageModel, FollowModel } = require("../models/message.model");
 const multer = require("multer");
 const Aws = require("aws-sdk");
 require("dotenv").config();
@@ -18,14 +18,14 @@ postRouter.get("/", async (req, res) => {
     const posts = await PostModel.aggregate([
       {
         $lookup: {
-          from: "likes", 
+          from: "likes",
           let: { post_id: "$_id" },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ["$UserID",new mongoose.Types.ObjectId(UserID)] },
+                    { $eq: ["$UserID", new mongoose.Types.ObjectId(UserID)] },
                     { $eq: ["$postID", "$$post_id"] },
                   ],
                 },
@@ -45,8 +45,14 @@ postRouter.get("/", async (req, res) => {
       $or: [{ "sender.UserID": UserID }, { "receiver.UserID": UserID }],
     }).sort({ CreatedAt: -1 });
 
-
-    res.render("index", { UserDetails: req.body.UserDetails, posts,  messages});
+    let users = []
+    if(messages.length<5){
+      users = await RegisterModel.find({}, { _id: 1, name: 1 })
+      .sort({ CreatedAt: -1 })
+      .limit(5);
+    }
+    
+    res.render("index", { UserDetails: req.body.UserDetails, posts, messages, users });
   } catch (error) {
     console.log(error);
     res.json({ err: error });
@@ -141,37 +147,86 @@ postRouter.post("/", upload.single("file"), (req, res) => {
 postRouter.get("/:id", async (req, res) => {
   try {
     const ID = req.params.id;
-    // const UserID = req.body.UserDetails.UserID;
-    // const Users = await RegisterModel.find({},{name:1, email:1, _id:1}).sort({CreatedAt: -1}).limit(7);
-    // const userLikes = await LikeModel.find({ UserID }).limit(20);
 
-    // const likedPostIds = new Set(
-    //   userLikes.map((like) => like.postID.toString())
-    // );
     const user = await RegisterModel.findOne(
       { _id: ID },
-      { _id: 1, name: 1, email: 1 }
+      { _id: 1, name: 1, email: 1, bio: 1 }
     );
     const posts = await PostModel.find({ "UserDetails.UserID": ID })
       .sort({ CreatedAt: -1 })
       .limit(20);
-    // console.log(posts);
-    // const postWithLikes = posts.map((post) => {
-    //   const liked = likedPostIds.has(post._id.toString());
-    //   return { ...post._doc, liked };
-    // });
+    let follow = await FollowModel.countDocuments({follower: req.body.UserDetails.UserID, following:ID});
+    if(follow==0){
+      follow = "Follow"
+    }else{
+      follow = "Following"
+    }
+    
+    const following = await FollowModel.countDocuments({follower: ID});
+    const followers = await FollowModel.countDocuments({following: ID});
+
 
     res.render("profile", {
       UserDetails: req.body.UserDetails,
       ProfileDetails: {
-        UserID: user._id,
+        UserID: ID,
         UserName: user.name,
         UserEmail: user.email,
+        UserBio: user.bio,
       },
       posts,
+      follow,
+      following,
+      followers
     });
   } catch (error) {
     res.json({ err: error });
+  }
+});
+
+postRouter.get("/profileEdit/:id", async (req, res) => {
+  try {
+    const ID = req.params.id;
+    if (ID !== req.body.UserDetails.UserID) {
+      res.status(400).send({ msg: "Unauthorised" });
+    } else {
+      const user = await RegisterModel.findOne(
+        { _id: ID },
+        { password: 0, CreatedAt: 0 }
+      );
+      console.log(user, "UserDetails");
+      if (!user) {
+        res.status(400).send({ msg: "User not Found" });
+        return;
+      }
+      res.render("profileEdit", {
+        UserDetails: {
+          UserID: user._id,
+          UserName: user.name,
+          UserBio: user.bio,
+        },
+      });
+    }
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+  }
+});
+
+postRouter.put("/profileEdit/:id", async (req, res) => {
+  let { UserName, UserBio } = req.body;
+  let ID = req.params.id;
+  try {
+    if (ID == req.body.UserDetails.UserID) {
+      let user = await RegisterModel.findOne({ _id: ID });
+      user.name = UserName;
+      user.bio = UserBio;
+      await user.save();
+      res.status(201).send({msg:"Done with editting"})
+    } else {
+      res.status(400).send({ msg: "Error" });
+    }
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
   }
 });
 
@@ -218,36 +273,6 @@ postRouter.delete("/delete/:id", async (req, res) => {
   }
 });
 
-// postRouter.get("/:id", async (req, res) => {
-//   try {
-//     const UserID = req.body.UserDetails.UserID;
-
-//     // const userLikes = await LikeModel.find({ UserID }).limit(20);
-//     const userLikes = await LikeModel.find({ UserID, authorID: req.params.id });
-//     const likedPostIds = new Set(
-//       userLikes.map((like) => like.postID.toString())
-//     );
-
-//     const UserDetails = await RegisterModel.findOne(
-//       { _id: req.params.id },
-//       { name: 1, email: 1, _id: 1 }
-//     );
-//     // console.log(authorDetails);
-//     const posts = await PostModel.find({ "UserDetails.UserID": req.params.id })
-//       .sort({ CreatedAt: -1 })
-//       .limit(20);
-//     const postCount = posts.length;
-//     UserDetails.postCount = postCount;
-//     const postWithLikes = posts.map((post) => {
-//       const liked = likedPostIds.has(post._id.toString());
-//       return { ...post._doc, liked };
-//     });
-
-//     res.status(200).send({ UserDetails, posts: postWithLikes });
-//   } catch (error) {
-//     res.json({ err: error });
-//   }
-// });
 
 module.exports = { postRouter };
 
