@@ -7,7 +7,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+     
     <link
       rel="stylesheet"
       href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css"
@@ -126,7 +126,6 @@
             <div class="chat-message {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}} chat-right {{else}} chat-left {{/if}}" onclick="toggleTime('chat-time-{{this._id}}')"> {{formatText this.text}}</div>
             <p id="chat-time-{{this._id}}" class="chat-time {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}} chat-right {{else}} chat-left {{/if}}" style="display: none;">{{formatDate this.CreatedAt}}</p>
             {{/each}}
-            
           </div>
           <div class="form-only">
             <form class="create-post" id="chat_form">

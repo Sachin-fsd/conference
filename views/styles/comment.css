@@ -294,6 +294,12 @@ main .container .left .profile {
   padding-bottom: 0;
   margin-bottom: 0;
 }
+.like-post{
+  cursor: pointer;
+  position:sticky;
+  z-index: 10;
+}
+
 
 .middle .stories {
   display: flex;
@@ -897,7 +903,7 @@ main .container .left .profile {
     grid-column: 1/-1;
   }
   .middle .content-only{
-    height: calc(100vh - 220px);
+    height: calc(100vh - 350px);
     overflow-y: scroll;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none;

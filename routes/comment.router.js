@@ -38,7 +38,7 @@ commentRouter.get("/:id",async(req,res)=>{
           .sort({ CreatedAt: -1 })
           .limit(20);
         
-        let activePost =  {UserID:post._id, Username:post.UserDetails.UserName, CreatedAt:post.CreatedAt, text:post.text } ;
+        let activePost =  {UserID:post._id, UserDetails:post.UserDetails, CreatedAt:post.CreatedAt, text:post.text } ;
         if(post.photo){
           activePost.photo = post.photo
         }
@@ -46,7 +46,8 @@ commentRouter.get("/:id",async(req,res)=>{
         res.render("comment", {
           UserDetails:req.body.UserDetails,
           activePost,
-          comments
+          comments,
+          post
         });
       } catch (error) {
         res.status(401).json({ err: error });

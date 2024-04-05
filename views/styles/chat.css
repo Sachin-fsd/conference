@@ -290,7 +290,7 @@ main .container .left .profile {
 }
 
 /* ------------ MIDDLE ------------ */
-.middle{
+.middle {
   padding-bottom: 0;
   margin-bottom: 0;
 }
@@ -308,13 +308,12 @@ main .container .middle .profile {
   margin-bottom: 5px;
 }
 
-.unread{
+.unread {
   border: 1px solid rgb(248, 31, 31);
 }
 
 /* ------------ CREATE POST ------------ */
 .middle .create-post {
-  
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -339,7 +338,7 @@ main .container .middle .profile {
 
 /* FEED */
 
-.chat-message{
+.chat-message {
   padding: 10px;
   margin: 10px 2px;
   /* border: 1px solid #5f5f5f; */
@@ -347,18 +346,18 @@ main .container .middle .profile {
   width: fit-content;
   overflow-y: auto;
 }
-.chat-left{
+.chat-left {
   float: left;
   clear: both;
   background-color: green;
 }
-.chat-right{
+.chat-right {
   float: right;
   clear: both;
   background-color: rgb(114, 114, 247);
 }
 
-.chat-time{
+.chat-time {
   background-color: transparent;
   font-size: 12px;
 }
@@ -719,7 +718,7 @@ main .container .middle .profile {
   scrollbar-width: none; /* Firefox */
 }
 
-.middle .content-only{
+.middle .content-only {
   /* border: 1px solid #575656; */
   border-radius: 10px;
   height: calc(100vh - 250px);
@@ -728,10 +727,10 @@ main .container .middle .profile {
   scrollbar-width: none;
 }
 
-.left{
+.left {
   padding-bottom: 100px;
 }
-.right{
+.right {
   padding-bottom: 100px;
 }
 
@@ -758,9 +757,9 @@ main .container .middle .profile {
     display: none;
   }
 
-  .middle .content-only{
+  .middle .content-only {
     height: calc(100vh - 250px);
-  border-radius: 10px;
+    border-radius: 10px;
 
     overflow-y: scroll;
     -ms-overflow-style: none; /* IE and Edge */
@@ -774,8 +773,6 @@ main .container .middle .profile {
   .left .btn {
     display: none;
   }
-
-  
 
   .customize-theme .card {
     width: 80vw;
@@ -807,7 +804,7 @@ main .container .middle .profile {
   .left {
     width: 1rem;
     z-index: 5;
-}
+  }
 
   main .container .left .sidebar {
     width: 100%;
@@ -822,7 +819,7 @@ main .container .middle .profile {
     margin-top: 0.2rem;
     background-color: var(--color-white);
     border-radius: var(--card-border-radius);
-}
+  }
 
   main .container .left .sidebar a {
     justify-content: center;
@@ -864,15 +861,15 @@ main .container .middle .profile {
   main .container .middle {
     grid-column: 1/-1;
   }
-  .middle .content-only{
-    height: calc(100vh - 305px);
-  border-radius: 10px;
+  .middle .content-only {
+    height: calc(100vh - 350px);
+    border-radius: 10px;
 
     overflow-y: scroll;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none;
   }
-  .post-text-active{
+  .post-text-active {
     text-align: center;
     margin-top: 20px;
     font-family: "Courier New", Courier, monospace;
