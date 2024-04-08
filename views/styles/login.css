@@ -41,15 +41,11 @@ main {
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button,
-input[type=number] {
-  -moz-appearance: textfield; /* For Firefox */
-}
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 
 section {
   height: 610px;

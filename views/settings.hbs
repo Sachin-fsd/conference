@@ -9,17 +9,8 @@
       rel="stylesheet"
       href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css"
     />
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-    />
     <!-- STYLESHEET -->
-    <!-- <link rel="stylesheet" href="./styles/profile.css" /> -->
-
-    <link rel="stylesheet" href="./styles/profile.css" />
     <link rel="stylesheet" href="./styles/style.css" />
-
   </head>
 
   <body>
@@ -34,11 +25,13 @@
           />
         </div>
         <div class="create">
-          <div class="profile-photo">
-            <img
-             src="{{ProfileDetails.UserDp}}"  onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"
-            />
-          </div>
+          <label for="create-post" class="btn btn-primary">Create</label>
+          <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
+              <img
+                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
+              />
+            </div></a>
+
         </div>
       </div>
     </nav>
@@ -51,7 +44,7 @@
           <a href="/{{UserDetails.UserID}}" class="profile">
             <div class="profile-photo">
               <img
-               src="{{ProfileDetails.UserDp}}"  onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"
+                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
               />
             </div>
             <div class="handle">
@@ -61,12 +54,12 @@
           </a>
           <!-- SIDEBAR -->
           <div class="sidebar">
-            <a href="/" class="menu-item active"><span><i
+            <a href="/" class="menu-item"><span><i
                   class="uil uil-home"
                 ></i></span>
               <h3>Home</h3>
             </a>
-            <a href="/search" class="menu-item"><span><i
+            <a href="#" class="menu-item "><span><i
                   class="uil uil-compass"
                 ></i></span>
               <h3>SEARCH</h3>
@@ -75,14 +68,13 @@
                   class="uil uil-bell"
                 ><small class="notification-count"></small></i></span>
               <h3>Notifications</h3>
+              <!-- NOTIFICATION POPUP -->
+              
+              <!-- END OF NOTIFICATION POPUP -->
             </a>
-            <a
-              href="/message"
-              class="menu-item"
-              id="messages-notification"
-            ><span><i class="uil uil-envelope-alt"><small
-                    class="notification-count"
-                  ></small></i></span>
+            <a href="/message" class="menu-item" id="messages-notification"><span><i
+                  class="uil uil-envelope-alt"
+                ><small class="notification-count"></small></i></span>
               <h3>Messages</h3>
             </a>
             <a href="#" class="menu-item"><span><i
@@ -100,7 +92,7 @@
                 ></i></span>
               <h3>Theme</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="#" class="menu-item active"><span><i
                   class="uil uil-setting"
                 ></i></span>
               <h3>Settings</h3>
@@ -112,159 +104,37 @@
         <!-- END OF LEFT -->
         <!-- MIDDLE -->
         <div class="middle">
-          <div class="IDprofile">
-            <div class="profile-image">
-              <img
-                src="{{ProfileDetails.UserDp}}"  onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"
-                alt=""
-              />
-            </div>
-            <div class="profile-user-settings">
-              <h1 class="profile-user-name">{{ProfileDetails.UserName}}</h1>
-              
-              {{#if (eq UserDetails.UserID ProfileDetails.UserID)}}
-              <button onclick="profileEdit('{{ProfileDetails.UserID}}')"
-                class="IDbtn profile-edit-btn"
-                id="message"
-              >Edit</button>
-              {{else}}
-              <div>
-                <button
-                  class="IDbtn profile-edit-btn"
-                  id="message"
-                >Message</button>
-                <button
-                  class="IDbtn profile-edit-btn"
-                  id="follow"
-                  onclick="follow('{{ProfileDetails.UserID}}','{{follow}}')"
-                >{{follow}}</button>
-              </div>
-              
-              {{/if}}
-            </div>
-            <div class="profile-stats">
-              <ul>
-                <li><span class="profile-stat-count">{{posts.length}}</span> posts</li>
-                <li onclick="getFollowers('{{ProfileDetails.UserID}}')"><span class="profile-stat-count" id="followers">{{followers}}</span> followers</li>
-                <li onclick="getFollowing('{{ProfileDetails.UserID}}')"><span class="profile-stat-count" id="following">{{following}}</span> following</li>
-              </ul>
-            </div>
-            <div class="profile-bio">
-              <p>
-                <span class="profile-real-name">Handle: {{ProfileDetails.UserEmail}}</span><br>
-                {{ProfileDetails.UserBio}}</p>
-            </div>
-          </div>
-          <div class="feeds" id="feeds">
-            <!-- FEED 1 -->
-            {{#each posts}}
-              <div class="feed">
-                <div class="head">
-                  <a href="/{{this.UserDetails.UserID}}"><div class="user">
-                      <div class="profile-photo">
-                        <img
-                          src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
-                        />
-                      </div>
-                      <div class="info">
-                        <h3>{{this.UserDetails.UserName}}</h3>
-                        <small>{{formatDate this.CreatedAt}}</small>
-                      </div>
-                    </div></a>
-
-                    <span class="dropdown edit">
-                      <i onclick="myFunction('{{this._id}}')" class="dropbtn uil uil-ellipsis-h"></i>
-                      <div id="myDropdown-{{this._id}}" class="dropdown-content">
-                        {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}<a href="" onclick="deletePost('{{this._id}}')">Delete</a> {{else}}{{/if}}
-                        <a href="#about">Report</a>
-                        <a href="#contact">Profile</a>
-                      </div>
-                    </span>
-
-
-                </div>
-                <a href="/comment/{{this._id}}">
-                  <div class="photo">
-                    {{#if this.photo}}
-                      <img
-                        src="{{this.photo}}"
-                        onerror="this.style.display='none'"
+          
+          <!-- FEEDS -->
+          <div class="feeds" id="results">
+            <div class="feed">
+              <div class="head">
+                  <div class="user">
+                    <div class="profile-photo" >
+                      <img 
+                        src="{{UserDetails.UserDp}}"
                       />
-                    {{/if}}
-                    {{#if this.pdf}}
-                      <div
-                        id="pdf-loader"
-                        style="width:475px; height:400px; display: flex; align-items: center; justify-content: center;"
-                      >
-                        <p>Loading PDF...</p>
-                      </div>
-                      <iframe
-                        id="pdf-preview"
-                        src="http://docs.google.com/gview?url={{this.pdf}}&embedded=true"
-                        style="width:475px; height:400px; display: none;"
-                        frameborder="0"
-                        onload="document.getElementById('pdf-loader').style.display='none'; this.style.display='block';"
-                      ></iframe>
-                      <a href="{{this.pdf}}" download>Download PDF</a>
-
-                    {{/if}}
-                    <p class="post-text">{{formatText this.text}}</p>
+                    </div>
+                    <div class="info">
+                      <h3>{{UserDetails.UserName}}</h3>
+                    </div>
                   </div>
-                </a>
-
-                <div class="action-buttons">
-                  <div class="interaction-buttons">
-                    <span class="like-post" onclick="likePost(event,'{{this._id}}','{{../UserDetails.UserID}}')">
-                      {{#if (eq this.likeCount 0)}}<i class='bx bx-like' style="color: #f54a6c;"></i>{{else}}<i class='bx bxs-like' style="color: #f54a6c"></i>{{/if}}
-                    </span>
-                    <span><a href="/comment/{{this._id}}"><i
-                          class="uil uil-comment-dots"
-                        ></i></a></span>
-                    <span><i class="uil uil-share-alt"></i></span>
-                  </div>
-                  <div class="bookmark">
-                    <span><i class="uil uil-bookmark-full"></i></span>
-                  </div>
-                </div>
-
-                <!-- <div class="liked-by">
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
-                    />
-                  </span>
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/10/50/cormorant-8516719_640.jpg"
-                    />
-                  </span>
-                  <span>
-                    <img
-                      src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
-                    />
-                  </span>
-                  <p>Liked by
-                    <b>Ernest Achiever </b>and
-                    <b>2,323 others</b></p>
-                </div> -->
-                <div class="caption">
-                  <p>
-                    <b>B.tech CSE FSD</b>
-                    | Section 1 | Group 1 |
-                    <b>Roll No.</b>
-                    2301350008
-
-                  </p>
-                  <p><span class="harsh-tag">#lifestyle</span></p>
-                </div><a href="/comment/{{this._id}}"><div
-                    class="comments text-muted"
-                  >View all comments</div></a>
-
+                
+                <span class="btn">
+                  <button class="btn logout" id="logoutBtn" onclick="logout()">Logout</button>
+                </span>
               </div>
-            {{/each}}
-            <!-- END OF FEED 1 -->
 
+              <div class="caption">
+                <p><b>SOET</b>
+                  | B.tech CSE FSD | Section 1 | Group 1 |
+                  <b>Roll No.</b>
+                  2301350008
+                </p>
+              </div>
+            </div>
           </div>
+          <!-- END OF FEEDS-->
         </div>
         <!-- END OF MIDDLE -->
         <!-- RIGHT -->
@@ -455,7 +325,7 @@
             <!-- BACKGROUND COLORS -->
             <div class="background">
               <h4>Bacground</h4>
-              <div class="choose-bg">
+              <div class="choose-bg" style="border: 1px solid red;">
                 <div class="bg-1 active">
                   <span></span>
                   <h5 for="bg-1">Light</h5>
@@ -478,6 +348,11 @@
   </body>
 </html>
 <script src="./scripts/index.js"></script>
-<script src="./scripts/profile.js"></script>
 
-  
+<script>
+  function logout(){
+    fetch('/settings/logout', { method: 'POST' })
+      .then(() => window.location.href = '/login');
+      
+  }
+</script>

@@ -11,9 +11,12 @@ const postRouter = express.Router();
 
 postRouter.get("/", async (req, res) => {
   try {
-    // const posts = await PostModel.find().sort({ CreatedAt: -1 }).limit(20);
 
     const UserID = req.body.UserDetails.UserID;
+    const user = await RegisterModel.findOne(
+      { _id: UserID },
+      { _id: 1, name: 1, email: 1, dp:1 }
+    );
 
     const posts = await PostModel.aggregate([
       {
@@ -45,14 +48,19 @@ postRouter.get("/", async (req, res) => {
       $or: [{ "sender.UserID": UserID }, { "receiver.UserID": UserID }],
     }).sort({ CreatedAt: -1 });
 
-    let users = []
-    if(messages.length<5){
+    let users = [];
+    if (messages.length < 5) {
       users = await RegisterModel.find({}, { _id: 1, name: 1 })
-      .sort({ CreatedAt: -1 })
-      .limit(5);
+        .sort({ CreatedAt: -1 })
+        .limit(5);
     }
-    
-    res.render("index", { UserDetails: req.body.UserDetails, posts, messages, users });
+
+    res.render("index", {
+      UserDetails: req.body.UserDetails,
+      posts,
+      messages,
+      users,
+    });
   } catch (error) {
     console.log(error);
     res.json({ err: error });
@@ -150,21 +158,23 @@ postRouter.get("/:id", async (req, res) => {
 
     const user = await RegisterModel.findOne(
       { _id: ID },
-      { _id: 1, name: 1, email: 1, bio: 1 }
+      { _id: 1, name: 1, email: 1, bio: 1, dp:1 }
     );
     const posts = await PostModel.find({ "UserDetails.UserID": ID })
       .sort({ CreatedAt: -1 })
       .limit(20);
-    let follow = await FollowModel.countDocuments({follower: req.body.UserDetails.UserID, following:ID});
-    if(follow==0){
-      follow = "Follow"
-    }else{
-      follow = "Following"
+    let follow = await FollowModel.countDocuments({
+      follower: req.body.UserDetails.UserID,
+      following: ID,
+    });
+    if (follow == 0) {
+      follow = "Follow";
+    } else {
+      follow = "Following";
     }
-    
-    const following = await FollowModel.countDocuments({follower: ID});
-    const followers = await FollowModel.countDocuments({following: ID});
 
+    const following = await FollowModel.countDocuments({ follower: ID });
+    const followers = await FollowModel.countDocuments({ following: ID });
 
     res.render("profile", {
       UserDetails: req.body.UserDetails,
@@ -173,11 +183,12 @@ postRouter.get("/:id", async (req, res) => {
         UserName: user.name,
         UserEmail: user.email,
         UserBio: user.bio,
+        UserDp:user.dp
       },
       posts,
       follow,
       following,
-      followers
+      followers,
     });
   } catch (error) {
     res.json({ err: error });
@@ -213,15 +224,16 @@ postRouter.get("/profileEdit/:id", async (req, res) => {
 });
 
 postRouter.put("/profileEdit/:id", async (req, res) => {
-  let { UserName, UserBio } = req.body;
+  let { UserName, UserBio, dp } = req.body;
   let ID = req.params.id;
   try {
     if (ID == req.body.UserDetails.UserID) {
       let user = await RegisterModel.findOne({ _id: ID });
       user.name = UserName;
       user.bio = UserBio;
+      user.dp = dp
       await user.save();
-      res.status(201).send({msg:"Done with editting"})
+      res.status(201).send({ msg: "Done with editting" });
     } else {
       res.status(400).send({ msg: "Error" });
     }
@@ -229,6 +241,70 @@ postRouter.put("/profileEdit/:id", async (req, res) => {
     res.status(400).send({ msg: error.message });
   }
 });
+
+postRouter.get("/followers/:id", async (req,res)=>{
+  let ID =new mongoose.Types.ObjectId(req.params.id)
+  try {
+    const followers = await FollowModel.aggregate([
+      { $match: { following: ID } },
+      {
+        $lookup: {
+          from: "users", 
+          localField: "follower",
+          foreignField: "_id",
+          as: "follower_info"
+        }
+      },
+      {
+        $unwind: "$follower_info"
+      },
+      {
+        $project: {
+          _id: 0,
+          ID: "$follower",
+          name: "$follower_info.name" 
+        }
+      }
+    ]);
+    // console.log("followers",followers);
+    res.status(201).send(followers);
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+    
+  }
+})
+
+postRouter.get("/following/:id", async (req,res)=>{
+  let ID =new mongoose.Types.ObjectId(req.params.id)
+  try {
+    const following = await FollowModel.aggregate([
+      { $match: { follower: ID } },
+      {
+        $lookup: {
+          from: "users", 
+          localField: "following",
+          foreignField: "_id",
+          as: "following_info"
+        }
+      },
+      {
+        $unwind: "$following_info"
+      },
+      {
+        $project: {
+          _id: 0,
+          ID: "$following",
+          name: "$following_info.name" 
+        }
+      }
+    ]);
+    // console.log("following",following);
+    res.status(201).send(following);
+  } catch (error) {
+    res.status(400).send({ msg: error.message });
+    
+  }
+})
 
 postRouter.put("/like/:id/:authorID", async (req, res) => {
   try {
@@ -253,18 +329,42 @@ postRouter.put("/like/:id/:authorID", async (req, res) => {
 
 postRouter.delete("/delete/:id", async (req, res) => {
   try {
-    const ID = await PostModel.findOne(
-      { _id: req.params.id },
-      { "UserDetails.UserID": 1 }
-    );
+    const post = await PostModel.findOne({ _id: req.params.id });
     const UserID = req.body.UserDetails.UserID;
-    if (UserID == ID.UserDetails.UserID) {
-      try {
-        await PostModel.findByIdAndDelete({ _id: req.params.id });
-        res.status(202).send({ msg: "Text Deleted successfully!" });
-      } catch (error) {
-        res.status(400).json({ err: error });
+    if (UserID == post.UserDetails.UserID) {
+      if (post.photo || post.pdf || post.video) {
+        const deleteParams = {
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: post.photo || post.pdf || post.video,
+        };
+        s3.deleteObject(deleteParams, function (err, data) {
+          if (err) {
+            console.log("Error", err);
+            res.status(500).send({ err: err });
+          } else {
+            PostModel.findByIdAndDelete({ _id: req.params.id })
+              .then(() => {
+                res
+                  .status(202)
+                  .send({ msg: "Post and file deleted successfully!" });
+              })
+              .catch((err) => {
+                res.status(500).send({ err: err });
+              });
+          }
+        });
+      } else {
+        PostModel.findByIdAndDelete({ _id: req.params.id })
+          .then(() => {
+            res
+              .status(202)
+              .send({ msg: "Post and file deleted successfully!" });
+          })
+          .catch((err) => {
+            res.status(500).send({ err: err });
+          });
       }
+
     } else {
       res.send({ msg: "You are not authorised!" });
     }
@@ -272,7 +372,6 @@ postRouter.delete("/delete/:id", async (req, res) => {
     res.send({ Errormsg: error });
   }
 });
-
 
 module.exports = { postRouter };
 

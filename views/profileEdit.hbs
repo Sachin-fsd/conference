@@ -114,7 +114,7 @@
         <div class="middle">
           <div class="IDprofile">
             <div class="profile-image">
-              <img
+              <img id="dp"
                 src="https://cdn.pixabay.com/photo/2017/02/08/17/24/fantasy-2049567_1280.jpg"
                 alt=""
               />
@@ -147,6 +147,45 @@
                 />
             </div>
             
+          </div>
+          <p class="text-muted" style="text-align: center;">Profile Photos</p>
+          <div class="photos" id="photos">
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2023/10/20/19/25/moon-8330104_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2023/06/28/08/13/public-speaking-8093767_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2023/07/04/19/43/man-8106958_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2023/04/12/21/52/mountain-7921253_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2023/06/28/10/53/world-8094131_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2023/06/13/15/05/astronaut-8061095_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2022/08/12/18/28/woman-7382243_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2023/01/28/06/57/man-7750139_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2022/08/26/13/15/man-7412527_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2022/07/08/10/37/books-7309019_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2016/09/16/19/12/atom-1674878_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
+            <div>
+              <img src="https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+            </div>
           </div>
           
         </div>
@@ -382,7 +421,8 @@ async function editProfile(ID){
       alert("Enter correct UserBio")
     }
     if(UserName && UserBio){
-      let obj = {UserName, UserBio}
+      let dp = document.getElementById("dp").src
+      let obj = {UserName, UserBio, dp}
       console.log(obj)
 
       const fetched = await fetch(`/profileEdit/${ID}`, {
@@ -398,5 +438,6 @@ async function editProfile(ID){
       }
     }
   }
+
 </script>
 <!-- <script src="./scripts/main.js"></script> -->

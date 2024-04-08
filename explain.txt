@@ -10,3 +10,10 @@ mongoose.connection.once('open', async () => {
     await mongoose.connection.db.collection('users').createIndex({ name: 'text' });
   }
 });
+
+UserDetails{
+0|index  |   UserID: '65b7d43f1c66dfe274ccfced',
+0|index  |   UserName: 'Sachin Singh',
+0|index  |   UserEmail: 'sachineducational555@gmail.com',
+0|index  |   UserDp: 'https://cdn.pixabay.com/photo/2023/04/12/21/52/mountain-7921253_640.png'
+ }

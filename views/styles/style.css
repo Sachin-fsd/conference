@@ -60,8 +60,13 @@ body {
   overflow: hidden;
 }
 
+
 img {
   display: block;
+  width: 100%;
+}
+
+.profile-photo img{
   width: 100%;
   height: 100%;
   object-fit: cover;
