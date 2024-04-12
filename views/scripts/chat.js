@@ -66,7 +66,6 @@ socket.emit("join room", room);
 socket.emit("done reading", { postID: room }, ()=>{
   doneReading(room)
 });
-chat_receiver.classList.remove("unread")
 
 window.addEventListener("beforeunload", () => {
   socket.emit("leave room", room);
@@ -101,10 +100,8 @@ post_submit_btn.onclick = async () => {
 };
 
 socket.on("done reading", () => {
-  console.log("Message is read by them");
   chat_receiver.classList.remove("unread");
   doneReading(room);
-
 });
 
 socket.on("new chat", (comment) => {
@@ -169,7 +166,6 @@ async function postMessage(room, receiverID) {
 
 
 async function doneReading(room) {
-  console.log("sendig doenreadng",room);
   const obj = { room };
   const fetched = await fetch(`/message`, {
     headers: {

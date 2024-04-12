@@ -4,8 +4,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Conference</title>
-    <link rel="shortcut-icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
      
     <link rel="icon"  href="">
     <!-- Boxicons -->
@@ -28,13 +29,14 @@
           <input
             type="search"
             placeholder="Search for creators, inspiration and projects"
+            onclick="window.location.href='/search'"
           />
         </div>
         <div class="create">
           <label for="create-post" class="btn btn-primary">Create</label>
           <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
               <img
-               src="{{UserDetails.UserDp}}"
+               src="{{UserDetails.UserDp}}" onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"/>
               />
             </div></a>
 
@@ -49,7 +51,7 @@
           <a href="/{{UserDetails.UserID}}" class="profile">
             <div class="profile-photo">
               <img
-               src="{{UserDetails.UserDp}}"  
+               src="{{UserDetails.UserDp}}"   onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"/>
               />
             </div>
             <div class="handle">
@@ -176,7 +178,7 @@
           >
             <div class="profile-photo">
               <img
-                src="{{UserDetails.UserDp}}"
+                src="{{UserDetails.UserDp}}" onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"/>
               />
             </div>
 
@@ -214,9 +216,9 @@
             {{#each posts}}
               <div class="feed">
                 <div class="head">
-                  <a href="/{{this.UserDetails.UserID}}"><div class="user">
+                  <a href="/{{this.authorID}}"><div class="user">
                       <div class="profile-photo">
-                        <img src="{{this.UserDetails.UserDp}}" onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"/>
+                        <img src="{{this.UserDetails.UserDp}}" onerror="this.src='https://source.unsplash.com/random?user={{this.authorID}}'"/>
                       </div>
                       <div class="info">
                         <h3>{{this.UserDetails.UserName}}</h3>
@@ -233,7 +235,7 @@
                     <div id="myDropdown-{{this._id}}" class="dropdown-content">
                       {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}<a href="" onclick="deletePost('{{this._id}}')">Delete</a> {{else}}{{/if}}
                       <a href="/comment/{{this._id}}">Comment</a>
-                      <a href="/{{this.UserDetails.UserID}}">Profile</a>
+                      <a href="/{{this.authorID}}">Profile</a>
                     </div>
                   </span>
 
@@ -279,7 +281,7 @@
                 <div class="action-buttons">
                   <div class="interaction-buttons">
                     <!-- <span><i class="uil uil-thumbs-up"></i></span> -->
-                    <span class="like-post" onclick="likePost(event,'{{this._id}}','{{this.UserDetails.UserID}}')">
+                    <span class="like-post" onclick="likePost(event,'{{this._id}}','{{this.authorID}}')">
                     {{#if (eq this.liked 1)}}<i class='bx bxs-like' style="color: #f54a6c;"></i>{{else}}<i class='bx bx-like' style="color: #f54a6c"></i>{{/if}}
                     </span>
                     <span><a href="/comment/{{this._id}}"><i
@@ -423,7 +425,7 @@
             <div class="message">
               <div class="profile-photo">
                 <img
-                  src="https://cdn.pixabay.com/photo/2023/11/19/14/10/hangzhou-8398789_640.jpg"
+                  src="{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserDp}}{{else}}{{this.sender.UserDp}}{{/if}}"
                 />
               </div>
               <div class="message-body">
@@ -434,13 +436,14 @@
               </div>
             </div>
             {{/each}}
-            <p class="text-muted">New Users</p>
+            
             {{#if (eq users.length 0)}}{{else}}
+            <p class="text-muted">New Users</p>
             {{#each users}}
            <div class="message">
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2023/11/19/14/10/hangzhou-8398789_640.jpg"
+                src="{{this.dp}}"
               />
             </div>
             <div class="message-body">

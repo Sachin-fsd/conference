@@ -11,14 +11,39 @@ const postRouter = express.Router();
 
 postRouter.get("/", async (req, res) => {
   try {
-
     const UserID = req.body.UserDetails.UserID;
     const user = await RegisterModel.findOne(
       { _id: UserID },
-      { _id: 1, name: 1, email: 1, dp:1 }
+      { _id: 1, name: 1, email: 1, dp: 1 }
     );
 
     const posts = await PostModel.aggregate([
+      { $sort: { CreatedAt: -1 } },
+      { $limit: 20 },
+      {
+        $addFields: {
+          CreatedAt: { $toDate: "$CreatedAt" },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "authorID",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$user",
+      },
+      {
+        $addFields: {
+          "UserDetails.UserID": { $toString: "$user._id" },
+          "UserDetails.UserName": "$user.name",
+          "UserDetails.UserEmail": "$user.email",
+          "UserDetails.UserDp": "$user.dp",
+        },
+      },
       {
         $lookup: {
           from: "likes",
@@ -40,21 +65,24 @@ postRouter.get("/", async (req, res) => {
         },
       },
       { $addFields: { liked: { $size: "$likes" } } },
-      { $sort: { CreatedAt: -1 } },
-      { $limit: 20 },
+      {
+        $project: {
+          user: 0,
+          likes: 0,
+        },
+      },
     ]);
-
     const messages = await MessageModel.find({
       $or: [{ "sender.UserID": UserID }, { "receiver.UserID": UserID }],
     }).sort({ CreatedAt: -1 });
 
     let users = [];
     if (messages.length < 5) {
-      users = await RegisterModel.find({}, { _id: 1, name: 1 })
+      users = await RegisterModel.find({}, { _id: 1, name: 1, dp: 1 })
         .sort({ CreatedAt: -1 })
         .limit(5);
     }
-
+    
     res.render("index", {
       UserDetails: req.body.UserDetails,
       posts,
@@ -111,7 +139,7 @@ postRouter.post("/", upload.single("file"), (req, res) => {
         console.log("data", data);
 
         const post = new PostModel({
-          UserDetails: JSON.parse(req.body.UserDetails),
+          authorID: req.body.authorID,
           text: req.body.text,
           photo: req.file.mimetype.startsWith("image/") ? data.Location : null,
           pdf: req.file.mimetype == "application/pdf" ? data.Location : null,
@@ -134,10 +162,9 @@ postRouter.post("/", upload.single("file"), (req, res) => {
   } else {
     // No file was uploaded, just save the text to MongoDB
     const post = new PostModel({
-      UserDetails: JSON.parse(req.body.UserDetails),
+      authorID: req.body.authorID,
       text: req.body.text,
     });
-
     post
       .save()
       .then((result) => {
@@ -158,9 +185,9 @@ postRouter.get("/:id", async (req, res) => {
 
     const user = await RegisterModel.findOne(
       { _id: ID },
-      { _id: 1, name: 1, email: 1, bio: 1, dp:1 }
+      { _id: 1, name: 1, email: 1, bio: 1, dp: 1 }
     );
-    const posts = await PostModel.find({ "UserDetails.UserID": ID })
+    const posts = await PostModel.find({ authorID: ID })
       .sort({ CreatedAt: -1 })
       .limit(20);
     let follow = await FollowModel.countDocuments({
@@ -183,7 +210,7 @@ postRouter.get("/:id", async (req, res) => {
         UserName: user.name,
         UserEmail: user.email,
         UserBio: user.bio,
-        UserDp:user.dp
+        UserDp: user.dp,
       },
       posts,
       follow,
@@ -205,7 +232,6 @@ postRouter.get("/profileEdit/:id", async (req, res) => {
         { _id: ID },
         { password: 0, CreatedAt: 0 }
       );
-      console.log(user, "UserDetails");
       if (!user) {
         res.status(400).send({ msg: "User not Found" });
         return;
@@ -215,6 +241,8 @@ postRouter.get("/profileEdit/:id", async (req, res) => {
           UserID: user._id,
           UserName: user.name,
           UserBio: user.bio,
+          UserDp: user.dp,
+          UserEmail: user.email,
         },
       });
     }
@@ -231,7 +259,7 @@ postRouter.put("/profileEdit/:id", async (req, res) => {
       let user = await RegisterModel.findOne({ _id: ID });
       user.name = UserName;
       user.bio = UserBio;
-      user.dp = dp
+      user.dp = dp;
       await user.save();
       res.status(201).send({ msg: "Done with editting" });
     } else {
@@ -242,69 +270,65 @@ postRouter.put("/profileEdit/:id", async (req, res) => {
   }
 });
 
-postRouter.get("/followers/:id", async (req,res)=>{
-  let ID =new mongoose.Types.ObjectId(req.params.id)
+postRouter.get("/followers/:id", async (req, res) => {
+  let ID = new mongoose.Types.ObjectId(req.params.id);
   try {
     const followers = await FollowModel.aggregate([
       { $match: { following: ID } },
       {
         $lookup: {
-          from: "users", 
+          from: "users",
           localField: "follower",
           foreignField: "_id",
-          as: "follower_info"
-        }
+          as: "follower_info",
+        },
       },
       {
-        $unwind: "$follower_info"
+        $unwind: "$follower_info",
       },
       {
         $project: {
           _id: 0,
           ID: "$follower",
-          name: "$follower_info.name" 
-        }
-      }
+          name: "$follower_info.name",
+        },
+      },
     ]);
-    // console.log("followers",followers);
     res.status(201).send(followers);
   } catch (error) {
     res.status(400).send({ msg: error.message });
-    
   }
-})
+});
 
-postRouter.get("/following/:id", async (req,res)=>{
-  let ID =new mongoose.Types.ObjectId(req.params.id)
+postRouter.get("/following/:id", async (req, res) => {
+  let ID = new mongoose.Types.ObjectId(req.params.id);
   try {
     const following = await FollowModel.aggregate([
       { $match: { follower: ID } },
       {
         $lookup: {
-          from: "users", 
+          from: "users",
           localField: "following",
           foreignField: "_id",
-          as: "following_info"
-        }
+          as: "following_info",
+        },
       },
       {
-        $unwind: "$following_info"
+        $unwind: "$following_info",
       },
       {
         $project: {
           _id: 0,
           ID: "$following",
-          name: "$following_info.name" 
-        }
-      }
+          name: "$following_info.name",
+        },
+      },
     ]);
-    // console.log("following",following);
     res.status(201).send(following);
   } catch (error) {
     res.status(400).send({ msg: error.message });
-    
   }
-})
+});
 
 postRouter.put("/like/:id/:authorID", async (req, res) => {
   try {
@@ -331,7 +355,7 @@ postRouter.delete("/delete/:id", async (req, res) => {
   try {
     const post = await PostModel.findOne({ _id: req.params.id });
     const UserID = req.body.UserDetails.UserID;
-    if (UserID == post.UserDetails.UserID) {
+    if (UserID == post.authorID) {
       if (post.photo || post.pdf || post.video) {
         const deleteParams = {
           Bucket: process.env.AWS_BUCKET_NAME,
@@ -364,7 +388,6 @@ postRouter.delete("/delete/:id", async (req, res) => {
             res.status(500).send({ err: err });
           });
       }
-
     } else {
       res.send({ msg: "You are not authorised!" });
     }

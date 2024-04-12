@@ -36,7 +36,7 @@
         <div class="create">
           <div class="profile-photo">
             <img
-             src="{{ProfileDetails.UserDp}}"  onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"
+             src="{{UserDetails.UserDp}}"  onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"
             />
           </div>
         </div>
@@ -51,7 +51,7 @@
           <a href="/{{UserDetails.UserID}}" class="profile">
             <div class="profile-photo">
               <img
-               src="{{ProfileDetails.UserDp}}"  onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"
+               src="{{UserDetails.UserDp}}"  onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"
               />
             </div>
             <div class="handle">
@@ -144,7 +144,7 @@
             </div>
             <div class="profile-stats">
               <ul>
-                <li><span class="profile-stat-count">{{posts.length}}</span> posts</li>
+                <li onclick="window.location.reload()"><span class="profile-stat-count">{{posts.length}}</span> posts</li>
                 <li onclick="getFollowers('{{ProfileDetails.UserID}}')"><span class="profile-stat-count" id="followers">{{followers}}</span> followers</li>
                 <li onclick="getFollowing('{{ProfileDetails.UserID}}')"><span class="profile-stat-count" id="following">{{following}}</span> following</li>
               </ul>
@@ -160,14 +160,14 @@
             {{#each posts}}
               <div class="feed">
                 <div class="head">
-                  <a href="/{{this.UserDetails.UserID}}"><div class="user">
+                  <a href="/{{../ProfileDetails.UserID}}"><div class="user">
                       <div class="profile-photo">
                         <img
-                          src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
+                          src="{{../ProfileDetails.UserDp}}"
                         />
                       </div>
                       <div class="info">
-                        <h3>{{this.UserDetails.UserName}}</h3>
+                        <h3>{{../ProfileDetails.UserName}}</h3>
                         <small>{{formatDate this.CreatedAt}}</small>
                       </div>
                     </div></a>
@@ -175,7 +175,7 @@
                     <span class="dropdown edit">
                       <i onclick="myFunction('{{this._id}}')" class="dropbtn uil uil-ellipsis-h"></i>
                       <div id="myDropdown-{{this._id}}" class="dropdown-content">
-                        {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}<a href="" onclick="deletePost('{{this._id}}')">Delete</a> {{else}}{{/if}}
+                        {{#if (eq this.authorID ../UserDetails.UserID)}}<a href="" onclick="deletePost('{{this._id}}')">Delete</a> {{else}}{{/if}}
                         <a href="#about">Report</a>
                         <a href="#contact">Profile</a>
                       </div>
@@ -262,8 +262,6 @@
 
               </div>
             {{/each}}
-            <!-- END OF FEED 1 -->
-
           </div>
         </div>
         <!-- END OF MIDDLE -->

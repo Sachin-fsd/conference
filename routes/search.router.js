@@ -22,10 +22,10 @@ searchRouter.get("/", async (req, res) => {
       // console.log(users,"users");
       res.status(200).json({ users });
     } else {
-      console.log("line24", req.query);
-      const users = await RegisterModel.find({}, { _id: 1, name: 1 })
-        .sort({ CreatedAt: -1 })
-        .limit(10);
+      const users = await RegisterModel.find(
+        {},
+        { _id: 1, name: 1, dp: 1 }
+      ).limit(10);
       res.render("search", { users, UserDetails: req.body.UserDetails });
     }
   } catch (error) {

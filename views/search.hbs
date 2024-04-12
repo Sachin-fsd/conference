@@ -13,17 +13,17 @@
     <link rel="stylesheet" href="./styles/style.css" />
   </head>
 
-  <body>
+  <body onload="document.getElementById('searchInput').focus();">
     <nav>
       <div class="container">
         <h2 class="logo">Conference</h2>
+        <Label for="searchInput">
         <div class="search-bar">
           <i class="uil uil-search"></i>
-          <input
-            type="search"
-            placeholder="Search for creators, inspiration and projects"
-          />
+          
+         
         </div>
+      </Label>
         <div class="create">
           <label for="create-post" class="btn btn-primary">Create</label>
           <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
@@ -107,6 +107,7 @@
           <div class="search-bar serach-page-top">
             <i class="uil uil-search"></i>
             <input
+              onload="this.focus()"
               id="searchInput"
               type="search"
               placeholder="Search for creators, inspiration and projects"
@@ -122,7 +123,7 @@
                     <div class="user">
                       <div class="profile-photo">
                         <img
-                          src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
+                        src="https://source.unsplash.com/random?user={{this._id}}"
                         />
                       </div>
                       <div class="info">
@@ -144,141 +145,7 @@
                 </div>
               </div>
             {{/each}}
-            <!-- FEED 3 -->
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/11/20/16/37/snowflakes-8401477_640.png"
-                    />
-                  </div>
-                  <div class="info">
-                    <h3>Faculty 2</h3>
-                  </div>
-                </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-
-              <div class="caption">
-                <p><b>SOLS</b>
-                  | BBA | Section 1 | Group 1 |
-                  <b>Roll No.</b>
-                  2501350035
-                </p>
-              </div>
-            </div>
-            <!-- END OF FEED 3 -->
-            <!-- FEED 4 -->
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/10/26/17/16/spider-8343193_1280.jpg"
-                    />
-                  </div>
-                  <div class="info">
-                    <h3>Faculty 1</h3>
-                  </div>
-                </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-
-              <div class="caption">
-                <p><b>SOET</b>
-                  | B.tech CSE FSD | Section 1 | Group 1 |
-                  <b>Roll No.</b>
-                  2301350008
-                </p>
-              </div>
-            </div>
-            <!-- END OF FEED 4 -->
-            <!-- FEED 5 -->
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/10/23/07/43/winter-8335532_640.png"
-                    />
-                  </div>
-                  <div class="info">
-                    <h3>Faculty 1</h3>
-                  </div>
-                </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-
-              <div class="caption">
-                <p><b>SOET</b>
-                  | B.tech CSE FSD | Section 1 | Group 1 |
-                  <b>Roll No.</b>
-                  2301350008
-                </p>
-              </div>
-            </div>
-            <!-- END OF FEED 5 -->
-            <!-- FEED 6 -->
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/10/26/17/16/spider-8343193_1280.jpg"
-                    />
-                  </div>
-                  <div class="info">
-                    <h3>Faculty 1</h3>
-                  </div>
-                </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-
-              <div class="caption">
-                <p><b>SOET</b>
-                  | B.tech CSE FSD | Section 1 | Group 1 |
-                  <b>Roll No.</b>
-                  2301350008
-                </p>
-              </div>
-            </div>
-            <!-- END OF FEED 6 -->
-            <!-- FEED 7 -->
-            <div class="feed">
-              <div class="head">
-                <div class="user">
-                  <div class="profile-photo">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2023/03/18/05/26/ferris-wheel-7859855_640.jpg"
-                    />
-                  </div>
-                  <div class="info">
-                    <h3>Faculty 1</h3>
-                  </div>
-                </div>
-                <span class="edit">
-                  <i class="uil uil-ellipsis-h"></i>
-                </span>
-              </div>
-
-              <div class="caption">
-                <p><b>SOET</b>
-                  | B.tech CSE FSD | Section 1 | Group 1 |
-                  <b>Roll No.</b>
-                  2301350008
-                </p>
-              </div>
-            </div>
-            <!-- END OF FEED 7 -->
+            
           </div>
           <!-- END OF FEEDS-->
         </div>

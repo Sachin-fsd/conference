@@ -14,8 +14,6 @@ messageRouter.get("/", async (req, res) => {
       $or: [{ "sender.UserID": userID }, { "receiver.UserID": userID }],
     }).sort({ CreatedAt: -1 });
 
-    // console.log("received",received);
-    // console.log(messages, "\n", req.body.UserDetails);
     res
       .status(200)
       .render("message", { messages, UserDetails: req.body.UserDetails });
@@ -31,12 +29,13 @@ messageRouter.post("/", async (req, res) => {
     let messages = await MessageModel.findOne({ room });
     const receivedUser = await RegisterModel.findOne(
       { _id: receiverID },
-      { _id: 1, name: 1, email: 1 }
+      { _id: 1, name: 1, email: 1,dp:1 }
     );
     const receiver = {
       UserID: receivedUser._id.toString(),
       UserName: receivedUser.name,
       UserEmail: receivedUser.email,
+      UserDp: receivedUser.dp
     };
     if (!messages) {
       messages = new MessageModel({
@@ -62,7 +61,6 @@ messageRouter.patch("/", async (req, res) => {
   try {
     let messages = await MessageModel.findOne({ room });
     messages.read = true;
-    console.log(messages)
     await messages.save();
     res.status(201).json({ ok: true });
   } catch (error) {

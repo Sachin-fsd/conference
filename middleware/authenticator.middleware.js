@@ -17,8 +17,8 @@ const authenticator =async (req, res, next) => {
         return res.redirect("/welcome");
       } else {
         req.body.UserDetails = decoded.UserDetails;
+        // console.log(req.body,)
         console.log("auth start", req.url, "line 17");
-
         next();
       }
     });

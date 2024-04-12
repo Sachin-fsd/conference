@@ -4,9 +4,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Conference</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico">
      
     <link
       rel="stylesheet"
@@ -51,7 +51,8 @@
           <a href="/{{UserDetails.UserID}}" class="profile">
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
+                src="{{UserDetails.UserDp}}"
+                onerror='this.src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"'
               />
             </div>
             <div class="handle">
@@ -98,7 +99,7 @@
                 ></i></span>
               <h3>Theme</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/settings" class="menu-item"><span><i
                   class="uil uil-setting"
                 ></i></span>
               <h3>Settings</h3>
@@ -110,10 +111,10 @@
         <!-- END OF LEFT -->
         <!-- MIDDLE -->
         <div class="middle">
-          <a href="/{{ProfileUser.UserID}}" class="profile chat-top-profile {{#if (eq read false)}}unread{{else}}{{/if}}" id="chat-receiver">
+          <a href="/{{ProfileUser.UserID}}" class="profile chat-top-profile {{#if (eq read false)}} unread {{else}} read {{/if}}" id="chat-receiver">
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
+                src="{{ProfileUser.UserDp}}"
               />
             </div>
             <div class="handle">
@@ -131,12 +132,13 @@
             <form class="create-post" id="chat_form">
               <div class="profile-photo">
                 <img
-                  src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
-                />
+                src="{{UserDetails.UserDp}}"
+                onerror='this.src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"'
+              />
               </div>
               <textarea
                 id="create-post"
-                placeholder="Message"
+                placeholder="Message" 
               ></textarea>
               <input
                 type="submit"

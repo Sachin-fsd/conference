@@ -12,33 +12,30 @@ chatRouter.get("/:id", async (req, res) => {
   const ID = req.params.id;
   const room = `${UserID}${ID}`.split("").sort().join("");
   try {
-    const message = await MessageModel.findOne({room});
-    if(!message){
+    const message = await MessageModel.findOne({ room });
+    let read = false;
+    if (!message) {
       read = null;
-    }else{
+    } else {
       read = message.read;
     }
 
     const ProfileUser = await RegisterModel.findOne({ _id: ID });
     let chats = await ChatModel.find({ room })
       .sort({ CreatedAt: -1 })
-      .limit(20).sort({CreatedAt:1});
-    
-      // console.log(read)
-      const messages = await MessageModel.find({
-        $or: [{ "sender.UserID": UserID }, { "receiver.UserID": UserID }],
-      }).sort({ CreatedAt: -1 });
-  
+      .limit(20)
+      .sort({ CreatedAt: 1 });
+
     res.render("chat", {
       UserDetails: req.body.UserDetails,
       ProfileUser: {
         UserID: ProfileUser._id,
         UserName: ProfileUser.name,
+        UserDp: ProfileUser.dp,
       },
       room,
       chats,
       read,
-      messages
     });
   } catch (error) {
     res.status(401).json({ err: error });
@@ -54,7 +51,7 @@ chatRouter.post("/", async (req, res) => {
   try {
     const chat = new ChatModel(payload);
     await chat.save();
-    
+
     res.status(201).json({ ok: true });
   } catch (error) {
     res.status(400).json({ err: error });

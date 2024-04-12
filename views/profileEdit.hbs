@@ -19,6 +19,68 @@
     <link rel="stylesheet" href="../styles/profile.css" />
     <link rel="stylesheet" href="../styles/style.css" />
 
+    <style>
+      .popup {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: none;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #888888;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    font-weight: bolder;
+    border-radius: 10px;
+}
+
+.popup-content label {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.popup-content input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.popup-content button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup-content button:hover {
+    background-color: #0056b3;
+}
+
+.show {
+    display: flex;
+}
+
+            
+    </style>
+
   </head>
 
   <body>
@@ -36,7 +98,8 @@
           <label for="create-post" class="btn btn-primary">Create</label>
           <div class="profile-photo">
             <img
-              src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
+            src="{{UserDetails.UserDp}}"
+              onerror='this.src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"''
             />
           </div>
         </div>
@@ -51,8 +114,9 @@
           <a href="/{{UserDetails.UserID}}" class="profile">
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
-              />
+              src="{{UserDetails.UserDp}}"
+              onerror='this.src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"''
+            />
             </div>
             <div class="handle">
               <h4>{{UserDetails.UserName}}</h4>
@@ -114,80 +178,145 @@
         <div class="middle">
           <div class="IDprofile">
             <div class="profile-image">
-              <img id="dp"
-                src="https://cdn.pixabay.com/photo/2017/02/08/17/24/fantasy-2049567_1280.jpg"
+              <img
+                id="dp"
+                src="{{UserDetails.UserDp}}"
+                onerror="this.src='https://cdn.pixabay.com/photo/2017/02/08/17/24/fantasy-2049567_1280.jpg'"
                 alt=""
               />
             </div>
             <div class="form-only">
-                <form class="create-post" id="chat_form">
-                  <input
-                    id="UserName"
-                    placeholder="Enter Name"
-                    value="{{UserDetails.UserName}}"
-                  />
-                </form>
-           
-              <form class="create-post" id="chat_form">
-                <textarea
-                style="height: 70px;"
-                id="UserBio"
-                placeholder="Enter Bio"
-              >{{UserDetails.UserBio}}</textarea>
-                
-              </form>
-              <hr>
-              <br>
+              <div>
+                <p class="text-bold">UserName</p>
+              <form class="create-post" id="chat_form" style="margin-top: 0rem;">
                 <input
-                  type="submit"
-                  id="profile-submit-btn"
-                  value="Save"
-                  class="btn btn-primary"
-                  onclick="editProfile('{{UserDetails.UserID}}')"
+                  id="UserName"
+                  placeholder="Enter Name"
+                  value="{{UserDetails.UserName}}"
                 />
+              </form>
+              </div>
+              <br>
+              <div>
+                <p class="text-bold">UserBio</p>
+              <form class="create-post" id="chat_form" style="margin-top: 0rem;">
+                <textarea
+                  id="UserBio"
+                  placeholder="Enter Bio"
+                >{{UserDetails.UserBio}}</textarea>
+
+              </form>
+              </div>
+
+              <hr />
+              <br />
+              <input
+                type="submit"
+                id="profile-submit-btn"
+                value="Save"
+                class="btn btn-primary"
+              />
             </div>
-            
+
+            <div id="myPopup" class="popup">
+              <div class="popup-content">
+                  <label for="" class="text-bold">Enter Password</label>
+                  <input type="password" name="" id="password" placeholder="Enter Password" data-email="{{UserDetails.UserEmail}}" data-id="{{UserDetails.UserID}}">
+                  <button id="closePopup">
+                      Submit
+                  </button>
+              </div>
+            </div>
+
           </div>
           <p class="text-muted" style="text-align: center;">Profile Photos</p>
           <div class="photos" id="photos">
             <div>
-              <img src="https://cdn.pixabay.com/photo/2023/10/20/19/25/moon-8330104_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2023/10/20/19/25/moon-8330104_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2023/06/28/08/13/public-speaking-8093767_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2023/06/28/08/13/public-speaking-8093767_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2023/07/04/19/43/man-8106958_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2023/07/04/19/43/man-8106958_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2023/04/12/21/52/mountain-7921253_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2023/04/12/21/52/mountain-7921253_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2023/06/28/10/53/world-8094131_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2023/06/28/10/53/world-8094131_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2023/06/13/15/05/astronaut-8061095_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2023/06/13/15/05/astronaut-8061095_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2022/08/12/18/28/woman-7382243_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2022/08/12/18/28/woman-7382243_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2023/01/28/06/57/man-7750139_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2023/01/28/06/57/man-7750139_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2022/08/26/13/15/man-7412527_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2022/08/26/13/15/man-7412527_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2022/07/08/10/37/books-7309019_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2022/07/08/10/37/books-7309019_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2016/09/16/19/12/atom-1674878_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2016/09/16/19/12/atom-1674878_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
             <div>
-              <img src="https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png" alt="" onclick="document.getElementById('dp').src = `${this.src}`">
+              <img
+                src="https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png"
+                alt=""
+                onclick="document.getElementById('dp').src = `${this.src}`"
+              />
             </div>
           </div>
-          
+
         </div>
         <!-- END OF MIDDLE -->
         <!-- RIGHT -->
@@ -404,40 +533,66 @@
 
 <script>
 
-const textarea = document.querySelector("#UserBio");
+  const textarea = document.querySelector("#UserBio");
   textarea.addEventListener("input", autoResize, false);
-
   function autoResize() {
-    this.style.height = "auto";
-    this.style.height = this.scrollHeight + "px";
-  }
-async function editProfile(ID){
-    let UserName = document.getElementById("UserName").value
-    let UserBio = document.getElementById("UserBio").value
-    if(!UserName){
-      alert("Enter correct Username")
-    }
-    if(!UserBio){
-      alert("Enter correct UserBio")
-    }
-    if(UserName && UserBio){
-      let dp = document.getElementById("dp").src
-      let obj = {UserName, UserBio, dp}
-      console.log(obj)
+  this.style.height = "auto"; 
+  this.style.height = this.scrollHeight + "px"; }
 
-      const fetched = await fetch(`/profileEdit/${ID}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token") ||sessionStorage.getItem("token") ||""}`,
-        },
-        method: "PUT",
-        body: JSON.stringify(obj),
-      });
-      if(fetched.ok){
-        window.location.href = `/${ID}`
+  async function editProfile(){ 
+    let email = document.getElementById("password").dataset.email
+    let password = document.getElementById("password").value;
+    let ID = document.getElementById("password").dataset.id;
+    let UserName = document.getElementById("UserName").value 
+    let UserBio = document.getElementById("UserBio").value
+
+
+    if(!UserName || !UserBio || !password){ 
+      alert("Enter correct Details") 
+      return;
+    } 
+    
+    if(UserName && UserBio && password){ 
+      let dp = document.getElementById("dp").src 
+      let obj = {UserName,UserBio,dp,email,password} 
+      let fetched = await fetch(`/profile/${ID}`, { 
+        headers: { "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token") ||sessionStorage.getItem("token") ||""}`, }, 
+        method: "PUT", 
+        body: JSON.stringify(obj), }); 
+      if(fetched.ok){ 
+        window.location.href = `/${ID}` 
+      }else{
+        alert("Update Failed")
       }
-    }
+    } 
   }
+
+
+    document.getElementById("profile-submit-btn").addEventListener(
+        "click",
+        function () {
+            myPopup.classList.add("show");
+        }
+      );
+      closePopup.addEventListener(
+        "click",
+        function () {
+            editProfile()
+            myPopup.classList.remove(
+                "show"
+            );
+        }
+      );
+      window.addEventListener(
+          "click",
+          function (event) {
+              if (event.target == myPopup) {
+                  myPopup.classList.remove(
+                      "show"
+                  );
+              }
+          }
+      );
 
 </script>
-<!-- <script src="./scripts/main.js"></script> -->

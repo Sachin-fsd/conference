@@ -51,6 +51,7 @@ post_submit_btn.onclick = async () => {
 };
 const UserDetails = getCookie("UserDetails").substring(2);
 
+
 document.getElementById("fileinput").addEventListener("change", function (e) {
   const file = e.target.files[0];
 
@@ -100,11 +101,10 @@ async function postText(text) {
 
   // Create a new FormData instance
   const formData = new FormData();
-
   // Append the text and UserDetails data to the form
   formData.append("text", text);
-  formData.append("UserDetails", UserDetails);
-
+  formData.append("authorID", JSON.parse(UserDetails).UserID);
+  // formData.append("UserDetails", UserDetails);
   // Check if an image file is being uploaded
   const file = document.querySelector("#fileinput").files[0];
   if (file) {
@@ -119,12 +119,11 @@ async function postText(text) {
     method: "POST",
     body: formData, // Send the form data
   });
-  console.log(fetched);
   if (fetched.ok === true) {
     window.location.reload();
+  }else{
+    alert("Something went wrong")
   }
-  const res = await fetched.json();
-  console.log(res);
 }
 
 function likePost(event, postID, authorID) {
