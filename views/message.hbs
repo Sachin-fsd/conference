@@ -13,23 +13,22 @@
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
     />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
 
     <link rel="stylesheet" href="../styles/chat.css" />
   </head>
 
   <body>
+    <div class="progress" id="PreLoaderBar" style="z-index: 10000;">
+      <div class="indeterminate"></div>
+    </div>
     <nav>
       <div class="container">
+        <i class='bx bx-arrow-back' onclick="window.history.back();"></i>
         <h2 class="logo">Conference</h2>
-        <div class="search-bar">
-          <i class="uil uil-search"></i>
-          <input
-            type="search"
-            placeholder="Search for creators, inspiration and projects"
-          />
-        </div>
+       
         <div class="create">
-          <label for="create-post" class="btn btn-primary">Create</label>
           <div class="profile-photo">
             <img
               src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"

@@ -18,11 +18,16 @@
     />
     <!-- STYLESHEET -->
     <link rel="stylesheet" href="./styles/style.css" />
+
   </head>
 
   <body>
+    <div class="progress" id="PreLoaderBar" style="z-index: 10000;">
+      <div class="indeterminate"></div>
+    </div>
     <nav>
       <div class="container">
+        <i class='bx bx-arrow-back' onclick="window.history.back();"></i>
         <h2 class="logo">Conference</h2>
         <div class="search-bar">
           <i class="uil uil-search"></i>
@@ -71,7 +76,7 @@
                 ></i></span>
               <h3>SEARCH</h3>
             </a>
-            <a href="#" class="menu-item" id="notifications"><span><i
+            <a href="/notification" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
                 ><small class="notification-count"></small></i></span>
               <h3>Notifications</h3>
@@ -86,7 +91,7 @@
                   ></small></i></span>
               <h3>Messages</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/save" class="menu-item"><span><i
                   class="uil uil-bookmark"
                 ></i></span>
               <h3>Bookmarks</h3>
@@ -101,7 +106,7 @@
                 ></i></span>
               <h3>Theme</h3>
             </a>
-            <a href="/settings" class="menu-item"><span><i
+            <a href="/settings" class="menu-item" onclick="settings('{{UserDetails}}')"><span><i
                   class="uil uil-setting"
                 ></i></span>
               <h3>Settings</h3>
@@ -112,7 +117,7 @@
         </div>
         <!-- END OF LEFT -->
         <!-- MIDDLE -->
-        <div class="middle">
+        <div class="middle" id="middle">
           <!-- STORIES -->
           <!-- <div class="stories">
             <div class="story">
@@ -210,6 +215,18 @@
             />
           </form>
 
+          <div id="myPopup" class="popup">
+            <div class="popup-content">
+                <label for="" class="text-bold">Delete Post Permanently</label>
+                <button id="yesButton" class="formal-button">
+                    Yes
+                </button>
+                <button id="noButton" class="formal-button">
+                    No
+                </button>
+            </div>
+          </div>
+        
           <!-- FEEDS -->
           <div class="feeds">
             <!-- FEED 1 -->
@@ -233,13 +250,13 @@
                   <span class="dropdown edit">
                     <i onclick="myFunction('{{this._id}}')" class="dropbtn uil uil-ellipsis-h"></i>
                     <div id="myDropdown-{{this._id}}" class="dropdown-content">
-                      {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}<a href="" onclick="deletePost('{{this._id}}')">Delete</a> {{else}}{{/if}}
-                      <a href="/comment/{{this._id}}">Comment</a>
-                      <a href="/{{this.authorID}}">Profile</a>
+                        {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}
+                            <a href="#" onclick="showDeletePopup('{{this._id}}')">Delete</a>
+                        {{else}}{{/if}}
+                        <a href="/comment/{{this._id}}">Comment</a>
+                        <a href="/{{this.authorID}}">Profile</a>
                     </div>
                   </span>
-
-
 
                 </div>
                 <a href="/comment/{{this._id}}">
@@ -274,7 +291,7 @@
 
                     {{/if}}
 
-                    <p class="post-text">{{formatText this.text}}</p>
+                    <p class="post-text">{{this.text}}</p>
                   </div>
                 </a>
 
@@ -289,8 +306,10 @@
                         ></i></a></span>
                     <span><i class="uil uil-share-alt"></i></span>
                   </div>
-                  <div class="bookmark">
-                    <span><i class="uil uil-bookmark-full"></i></span>
+                  <div class="bookmark" onclick="savePost(event,'{{this._id}}','{{this.authorID}}')">
+                    <span>
+                      {{#if (eq this.saved 1)}}<i class='bx bxs-bookmark' style="color: #6a3bec;"></i>{{else}}<i class='bx bx-bookmark' style="color: #6a3bec"></i>{{/if}}
+                    </span>
                   </div>
                 </div>
 
@@ -330,6 +349,8 @@
 
               </div>
             {{/each}}
+
+
             <!-- END OF FEED 1 -->
             
             <!-- FEED 3 -->

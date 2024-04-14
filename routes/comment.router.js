@@ -5,35 +5,18 @@ const { CommentModel } = require('../models/comment.model');
 const commentRouter = express.Router();
 
 
-// commentRouter.get("/",async(req,res)=>{
-//     console.log("comemnet line9");
-//     try {
-//         const ID = req.params.id || "65c8a19b3b2373224ef78e1e";
-//         const post = await PostModel.findOne(
-//           { _id: ID },
-//           { _id: 1, text: 1, CreatedAt: 1, UserDetails: 1}
-//         );
-//         const comments = await CommentModel.find({ parentPost: ID })
-//           .sort({ CreatedAt: -1 })
-//           .limit(20);
-    
-//         res.render("comment", {
-//           UserDetails:req.body.UserDetails,
-//           activePost: {UserID:post._id, Username:post.UserDetails.UserName, CreatedAt:post.CreatedAt, text:post.text, },
-//           comments
-//         });
-//       } catch (error) {
-//         res.json({ err: error });
-//       }
-// })
-
 commentRouter.get("/:id",async(req,res)=>{
     console.log("comemnet line9");
     try {
         const ID = req.params.id || "65c8a19b3b2373224ef78e1e";
+        // const post = await PostModel.findOne(
+        //   { _id: ID }
+        // );
         const post = await PostModel.findOne(
-          { _id: ID }
-        );
+          {  _id: ID },
+          { _id: 1, authorID: 1, text: 1, CreatedAt: 1 }
+        ).populate('authorID', '_id name dp');
+
         const comments = await CommentModel.find({ parentPost: ID })
           .sort({ CreatedAt: -1 })
           .limit(20);

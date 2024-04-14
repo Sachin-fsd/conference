@@ -36,7 +36,8 @@ registerRouter.post("/", async (req, res) => {
             const UserDetails = {
               UserID: user._id,
               UserName: user.name,
-              UserEmail: user.email
+              UserEmail: user.email,
+              UserDp:user.dp
             }
             const token = jwt.sign(
               { UserDetails },

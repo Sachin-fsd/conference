@@ -1,4 +1,7 @@
 document.getElementById("message").addEventListener("click", () => {
+  document.getElementById("PreLoaderBar").classList.remove("hide");
+document.getElementById("PreLoaderBar").classList.add("show");;
+
   console.log("message clicked");
   const profileID = window.location.pathname.split("/").pop();
   fetch(`/chat/${profileID}`).then((res) => {
@@ -34,15 +37,49 @@ function profileEdit(ID) {
   window.location.href = `/profileEdit/${ID}`;
 }
 
+
+function showDeletePopup(id) {
+  // store the id of the post to be deleted
+  document.getElementById('yesButton').dataset.postId = id;
+  // show the delete confirmation popup
+  myPopup.classList.add("show");
+}
+
+document.getElementById("yesButton").addEventListener(
+  "click",
+  function () {
+      // get the id of the post to be deleted
+      let id = this.dataset.postId;
+      deletePost(id);
+      myPopup.classList.remove("show");
+  }
+);
+
+document.getElementById("noButton").addEventListener(
+  "click",
+  function () {
+      myPopup.classList.remove("show");
+  }
+);
+
+window.addEventListener(
+  "click",
+  function (event) {
+      if (event.target == myPopup) {
+          myPopup.classList.remove("show");
+      }
+  }
+);
+
 function deletePost(id) {
   fetch("/delete/" + id, {
-    method: "DELETE",
+      method: "DELETE",
   })
-    .then((response) => response.json())
-    .then((data) => window.location.reload())
-    .catch((error) => {
+  .then((response) => response.json())
+  .then(() => window.location.reload())
+  .catch((error) => {
       console.error("Error:", error);
-    });
+  });
 }
 
 function myFunction(id) {
@@ -67,7 +104,9 @@ async function follow(ID) {
   let follow = document.getElementById("follow");
   follow.setAttribute("disabled", true);
   let followerCount = Number(document.getElementById("followers").innerText);
-  const fetched = await fetch(`/follow/${ID}`);
+  const fetched = await fetch(`/follow/${ID}`,{
+    method:"POST"
+  });
   if (fetched.ok) {
     if (follow.innerText == "Following") {
       document.getElementById("follow").innerText = "Follow";
@@ -160,3 +199,10 @@ function getFollowing(ID) {
     });
 }
 
+document.onreadystatechange = function () {
+  if (document.readyState === "complete") {
+      console.log(document.readyState);
+      document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");;
+  }
+}

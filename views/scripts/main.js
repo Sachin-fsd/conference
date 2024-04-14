@@ -7,7 +7,22 @@ window.onload = function () {
     this.style.height = "auto";
     this.style.height = this.scrollHeight + "px";
   }
+  document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");
+  
 };
+
+window.onbeforeunload = function() {
+  // To show the progress bar
+document.getElementById("PreLoaderBar").classList.remove("hide");
+document.getElementById("PreLoaderBar").classList.add("show");
+
+// To hide the progress bar
+// document.getElementById("PreLoaderBar").classList.remove("show");
+// document.getElementById("PreLoaderBar").classList.add("hide");
+
+}
+
 
 function myFunction(id) {
   document.getElementById("myDropdown-" + id).classList.toggle("show");
@@ -49,8 +64,8 @@ post_submit_btn.onclick = async () => {
   post.value.trim().length && (await postText(post.value.trim()));
   post.value = null;
 };
-const UserDetails = getCookie("UserDetails").substring(2);
-
+let UserDetails = getCookie("UserDetails").substring(2);
+UserDetails = JSON.parse(UserDetails)
 
 document.getElementById("fileinput").addEventListener("change", function (e) {
   const file = e.target.files[0];
@@ -103,7 +118,7 @@ async function postText(text) {
   const formData = new FormData();
   // Append the text and UserDetails data to the form
   formData.append("text", text);
-  formData.append("authorID", JSON.parse(UserDetails).UserID);
+  formData.append("authorID", UserDetails.UserID);
   // formData.append("UserDetails", UserDetails);
   // Check if an image file is being uploaded
   const file = document.querySelector("#fileinput").files[0];
@@ -148,16 +163,73 @@ function likePost(event, postID, authorID) {
     .catch((err) => console.log(err));
 }
 
+function savePost(event, postID, authorID) {
+  console.log(event, postID, authorID);
+
+  if (event.target.className == "bx bx-bookmark") {
+    event.target.className = "bx bxs-bookmark";
+    event.target.setAttribute("style","color: #6a3bec")
+  } else {
+    event.target.className = "bx bx-bookmark";
+  }
+
+  fetch(`/save/${postID}/${authorID}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${localStorage.getItem("token")}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
+}
+
+
+function showDeletePopup(id) {
+  // store the id of the post to be deleted
+  document.getElementById('yesButton').dataset.postId = id;
+  // show the delete confirmation popup
+  myPopup.classList.add("show");
+}
+
+document.getElementById("yesButton").addEventListener(
+  "click",
+  function () {
+      // get the id of the post to be deleted
+      let id = this.dataset.postId;
+      deletePost(id);
+      myPopup.classList.remove("show");
+  }
+);
+
+document.getElementById("noButton").addEventListener(
+  "click",
+  function () {
+      myPopup.classList.remove("show");
+  }
+);
+
+window.addEventListener(
+  "click",
+  function (event) {
+      if (event.target == myPopup) {
+          myPopup.classList.remove("show");
+      }
+  }
+);
+
 function deletePost(id) {
   fetch("/delete/" + id, {
-    method: "DELETE",
+      method: "DELETE",
   })
-    .then((response) => response.json())
-    .then(() => window.location.reload())
-    .catch((error) => {
+  .then((response) => response.json())
+  .then(() => window.location.reload())
+  .catch((error) => {
       console.error("Error:", error);
-    });
+  });
 }
+
 
 function getCookie(name) {
   const cookieArr = document.cookie.split(";");
@@ -172,3 +244,11 @@ function getCookie(name) {
 
   return null;
 }
+
+// document.onreadystatechange = function () {
+//   if (document.readyState === "complete") {
+//       console.log(document.readyState);
+//       document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");;
+//   }
+// }

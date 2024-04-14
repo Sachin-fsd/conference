@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 
 const postSchema = mongoose.Schema({
-//   UserDetails: Object,
-  authorID: { type: mongoose.Schema.Types.ObjectId },
+  authorID: { type: mongoose.Schema.Types.ObjectId,ref: "user" },
   text: { required: true, type: String },
   photo: { type: String },
   pdf: String,

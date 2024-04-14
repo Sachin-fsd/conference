@@ -26,6 +26,8 @@ chatRouter.get("/:id", async (req, res) => {
       .limit(20)
       .sort({ CreatedAt: 1 });
 
+      console.log(chats,read)
+
     res.render("chat", {
       UserDetails: req.body.UserDetails,
       ProfileUser: {

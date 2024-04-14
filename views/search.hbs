@@ -9,23 +9,22 @@
       rel="stylesheet"
       href="https://unicons.iconscout.com/release/v2.1.6/css/unicons.css"
     />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
     <!-- STYLESHEET -->
     <link rel="stylesheet" href="./styles/style.css" />
   </head>
 
   <body onload="document.getElementById('searchInput').focus();">
+    <div class="progress" id="PreLoaderBar" style="z-index: 10000;">
+      <div class="indeterminate"></div>
+    </div>
     <nav>
       <div class="container">
+        <i class='bx bx-arrow-back' onclick="window.history.back();"></i>
         <h2 class="logo">Conference</h2>
-        <Label for="searchInput">
-        <div class="search-bar">
-          <i class="uil uil-search"></i>
-          
-         
-        </div>
-      </Label>
+        
         <div class="create">
-          <label for="create-post" class="btn btn-primary">Create</label>
           <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
               <img
                 src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
@@ -116,6 +115,100 @@
           </div>
           <!-- FEEDS -->
           <div class="feeds" id="results">
+            {{#each posts}}
+            <div class="feed">
+              <div class="head">
+                <a href="/{{this.authorID._id}}"><div class="user">
+                    <div class="profile-photo">
+                      <img src="{{this.authorID.dp}}" onerror="this.src='https://source.unsplash.com/random?user={{this._id}}'"/>
+                    </div>
+                    <div class="info">
+                      <h3>{{this.authorID.name}}</h3>
+                      <small>{{formatDate this.CreatedAt}}</small>
+                    </div>
+                  </div></a>
+
+                <span class="dropdown edit">
+                  <i onclick="myFunction('{{this._id}}')" class="dropbtn uil uil-ellipsis-h"></i>
+                  <div id="myDropdown-{{this._id}}" class="dropdown-content">
+                      {{#if (eq this.authorID._id ../UserDetails.UserID)}}
+                          <a href="#" onclick="showDeletePopup('{{this._id}}')">Delete</a>
+                      {{else}}{{/if}}
+                      <a href="/comment/{{this._id}}">Comment</a>
+                      <a href="/{{this.authorID._id}}">Profile</a>
+                  </div>
+                </span>
+
+              </div>
+              <a href="/comment/{{this._id}}">
+                <div class="photo">
+                  {{#if this.photo}}
+                    <img
+                      src="{{this.photo}}"
+                      onerror="this.style.display='none'"
+                      
+                    />
+                  {{/if}}
+                  {{#if this.video}}
+                  <video width="" height="" controls src="{{this.video}}" onerror="this.style.display='none'" class="preview-video">
+                    
+                  </video>
+                  {{/if}}
+                  {{#if this.pdf}}
+                    <div
+                      id="pdf-loader"
+                      style="width:475px; height:400px; display: flex; align-items: center; justify-content: center;"
+                    >
+                      <p>Loading PDF...</p>
+                    </div>
+                    <iframe
+                      id="pdf-preview"
+                      src="http://docs.google.com/gview?url={{this.pdf}}&embedded=true"
+                      style="width:475px; height:400px; display: none;"
+                      frameborder="0"
+                      onload="document.getElementById('pdf-loader').style.display='none'; this.style.display='block';"
+                    ></iframe>
+                    <a href="{{this.pdf}}" download>Download PDF</a>
+
+                  {{/if}}
+
+                  <p class="post-text">{{formatText this.text}}</p>
+                </div>
+              </a>
+
+              <div class="action-buttons">
+                <div class="interaction-buttons">
+                  <span><i class="uil uil-thumbs-up"></i></span>
+                  <!-- <span class="like-post" onclick="likePost(event,'{{this._id}}','{{this.authorID._id}}')">
+                  {{#if (eq this.liked 1)}}<i class='bx bxs-like' style="color: #f54a6c;"></i>{{else}}<i class='bx bx-like' style="color: #f54a6c"></i>{{/if}}
+                  </span> -->
+                  <span><a href="/comment/{{this._id}}"><i
+                        class="uil uil-comment-dots" style="color: rgb(51, 100, 51);"
+                      ></i></a></span>
+                  <span><i class="uil uil-share-alt"></i></span>
+                </div>
+                <div class="bookmark">
+                  <span><i class="uil uil-bookmark-full"></i></span>
+                </div>
+              </div>
+
+              <div class="caption">
+                <p>
+                  <b>B.tech CSE FSD</b>
+                  | Section 1 | Group 1 |
+                  <b>Roll No.</b>
+                  2301350008
+
+                </p>
+                <p><span class="harsh-tag">#lifestyle</span></p>
+              </div>
+              <a href="/comment/{{this._id}}"><div
+                  class="comments text-muted"
+                >View all comments</div></a>
+
+            </div>
+          {{/each}}
+
 
             {{#each users}}
               <div class="feed">
@@ -123,7 +216,7 @@
                     <div class="user">
                       <div class="profile-photo">
                         <img
-                        src="https://source.unsplash.com/random?user={{this._id}}"
+                        src="{{this.dp}}"
                         />
                       </div>
                       <div class="info">

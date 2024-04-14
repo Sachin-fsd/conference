@@ -1,10 +1,16 @@
-let profiles = document.querySelectorAll(".users-profile");
-let userIDs = []
-profiles.forEach((value, index, array) => {
-    userIDs.push(value.htref)
-  console.log(value.href);
-});
-console.log("profiles", userIDs);
+window.onload = () => {
+  document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");
+}
+window.onbeforeunload = () => {
+  document.getElementById("PreLoaderBar").classList.remove("hide");
+  document.getElementById("PreLoaderBar").classList.add("show");
+}
+window.onloadstart = () => {
+  document.getElementById("PreLoaderBar").classList.remove("hide");
+  document.getElementById("PreLoaderBar").classList.add("show");
+}
+
 
 const middle = document.getElementById("middle");
 const socket = io();

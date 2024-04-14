@@ -21,6 +21,7 @@
   <body>
     <nav>
       <div class="container">
+        <i class='bx bx-arrow-back' onclick="window.history.back();"></i>
         <h2 class="logo">Conference</h2>
         <div class="search-bar">
           <i class="uil uil-search"></i>
@@ -115,11 +116,11 @@
                 <div class="user">
                   <div class="profile-photo">
                     <img
-                      src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
+                      src="{{post.authorID.dp}}"
                     />
                   </div>
                   <div class="info">
-                    <h3>{{post.UserDetails.UserName}}</h3>
+                    <h3>{{post.authorID.name}}</h3>
                     <small>{{formatDate post.CreatedAt}}</small>
                   </div>
                 </div>
@@ -142,7 +143,7 @@
               </div>
               <div class="action-buttons">
                 <div class="interaction-buttons">
-                  <span class="like-post" onclick="likePost(event,'{{post._id}}','{{activePost.UserDetails.UserID}}')">
+                  <span class="like-post" onclick="likePost(event,'{{post._id}}','{{post.authorID._id}}')">
                     {{#if (eq post.likeCount 0)}}<i class='bx bx-like' style="color: #f54a6c;"></i>{{else}}<i class='bx bxs-like' style="color: #f54a6c"></i>{{/if}}
                   </span>
                   <span><i class="uil uil-comment-dots"></i></span>
@@ -160,7 +161,7 @@
               {{#each comments}}
                 <div class="feed">
                   <div class="head">
-                    <a href="/{{this.UserDetails.UserID}}"><div class="user">
+                    <a href="/{{this.authorID._id}}"><div class="user">
                         <div class="profile-photo">
                           <img
                             src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"

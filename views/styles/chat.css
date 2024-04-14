@@ -96,6 +96,94 @@ img {
 a {
   color: inherit;
 }
+
+
+.progress {
+  position: relative;
+  height: 5px;
+  display: block;
+  width: 100%;
+  background-color: rgb(124, 102, 247);
+  border-radius: 2px;
+  background-clip: padding-box;
+  /*margin: 0.5rem 0 1rem 0;*/
+  overflow: hidden;
+  transition: opacity 0.5s, height 0.5s;
+}
+.progress.hide {
+  opacity: 0;
+  height: 0;
+}
+.progress.show {
+  opacity: 1;
+  height: 5px;
+}
+.progress .indeterminate {
+background-color:black; }
+.progress .indeterminate:before {
+  content: '';
+  position: absolute;
+  background-color: #2C67B1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  will-change: left, right;
+  -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+          animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite; }
+.progress .indeterminate:after {
+  content: '';
+  position: absolute;
+  background-color: #2C67B1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  will-change: left, right;
+  -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+          animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+  -webkit-animation-delay: 1.15s;
+          animation-delay: 1.15s; }
+
+@-webkit-keyframes indeterminate {
+  0% {
+    left: -35%;
+    right: 100%; }
+  60% {
+    left: 100%;
+    right: -90%; }
+  100% {
+    left: 100%;
+    right: -90%; } }
+@keyframes indeterminate {
+  0% {
+    left: -35%;
+    right: 100%; }
+  60% {
+    left: 100%;
+    right: -90%; }
+  100% {
+    left: 100%;
+    right: -90%; } }
+@-webkit-keyframes indeterminate-short {
+  0% {
+    left: -200%;
+    right: 100%; }
+  60% {
+    left: 107%;
+    right: -8%; }
+  100% {
+    left: 107%;
+    right: -8%; } }
+@keyframes indeterminate-short {
+  0% {
+    left: -200%;
+    right: 100%; }
+  60% {
+    left: 107%;
+    right: -8%; }
+  100% {
+    left: 107%;
+    right: -8%; } }
+
 /* ------------ NAV BAR ------------ */
 
 nav {
@@ -339,6 +427,7 @@ main .container .middle .profile {
 
 /* FEED */
 
+
 .chat-message {
   padding: 10px;
   margin: 10px 2px;
@@ -346,16 +435,21 @@ main .container .middle .profile {
   border-radius: 10px;
   width: fit-content;
   overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 .chat-left {
   float: left;
   clear: both;
-  background-color: green;
+  background-color: #b5c1c7;
+  max-width: 80%;
+
 }
 .chat-right {
   float: right;
   clear: both;
   background-color: rgb(114, 114, 247);
+  max-width: 80%;
 }
 
 .chat-time {
@@ -722,7 +816,7 @@ main .container .middle .profile {
 .middle .content-only {
   /* border: 1px solid #575656; */
   border-radius: 10px;
-  height: calc(100vh - 250px);
+  height: 55%;
   overflow-y: scroll;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none;

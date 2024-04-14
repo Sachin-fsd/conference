@@ -16,13 +16,19 @@
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
     />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
 
     <link rel="stylesheet" href="../styles/chat.css" />
   </head>
 
   <body>
+    <div class="progress" id="PreLoaderBar" style="z-index: 10000;">
+      <div class="indeterminate"></div>
+    </div>
     <nav>
       <div class="container">
+        <i class='bx bx-arrow-back' onclick="window.history.back();"></i>
         <h2 class="logo">Conference</h2>
         <div class="search-bar">
           <i class="uil uil-search"></i>
@@ -124,7 +130,7 @@
           </a>
           <div class="content-only" id="feeds">
             {{#each chats}}
-            <div class="chat-message {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}} chat-right {{else}} chat-left {{/if}}" onclick="toggleTime('chat-time-{{this._id}}')"> {{formatText this.text}}</div>
+            <div class="chat-message {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}} chat-right {{else}} chat-left {{/if}}" onclick="toggleTime('chat-time-{{this._id}}')"> {{this.text}}</div>
             <p id="chat-time-{{this._id}}" class="chat-time {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}} chat-right {{else}} chat-left {{/if}}" style="display: none;">{{formatDate this.CreatedAt}}</p>
             {{/each}}
           </div>
@@ -137,6 +143,7 @@
               />
               </div>
               <textarea
+                onkeypress="if(event.key == 'Enter') { sendChat(); }"
                 id="create-post"
                 placeholder="Message" 
               ></textarea>

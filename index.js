@@ -28,6 +28,8 @@ const { followRouter } = require("./routes/follow.router.js");
 const { settingsRouter } = require("./routes/settings.router.js");
 const { RegisterModel } = require("./models/register.model.js");
 const { profileRouter } = require("./routes/profile.router.js");
+const { notificationRouter } = require("./routes/notification.router.js");
+const { saveRouter } = require("./routes/save.router.js");
 require("dotenv").config();
 
 const server = http.createServer(app);
@@ -60,10 +62,14 @@ hbs.registerHelper("formatDate", function (date) {
   return date.toString().substring(0, 24);
 });
 hbs.registerHelper("formatText", function (text) {
-  return new hbs.SafeString(text.replace(/\n/g, "<br>"));
+  return new hbs.SafeString(text.replace(/\\n|\n/g, "<br>"));
 });
+
 hbs.registerHelper("eq", function (a, b) {
-  return a === b;
+  if(typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined || typeof b === 'boolean' || typeof b === 'number' || typeof b === null || typeof b === undefined) {
+    return a === b;
+  }
+  return a.toString() === b.toString();
 });
 
 app.get("/usersList", async (req, res) => {
@@ -186,7 +192,6 @@ app.get("/welcome", (req, res) => {
   res.render("landing");
 });
 
-// app.use(authenticator)
 
 app.use("/search", authenticator, searchRouter);
 app.use("/comment", authenticator, commentRouter);
@@ -194,9 +199,16 @@ app.use("/chat", authenticator, chatRouter);
 app.use("/message", authenticator, messageRouter);
 app.use("/follow", authenticator, followRouter);
 app.use("/settings", authenticator, settingsRouter);
-app.use("/profile",authenticator,profileRouter)
+app.use("/profile",authenticator,profileRouter);
+app.use("/notification",authenticator,notificationRouter)
+app.use("/save",authenticator,saveRouter)
 
 app.use("/", authenticator, postRouter);
+
+app.use((req, res) => {
+  res.status(404).send({ title: 'Not Found' });
+});
+
 
 const io = new Server(server);
 io.on("connection", (socket) => {
@@ -272,13 +284,17 @@ const fetch = (...args) =>
 // Call the function
 // updateDp();
 
+// dlt()
+
 // function dlt () {
-//   PostModel.find()
+//   RegisterModel.find()
 //     .sort({ CreatedAt: 1 })
-//     .limit(5)
+//     .limit(3)
 //     .then((docs) => {
+
 //       docs.forEach((doc) => {
-//         PostModel.findByIdAndDelete(doc._id)
+//         console.log(doc)
+//         RegisterModel.findByIdAndDelete(doc._id)
 //           .then((deletedDoc) => {
 //             console.log('Deleted document:', deletedDoc)
 //           })
@@ -294,38 +310,23 @@ const fetch = (...args) =>
 
 // update()
  
-// async function update() {
-//   // Fetch all posts
-//   let posts = await PostModel.find();
+async function update() {
+  // Fetch all posts
+  let posts = await PostModel.find();
 
-//   // Iterate over each post
-//   await Promise.all(
-//     posts.map(async(post) => {
-//       if(!post.UserDetails){
-//         // Delete the post if it doesn't have UserDetails
-//         await PostModel.findByIdAndDelete(post._id);
-//       } else {
-//         // Update the post with authorID and remove UserDetails
-//         post.authorID = post.UserDetails.UserID;
-//         delete post.UserDetails;
+  // Iterate over each post
+  await Promise.all(
+    posts.map(async(post) => {
+      console.log(post)
+      // let text = post.text;
+      // let authorID = post.authorID.toString();
 
-//         // Mark the document as modified
-//         post.markModified('UserDetails');
-//         post.markModified('authorID');
+      //   await PostModel.findByIdAndDelete(post._id);
 
-//         console.log(post)
-//         return post.save().catch((err) => console.log(err))
-//       }
-//     })
-//   );
-// }
+      //   await PostModel.create({text,authorID})
+      //   // return post.save().catch((err) => console.log(err))
+      
+    })
+  );
+}
 
-// Your documents
-// let documents = [
-  
-// ];
-
-// // Insert the documents into the PostModel
-// PostModel.insertMany(documents)
-//   .then(() => console.log('Documents inserted'))
-//   .catch(err => console.error(err));

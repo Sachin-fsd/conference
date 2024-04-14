@@ -1,3 +1,14 @@
+window.onbeforeunload = () => {
+  document.getElementById("PreLoaderBar").classList.remove("hide");
+ document.getElementById("PreLoaderBar").classList.add("show");
+}
+
+window.onloadstart = () => {
+  document.getElementById("PreLoaderBar").classList.remove("hide");
+ document.getElementById("PreLoaderBar").classList.add("show");
+}
+
+
 window.onload = function () {
   var textarea = document.querySelector("#create-post");
   textarea.addEventListener("input", autoResize, false);
@@ -8,6 +19,9 @@ window.onload = function () {
     this.style.height = this.scrollHeight + "px";
     this.setAttribute("style", "max-height:300px");
   }
+
+  document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");
 };
 
 function getCookie(name) {
@@ -74,7 +88,7 @@ window.addEventListener("beforeunload", () => {
 let UserDetailsString = getCookie("UserDetails").substring(2);
 let UserDetails = JSON.parse(UserDetailsString);
 
-post_submit_btn.onclick = async () => {
+async function sendChat(){
   let text = post.value.trim();
   if (text.length) {
     let date = new Date();
@@ -97,7 +111,34 @@ post_submit_btn.onclick = async () => {
     postMessage(room, receiverID);
   }
   post.value = null;
-};
+} 
+
+post_submit_btn.addEventListener("click",sendChat)
+
+// post_submit_btn.onclick = async () => {
+//   let text = post.value.trim();
+//   if (text.length) {
+//     let date = new Date();
+//     let formattedDate = date.toString().substring(0, 24);
+//     let comment = {
+//       text,
+//       postID: room,
+//       UserDetails,
+//       receiverID,
+//       CreatedAt: formattedDate,
+//     };
+//     socket.emit("new chat", comment);
+//     append(comment);
+//     feeds.scrollTo({
+//       top: feeds.scrollHeight,
+//       behavior: "smooth",
+//     });
+//     chat_receiver.classList.add("unread");
+//     postText(text);
+//     postMessage(room, receiverID);
+//   }
+//   post.value = null;
+// };
 
 socket.on("done reading", () => {
   chat_receiver.classList.remove("unread");
@@ -186,3 +227,10 @@ async function doneReading(room) {
 }
 
 
+document.onreadystatechange = function () {
+  if (document.readyState === "complete") {
+      console.log(document.readyState);
+      document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");;
+  }
+}

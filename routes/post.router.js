@@ -5,6 +5,7 @@ const { PostModel, LikeModel } = require("../models/post.model");
 const { MessageModel, FollowModel } = require("../models/message.model");
 const multer = require("multer");
 const Aws = require("aws-sdk");
+const { NotificationModel } = require("../models/notifications.model");
 require("dotenv").config();
 
 const postRouter = express.Router();
@@ -12,11 +13,14 @@ const postRouter = express.Router();
 postRouter.get("/", async (req, res) => {
   try {
     const UserID = req.body.UserDetails.UserID;
+
+    // Fetch the user details
     const user = await RegisterModel.findOne(
       { _id: UserID },
       { _id: 1, name: 1, email: 1, dp: 1 }
     );
 
+    // Fetch the posts and populate the author details
     const posts = await PostModel.aggregate([
       { $sort: { CreatedAt: -1 } },
       { $limit: 20 },
@@ -30,18 +34,18 @@ postRouter.get("/", async (req, res) => {
           from: "users",
           localField: "authorID",
           foreignField: "_id",
-          as: "user",
+          as: "author",
         },
       },
       {
-        $unwind: "$user",
+        $unwind: "$author",
       },
       {
         $addFields: {
-          "UserDetails.UserID": { $toString: "$user._id" },
-          "UserDetails.UserName": "$user.name",
-          "UserDetails.UserEmail": "$user.email",
-          "UserDetails.UserDp": "$user.dp",
+          "UserDetails.UserID": { $toString: "$author._id" },
+          "UserDetails.UserName": "$author.name",
+          "UserDetails.UserEmail": "$author.email",
+          "UserDetails.UserDp": "$author.dp",
         },
       },
       {
@@ -64,25 +68,50 @@ postRouter.get("/", async (req, res) => {
           as: "likes",
         },
       },
-      { $addFields: { liked: { $size: "$likes" } } },
+      {
+        $lookup: {
+          from: "saves",
+          let: { post_id: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$UserID", new mongoose.Types.ObjectId(UserID)] },
+                    { $eq: ["$postID", "$$post_id"] },
+                  ],
+                },
+              },
+            },
+            { $project: { _id: 0 } },
+          ],
+          as: "saves",
+        },
+      },
+      { $addFields: { liked: { $size: "$likes" }, saved: { $size: "$saves" } } },
       {
         $project: {
-          user: 0,
+          author: 0,
           likes: 0,
+          saves: 0,
         },
       },
     ]);
+
+    // Fetch the messages
     const messages = await MessageModel.find({
       $or: [{ "sender.UserID": UserID }, { "receiver.UserID": UserID }],
     }).sort({ CreatedAt: -1 });
 
+    // Fetch the users
     let users = [];
     if (messages.length < 5) {
       users = await RegisterModel.find({}, { _id: 1, name: 1, dp: 1 })
         .sort({ CreatedAt: -1 })
         .limit(5);
     }
-    
+
+    // Render the page
     res.render("index", {
       UserDetails: req.body.UserDetails,
       posts,
@@ -94,6 +123,7 @@ postRouter.get("/", async (req, res) => {
     res.json({ err: error });
   }
 });
+
 
 const storage = multer.memoryStorage({
   destination: (req, file, cb) => {
@@ -183,6 +213,10 @@ postRouter.get("/:id", async (req, res) => {
   try {
     const ID = req.params.id;
 
+    if (!mongoose.Types.ObjectId.isValid(ID)) {
+      return res.status(404).render("404");
+    }
+
     const user = await RegisterModel.findOne(
       { _id: ID },
       { _id: 1, name: 1, email: 1, bio: 1, dp: 1 }
@@ -202,6 +236,8 @@ postRouter.get("/:id", async (req, res) => {
 
     const following = await FollowModel.countDocuments({ follower: ID });
     const followers = await FollowModel.countDocuments({ following: ID });
+
+    console.log(posts)
 
     res.render("profile", {
       UserDetails: req.body.UserDetails,
@@ -340,9 +376,12 @@ postRouter.put("/like/:id/:authorID", async (req, res) => {
     if (like) {
       await LikeModel.deleteOne({ _id: like._id });
       await PostModel.updateOne({ _id: postID }, { $inc: { likeCount: -1 } });
+      await NotificationModel.deleteOne({senderID:UserID,receiverID:authorID,purpose:"Liked a post",postID})
+
     } else {
       await LikeModel.create({ UserID, postID, authorID });
       await PostModel.updateOne({ _id: postID }, { $inc: { likeCount: 1 } });
+      await NotificationModel.create({senderID:UserID,receiverID:authorID,purpose:"Liked a post",postID})
     }
 
     res.send({ msg: "Done with like", ok: true });
