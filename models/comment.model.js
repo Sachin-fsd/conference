@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const commentSchema = mongoose.Schema({
-    parentPost:{type:mongoose.Schema.Types.ObjectId, ref:"user"},
+    parentPost:{type:mongoose.Schema.Types.ObjectId, ref:"post"},
     UserDetails:Object,
     text:{required:true, type:String},
     CreatedAt:{type:Date, default:Date.now}

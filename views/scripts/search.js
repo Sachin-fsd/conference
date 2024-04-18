@@ -1,10 +1,8 @@
-
-window.onbeforeunload = function() {
+window.onbeforeunload = function () {
   // Display the progress bar when the page is about to unload
   document.getElementById("PreLoaderBar").classList.remove("hide");
-document.getElementById("PreLoaderBar").classList.add("show");;
-}
-
+  document.getElementById("PreLoaderBar").classList.add("show");
+};
 
 async function seachUser(event) {
   const searchInput = document.getElementById("searchInput").value;
@@ -12,30 +10,30 @@ async function seachUser(event) {
     let resultDiv = document.getElementById("results");
     resultDiv.innerHTML = null;
     document.getElementById("PreLoaderBar").classList.remove("hide");
-document.getElementById("PreLoaderBar").classList.add("show");;
+    document.getElementById("PreLoaderBar").classList.add("show");
 
-
-    let load = document.createElement("div")
-    load.innerHTML = `<p class="text-bold">Searching...</p>`
+    let load = document.createElement("div");
+    load.innerHTML = `<p class="text-bold">Searching...</p>`;
     resultDiv.append(load);
-    
-    const response = await fetch(`/search?query=${encodeURIComponent(searchInput)}`);
-    const {users,posts} =await response.json();
-    console.log("res",posts);
-    
 
-    if(users.length===0 && posts.length===0){
-      let div = document.createElement("div")
-      div.classList.add("feed")
+    const response = await fetch(
+      `/search?query=${encodeURIComponent(searchInput)}`
+    );
+    const { users, posts } = await response.json();
+    console.log("res", posts);
+
+    if (users.length === 0 && posts.length === 0) {
+      let div = document.createElement("div");
+      div.classList.add("feed");
       div.innerHTML = `
       
       <h2>No results found for ${searchInput}</h2>
-      `
-      resultDiv.append(div)
+      `;
+      resultDiv.append(div);
     }
 
-    posts.forEach((post)=>{
-      let div = document.createElement("div")
+    posts.forEach((post) => {
+      let div = document.createElement("div");
       div.classList.add("feed");
       div.innerHTML = `
         <div class="head">
@@ -95,10 +93,9 @@ document.getElementById("PreLoaderBar").classList.add("show");;
             class="comments text-muted"
           >View all comments</div></a>
 
-      `
-      resultDiv.append(div)
-    })
-
+      `;
+      resultDiv.append(div);
+    });
 
     users.forEach((user) => {
       let div = document.createElement("div");
@@ -134,14 +131,10 @@ document.getElementById("PreLoaderBar").classList.add("show");;
       `;
 
       resultDiv.append(div);
-
-    })
+    });
     load.innerHTML = null;
     document.getElementById("PreLoaderBar").classList.remove("show");
-  document.getElementById("PreLoaderBar").classList.add("hide");;
-
-
-
+    document.getElementById("PreLoaderBar").classList.add("hide");
   } catch (error) {
     console.log(error);
   }
@@ -149,8 +142,8 @@ document.getElementById("PreLoaderBar").classList.add("show");;
 
 document.onreadystatechange = function () {
   if (document.readyState === "complete") {
-      console.log(document.readyState);
-      document.getElementById("PreLoaderBar").classList.remove("show");
-  document.getElementById("PreLoaderBar").classList.add("hide");;
+    console.log(document.readyState);
+    document.getElementById("PreLoaderBar").classList.remove("show");
+    document.getElementById("PreLoaderBar").classList.add("hide");
   }
-}
+};

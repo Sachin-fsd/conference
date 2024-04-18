@@ -111,6 +111,7 @@ async function sendChat(){
     postMessage(room, receiverID);
   }
   post.value = null;
+  post.innerText = null;
 } 
 
 post_submit_btn.addEventListener("click",sendChat)

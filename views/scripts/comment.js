@@ -51,6 +51,8 @@ const post = document.getElementById("create-post");
 
 const post_submit_btn = document.getElementById("post-submit-btn");
 const postID = post_submit_btn.dataset.postid
+const authorID = post_submit_btn.dataset.authorid
+// console.log(authorID,post_submit_btn)
 
 const feeds = document.querySelector("#feeds");
 
@@ -100,7 +102,8 @@ function append(comment) {
     <div class="user">
       <div class="profile-photo">
         <img
-          src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
+          src="${UserDetails.UserDp}"
+          onerror="this.src='https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg'"
         />
       </div>
       <div class="info">
@@ -113,9 +116,6 @@ function append(comment) {
     </span>
   </div>
   <div class="photo">
-    <!-- {{! <img
-    src="https://cdn.pixabay.com/photo/2023/04/13/17/49/dare-7923106_640.jpg"
-  /> }} -->
     <p class="post-text">${comment.text}</p>
   </div>`;
 
@@ -128,7 +128,7 @@ socket.on("new comment", (comment) => {
 });
 
 async function postText(text) {
-  const obj = { text };
+  const obj = { text,authorID };
   const fetched = await fetch(`/comment/${postID}`, {
     headers: {
       "Content-Type": "application/json",

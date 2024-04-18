@@ -13,11 +13,6 @@ notificationRouter.get("/", async (req, res) => {
       const notifications = await NotificationModel.aggregate([
         { $match: { receiverID:new mongoose.Types.ObjectId(UserID) } },
         { $limit: 20 },
-        {
-          $addFields: {
-            CreatedAt: { $toDate: "$CreatedAt" },
-          },
-        },
         { $sort: { CreatedAt: -1 } },
         {
           $lookup: {

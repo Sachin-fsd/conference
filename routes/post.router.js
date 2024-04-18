@@ -12,6 +12,9 @@ const postRouter = express.Router();
 
 postRouter.get("/", async (req, res) => {
   try {
+    const page = req.query.page || 1;
+    const limit = 10;
+    const skip = (page-1)*limit
     const UserID = req.body.UserDetails.UserID;
 
     // Fetch the user details
@@ -23,7 +26,8 @@ postRouter.get("/", async (req, res) => {
     // Fetch the posts and populate the author details
     const posts = await PostModel.aggregate([
       { $sort: { CreatedAt: -1 } },
-      { $limit: 20 },
+      {$skip:skip},
+      { $limit: limit },
       {
         $addFields: {
           CreatedAt: { $toDate: "$CreatedAt" },
@@ -111,13 +115,14 @@ postRouter.get("/", async (req, res) => {
         .limit(5);
     }
 
-    // Render the page
-    res.render("index", {
-      UserDetails: req.body.UserDetails,
-      posts,
-      messages,
-      users,
-    });
+    // res.render("index", {
+    //   UserDetails: req.body.UserDetails,
+    //   posts,
+    //   messages,
+    //   users,
+    // });
+    // console.log(posts)
+    res.status(200).send({ posts });
   } catch (error) {
     console.log(error);
     res.json({ err: error });
@@ -239,8 +244,23 @@ postRouter.get("/:id", async (req, res) => {
 
     console.log(posts)
 
-    res.render("profile", {
-      UserDetails: req.body.UserDetails,
+
+
+    // res.render("profile", {
+    //   UserDetails: req.body.UserDetails,
+    //   ProfileDetails: {
+    //     UserID: ID,
+    //     UserName: user.name,
+    //     UserEmail: user.email,
+    //     UserBio: user.bio,
+    //     UserDp: user.dp,
+    //   },
+    //   posts,
+    //   follow,
+    //   following,
+    //   followers,
+    // });
+    res.send({
       ProfileDetails: {
         UserID: ID,
         UserName: user.name,
@@ -381,7 +401,9 @@ postRouter.put("/like/:id/:authorID", async (req, res) => {
     } else {
       await LikeModel.create({ UserID, postID, authorID });
       await PostModel.updateOne({ _id: postID }, { $inc: { likeCount: 1 } });
-      await NotificationModel.create({senderID:UserID,receiverID:authorID,purpose:"Liked a post",postID})
+      if(UserID!==authorID){
+        await NotificationModel.create({senderID:UserID,receiverID:authorID,purpose:"Liked a post",postID})
+      }
     }
 
     res.send({ msg: "Done with like", ok: true });

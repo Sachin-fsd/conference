@@ -56,14 +56,14 @@
                 ></i></span>
               <h3>Home</h3>
             </a>
-            <a href="#" class="menu-item "><span><i
+            <a href="/search" class="menu-item "><span><i
                   class="uil uil-compass"
                 ></i></span>
-              <h3>SEARCH</h3>
+              <h3>Search</h3>
             </a>
-            <a href="#" class="menu-item active" id="notifications"><span><i
+            <a href="/notification" class="menu-item " id="notifications"><span><i
                   class="uil uil-bell"
-                ><small class="notification-count"></small></i></span>
+                > </i></span>
               <h3>Notifications</h3>
               <!-- NOTIFICATION POPUP -->
               
@@ -71,25 +71,25 @@
             </a>
             <a href="/message" class="menu-item" id="messages-notification"><span><i
                   class="uil uil-envelope-alt"
-                ><small class="notification-count"></small></i></span>
+                > </i></span>
               <h3>Messages</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="" class="menu-item active"><span><i
                   class="uil uil-bookmark"
                 ></i></span>
               <h3>Bookmarks</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="" class="menu-item"><span><i
                   class="uil uil-chart-line"
                 ></i></span>
               <h3>Analytics</h3>
             </a>
-            <a href="#" class="menu-item" id="theme"><span><i
+            <a href="" class="menu-item" id="theme"><span><i
                   class="uil uil-palette"
                 ></i></span>
               <h3>Theme</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/settings" class="menu-item"><span><i
                   class="uil uil-setting"
                 ></i></span>
               <h3>Settings</h3>
@@ -101,9 +101,18 @@
         <!-- END OF LEFT -->
         <!-- MIDDLE -->
         <div class="middle">
+
           
           <!-- FEEDS -->
           <div class="feeds" id="results">
+          {{#if (eq saves.length 0)}}
+
+            <div class="feed">
+                <div class="photo">
+                  <p class="post-text" style="white-space: pre-wrap;text-align: center;">No Saved Posts </p>
+                </div>
+            </div>
+            {{else}}
 
             {{#each saves}}
             <div class="feed">
@@ -162,7 +171,7 @@
 
                   {{/if}}
 
-                  <p class="post-text">{{formatText this.postID.text}}</p>
+                  <p class="post-text" style="white-space: pre-wrap;">{{this.postID.text}}</p>
                 </div>
               </a>
 
@@ -198,6 +207,8 @@
 
             </div>
           {{/each}}
+
+          {{/if}}
             
           </div>
           <!-- END OF FEEDS-->

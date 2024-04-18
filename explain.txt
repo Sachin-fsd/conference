@@ -17,3 +17,7 @@ UserDetails{
 0|index  |   UserEmail: 'sachineducational555@gmail.com',
 0|index  |   UserDp: 'https://cdn.pixabay.com/photo/2023/04/12/21/52/mountain-7921253_640.png'
  }
+
+changs for react
+ --> postRouter / get
+ --> login router / post

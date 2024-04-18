@@ -502,7 +502,7 @@ main .container .left .profile {
   justify-content: space-between;
   margin-top: 1rem;
   background-color: var(--color-white);
-  padding: 0.4rem var(--card-padding);
+  padding: 0.5rem 0.6rem;
   border-radius: var(--border-radius);
 }
 
@@ -574,7 +574,7 @@ main .container .left .profile {
 
 .middle .feed .photo {
   text-align: center;
-  border-radius: var(--card-border-radius);
+  /* border-radius: var(--card-border-radius); */
   overflow: hidden;
   margin: 0.7rem 0;
 }
@@ -582,8 +582,8 @@ main .container .left .profile {
   cursor: pointer;
 }
 .post-text {
-  font-size: 20px;
-  text-align: center;
+  font-size: 15px;
+  text-align: left;
   white-space: pre-wrap;
 }
 
@@ -620,6 +620,12 @@ main .container .left .profile {
 
 .middle .liked-by p {
   margin-left: 0.5rem;
+}
+
+.logout:hover{
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  opacity: 1;
 }
 
 /* ------------ RIGHT ------------ */
@@ -976,7 +982,7 @@ main .container .left .profile {
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #007BFF;
+  /* background-color: #007BFF; */
   color: white;
   border: none;
   border-radius: 5px;

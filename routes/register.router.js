@@ -25,11 +25,11 @@ registerRouter.post("/", async (req, res) => {
     try {
       const user = await RegisterModel.findOne({ email })
       if (user) {
-        res.status(409).send({ msg: "User already exists", ok: false })
+        res.status(409).send({ msg: "User already exists" })
       } else {
         bcrypt.hash(password, 2, async (err, hashed) => {
           if (err) {
-            res.status(400).send({ msg: "Error while Hashing", ok: false })
+            res.status(400).send({ msg: "Error while Hashing" })
           } else {
             await RegisterModel.create({ name, email, password: hashed, dp })
             const user = await RegisterModel.find({ email })
@@ -77,7 +77,7 @@ registerRouter.post("/", async (req, res) => {
         })
       }
     } catch (error) {
-      res.status(400).send({ msg: "Error while registering", ok: false })
+      res.status(400).send({ msg: "Error while registering" })
     }
   }
 })

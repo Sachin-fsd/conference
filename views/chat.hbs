@@ -76,18 +76,18 @@
             <a href="/search" class="menu-item"><span><i
                   class="uil uil-compass"
                 ></i></span>
-              <h3>SEARCH</h3>
+              <h3>Search</h3>
             </a>
             <a href="#" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
-                ><small class="notification-count"></small></i></span>
+                > </i></span>
               <h3>Notifications</h3>
               
             </a>
             
             <a href="/message" class="menu-item active" id="messages-notification"><span><i
                   class="uil uil-envelope-alt"
-                ><small class="notification-count"></small></i></span>
+                > </i></span>
               <h3>Messages</h3>
             </a>
             <a href="#" class="menu-item"><span><i
@@ -143,7 +143,7 @@
               />
               </div>
               <textarea
-                onkeypress="if(event.key == 'Enter') { sendChat(); }"
+                onkeypress="if(event.key == 'Enter') { event.preventDefault();sendChat() }"
                 id="create-post"
                 placeholder="Message" 
               ></textarea>

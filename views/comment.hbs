@@ -31,11 +31,12 @@
           />
         </div>
         <div class="create">
-          <label for="create-post" class="btn btn-primary">Create</label>
+          <!-- <label for="create-post" class="btn btn-primary">Create</label> -->
+        <div class="create"> <a href="/notification"><big> <i class="uil uil-bell" style="margin: 0 1rem;"></i></big></a> 
           <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
-              <img
-                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
-              />
+            <img
+              src="{{UserDetails.UserDp}}"
+            />
             </div></a>
 
         </div>
@@ -51,7 +52,7 @@
           <a href="/{{UserDetails.UserID}}" class="profile">
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
+                src="{{UserDetails.UserDp}}"
               />
             </div>
             <div class="handle">
@@ -69,21 +70,21 @@
             <a href="/search" class="menu-item"><span><i
                   class="uil uil-compass"
                 ></i></span>
-              <h3>SEARCH</h3>
+              <h3>Search</h3>
             </a>
-            <a href="#" class="menu-item" id="notifications"><span><i
+            <a href="/notification" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
-                ><small class="notification-count"></small></i></span>
+                > </i></span>
               <h3>Notifications</h3>
               
               <!-- END OF NOTIFICATION POPUP -->
             </a>
             <a href="/message" class="menu-item" id="messages-notification"><span><i
                   class="uil uil-envelope-alt"
-                ><small class="notification-count"></small></i></span>
+                > </i></span>
               <h3>Messages</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/save" class="menu-item"><span><i
                   class="uil uil-bookmark"
                 ></i></span>
               <h3>Bookmarks</h3>
@@ -98,7 +99,7 @@
                 ></i></span>
               <h3>Theme</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/settings" class="menu-item"><span><i
                   class="uil uil-setting"
                 ></i></span>
               <h3>Settings</h3>
@@ -128,7 +129,8 @@
                   <i class="uil uil-ellipsis-h"></i>
                 </span>
               </div>
-              <div class="photo">
+              <div class="photo" >
+                <p class="post-text">{{formatText post.text}}</p>
                 {{#if post.photo}}
                   <img src="{{post.photo}}" />
                 {{/if}}
@@ -139,14 +141,12 @@
                   <img src="{{post.pdf}}" />
                 {{/if}}
                 
-                <p class="post-text">{{formatText post.text}}</p>
               </div>
               <div class="action-buttons">
                 <div class="interaction-buttons">
                   <span class="like-post" onclick="likePost(event,'{{post._id}}','{{post.authorID._id}}')">
                     {{#if (eq post.likeCount 0)}}<i class='bx bx-like' style="color: #f54a6c;"></i>{{else}}<i class='bx bxs-like' style="color: #f54a6c"></i>{{/if}}
                   </span>
-                  <span><i class="uil uil-comment-dots"></i></span>
                   <span><i class="uil uil-share-alt"></i></span>
                 </div>
                 <div class="bookmark">
@@ -155,7 +155,7 @@
               </div>
 
             </div>
-            <p class="post-text">Comments</p>
+            <p class="post-text" style="text-align: center;">Comments</p>
             <div class="feeds" id="feeds">
               <!-- FEED 1 -->
               {{#each comments}}
@@ -164,7 +164,8 @@
                     <a href="/{{this.authorID._id}}"><div class="user">
                         <div class="profile-photo">
                           <img
-                            src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
+                            src="{{UserDetails.UserDp}}"
+                            onerror='this.src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"'
                           />
                         </div>
                         <div class="info">
@@ -180,23 +181,23 @@
                     <!-- {{! <img
                     src="https://cdn.pixabay.com/photo/2023/04/13/17/49/dare-7923106_640.jpg"
                   /> }} -->
-                    <p class="post-text">{{formatText this.text}}</p>
+                    <p class="post-text" style="white-space: pre-wrap;">{{formatText this.text}}</p>
                   </div>
                 </div>
               {{/each}}
-              <!-- END OF FEED 1 -->
-
             </div>
 
           </div>
-          <div class="form-only">
-            <form class="create-post" id="post_form">
+          <div class="form-only" >
+            <form class="create-post" id="post_form" style="border: 1px solid;">
               <div class="profile-photo">
                 <img
-                  src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
+                  src="{{UserDetails.UserDp}}"
+                  onerror="this.src='https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg'"
                 />
               </div>
               <textarea
+                onload="this.focus()"
                 id="create-post"
                 placeholder="Write a comment."
               ></textarea>
@@ -206,6 +207,7 @@
                 value="Send"
                 class="btn btn-primary"
                 data-postID="{{post._id}}"
+                data-authorID="{{post.authorID._id}}"
               />
 
             </form>

@@ -387,7 +387,7 @@ main .container .left .profile {
   justify-content: space-between;
   margin-top: 1rem;
   background-color: var(--color-white);
-  padding: 0.4rem var(--card-padding);
+  padding: 0.5rem 0.6rem;;
   border-radius: var(--border-radius);
   /* position: fixed;
   bottom: 70px;
@@ -416,9 +416,9 @@ main .container .left .profile {
 .middle .feeds .feed {
   background-color: none;
   border-radius: var(--card-border-radius);
-  padding: var(--card-padding);
+  padding: 0.4rem;
   margin: 1rem 0;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   line-height: 1.5;
   border: 1px solid #aaaaaa;
 }
@@ -434,9 +434,12 @@ main .container .left .profile {
 }
 
 .middle .feed .photo {
-  border-radius: var(--card-border-radius);
   overflow: hidden;
   margin: 0.7rem 0;
+}
+
+.middle .feed .photo img{
+  height: auto;
 }
 
 .middle .feed .action-buttons {
@@ -770,7 +773,7 @@ main .container .left .profile {
 }
 
 .middle .content-only{
-  height: calc(100vh - 150px);
+  height: 70%;
   overflow-y: scroll;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none;
@@ -784,8 +787,8 @@ main .container .left .profile {
 }
 
 .post-text {
-  font-size: 20px;
-  text-align: center;
+  font-size: 14px;
+  text-align: left;
 }
 /*====================================================================
 =            MEDIA QUERIES - SMALL LAPTOP AND BIG TABLETS            =

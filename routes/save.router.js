@@ -26,8 +26,6 @@ saveRouter.get("/", async (req, res) => {
         model: "user",
       });
 
-      console.log(saves)
-
     res.render("save", {
       UserDetails: req.body.UserDetails,
       saves,

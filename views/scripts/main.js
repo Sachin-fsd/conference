@@ -110,6 +110,8 @@ document.getElementById("fileinput").addEventListener("change", function (e) {
 });
 
 async function postText(text) {
+  document.getElementById("PreLoaderBar").classList.remove("hide");
+  document.getElementById("PreLoaderBar").classList.add("show");
   post_submit_btn.value = "Wait..";
   post_submit_btn.setAttribute("disabled", true);
   post_submit_btn.setAttribute("style", "opacity:0.8");
@@ -135,6 +137,8 @@ async function postText(text) {
     body: formData, // Send the form data
   });
   if (fetched.ok === true) {
+    document.getElementById("PreLoaderBar").classList.remove("show");
+    document.getElementById("PreLoaderBar").classList.add("hide");
     window.location.reload();
   }else{
     alert("Something went wrong")

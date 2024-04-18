@@ -57,11 +57,11 @@
             <a href="#" class="menu-item "><span><i
                   class="uil uil-compass"
                 ></i></span>
-              <h3>SEARCH</h3>
+              <h3>Search</h3>
             </a>
             <a href="#" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
-                ><small class="notification-count"></small></i></span>
+                > </i></span>
               <h3>Notifications</h3>
               <!-- NOTIFICATION POPUP -->
               
@@ -69,7 +69,7 @@
             </a>
             <a href="/message" class="menu-item" id="messages-notification"><span><i
                   class="uil uil-envelope-alt"
-                ><small class="notification-count"></small></i></span>
+                > </i></span>
               <h3>Messages</h3>
             </a>
             <a href="#" class="menu-item"><span><i
@@ -115,11 +115,8 @@
                     </div>
                   </div>
                 
-                <span class="btn">
-                  <button class="btn logout" id="logoutBtn" onclick="logout()">Logout</button>
-                </span>
+                
               </div>
-
               <div class="caption">
                 <p><b>SOET</b>
                   | B.tech CSE FSD | Section 1 | Group 1 |
@@ -127,6 +124,16 @@
                   2301350008
                 </p>
               </div>
+              <div class="" style="display: flex;">
+                <span class="btn">
+                  <button class="btn logout" id="logoutBtn" onclick="logout()">Logout of this Device</button>
+                </span>
+                <span class="btn">
+                  <button class="btn logout" id="logoutBtn" onclick="logoutAll()">Logout of all Devices</button>
+                </span>
+              </div>
+                
+              
             </div>
           </div>
           <!-- END OF FEEDS-->
@@ -349,5 +356,9 @@
     fetch('/settings/logout', { method: 'POST' })
       .then(() => window.location.href = '/login');
       
+  }
+  function logoutAll(){
+    fetch('/settings/logoutAll', { method: 'POST' })
+      .then(() => window.location.href = '/login');
   }
 </script>

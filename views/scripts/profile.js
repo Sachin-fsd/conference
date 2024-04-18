@@ -11,7 +11,7 @@ document.getElementById("PreLoaderBar").classList.add("show");;
       console.log(res);
     }
   });
-});
+  });
 
 function likePost(event, postID, authorID) {
   if (event.target.className == "bx bx-like") {

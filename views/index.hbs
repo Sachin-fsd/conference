@@ -37,8 +37,8 @@
             onclick="window.location.href='/search'"
           />
         </div>
-        <div class="create">
-          <label for="create-post" class="btn btn-primary">Create</label>
+        <div class="create"> <a href="/notification"><big> <i class="uil uil-bell" style="margin: 0 1rem;"></i></big></a> 
+         
           <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
               <img
                src="{{UserDetails.UserDp}}" onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"/>
@@ -74,11 +74,17 @@
             <a href="/search" class="menu-item"><span><i
                   class="uil uil-compass"
                 ></i></span>
-              <h3>SEARCH</h3>
+              <h3>Search</h3>
             </a>
+            <!-- <a href="/notification" class="menu-item" id="notifications"><span><i
+                  class="uil uil-bell"
+                > <small class="notification-count"></small></i></span>
+              <h3>Notifications</h3>
+
+            </a> -->
             <a href="/notification" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
-                ><small class="notification-count"></small></i></span>
+                ></i></span>
               <h3>Notifications</h3>
 
             </a>
@@ -86,9 +92,7 @@
               href="/message"
               class="menu-item"
               id="messages-notification"
-            ><span><i class="uil uil-envelope-alt"><small
-                    class="notification-count"
-                  ></small></i></span>
+            ><span><i class="uil uil-envelope-alt"></i></span>
               <h3>Messages</h3>
             </a>
             <a href="/save" class="menu-item"><span><i
@@ -113,7 +117,6 @@
             </a>
           </div>
           <!-- END OF SIDEBAR -->
-          <label for="create-post" class="btn btn-primary">Create Post</label>
         </div>
         <!-- END OF LEFT -->
         <!-- MIDDLE -->
@@ -187,8 +190,6 @@
               />
             </div>
 
-            
-
             <textarea
               id="create-post"
               placeholder="What's on your mind, {{UserDetails.UserName}}?"
@@ -203,8 +204,8 @@
               style="display: none;"
             />
 
-            <label for="fileinput" class="btn">
-              <i class="uil uil-upload"></i>
+            <label for="fileinput" class="btn"> <big><i class='bx bx-paperclip bx-rotate-90' ></i></big>
+              
             </label>
 
             <input
@@ -261,6 +262,7 @@
                 </div>
                 <a href="/comment/{{this._id}}">
                   <div class="photo">
+                    <p class="post-text">{{this.text}}</p>
                     {{#if this.photo}}
                       <img
                         src="{{this.photo}}"
@@ -291,7 +293,7 @@
 
                     {{/if}}
 
-                    <p class="post-text">{{this.text}}</p>
+                    
                   </div>
                 </a>
 

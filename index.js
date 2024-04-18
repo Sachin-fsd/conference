@@ -21,7 +21,7 @@ const { searchRouter } = require("./routes/search.router.js");
 const { commentRouter } = require("./routes/comment.router.js");
 const { chatRouter } = require("./routes/chat.router.js");
 const { messageRouter } = require("./routes/message.router.js");
-const { MessageModel } = require("./models/message.model.js");
+const { MessageModel, FollowModel } = require("./models/message.model.js");
 const { ChatModel } = require("./models/chat.model.js");
 const { PostModel } = require("./models/post.model.js");
 const { followRouter } = require("./routes/follow.router.js");
@@ -30,22 +30,21 @@ const { RegisterModel } = require("./models/register.model.js");
 const { profileRouter } = require("./routes/profile.router.js");
 const { notificationRouter } = require("./routes/notification.router.js");
 const { saveRouter } = require("./routes/save.router.js");
+const { NotificationModel } = require("./models/notifications.model.js");
 require("dotenv").config();
 
 const server = http.createServer(app);
-app.use(cors());
+// app.use(cors());
+
+const corsOptions = {
+  origin: 'http://localhost:3000', // replace with your React app origin
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 app.use(cookieParser());
 app.use(express.json());
-
-// app.set('trust proxy', 1) // trust first proxy
-// app.use(
-//   session({
-//     secret: process.env.secret_key,
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: { secure: true },
-//   })
-// );
 
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "/views"));
@@ -89,13 +88,40 @@ app.get("/postList", async (req, res) => {
   res.send(users);
 });
 
+app.use("/pic1",(req,res)=>{
+  let filePath = path.join(__dirname, "views/images/pic1.png");
+  res.sendFile(filePath);
+})
+app.use("/pic2",(req,res)=>{
+  let filePath = path.join(__dirname, "views/images/pic2.png");
+  res.sendFile(filePath);
+})
+app.use("/pic3",(req,res)=>{
+  let filePath = path.join(__dirname, "views/images/pic3.png");
+  res.sendFile(filePath);
+})
+app.use("/pic4",(req,res)=>{
+  let filePath = path.join(__dirname, "views/images/pic4.png");
+  res.sendFile(filePath);
+})
+app.use("/pic5",(req,res)=>{
+  let filePath = path.join(__dirname, "views/images/pic5.png");
+  res.sendFile(filePath);
+})
+
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/forgetpwd", forgetRouter);
-app.get("/favicon.ico", (req, res) => {
-  let filePath = path.join(__dirname, "favicon.ico");
-  res.sendFile(filePath);
-});
+// app.get("/favicon.ico", (req, res) => {
+//   let filePath = path.join(__dirname, "favicon.ico");
+//   res.sendFile(filePath);
+// });
+
+app.get("/user",authenticator,(req,res)=>{
+  let {UserDetails} = req.body;
+  console.log(UserDetails)
+  res.send(req.user)
+})
 // app.use("/user", userRouter);
 
 // app.use("/auth", googleAuthRouter);
@@ -251,6 +277,13 @@ connectDB().then(() => {
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
+// async function r(){
+//   console.log("a")
+//   let a =await fetch("https://api.quotable.io/random")
+//   let b = await a.json()
+//   console.log(b)
+// }
+// r()
 
 // async function updateDp() {
 //   // Fetch all posts
@@ -281,9 +314,6 @@ const fetch = (...args) =>
 // Call the function
 // updateDp();
 
-// Call the function
-// updateDp();
-
 // dlt()
 
 // function dlt () {
@@ -308,25 +338,28 @@ const fetch = (...args) =>
 //     })
 // }
 
-// update()
- 
-async function update() {
-  // Fetch all posts
-  let posts = await PostModel.find();
 
-  // Iterate over each post
-  await Promise.all(
-    posts.map(async(post) => {
-      console.log(post)
-      // let text = post.text;
-      // let authorID = post.authorID.toString();
+async function deleteUnmatchedPostsAndEmptyNotifications() {
+  try {
+    // Get all posts
+    // const posts = await PostModel.find();
+    // console.log(posts)
+    // Loop through all posts
+    // for (let post of posts) {
+    //   // Check if authorID is null or does not exist in Register model
+    //   // const author = await RegisterModel.findById(post.authorID);
+    //   if (!post.authorID) {
+    //     // Delete the post
+    //     console.log(post)
+    //     await PostModel.findByIdAndDelete(post._id);
+    //   }
+    // }
 
-      //   await PostModel.findByIdAndDelete(post._id);
-
-      //   await PostModel.create({text,authorID})
-      //   // return post.save().catch((err) => console.log(err))
-      
-    })
-  );
+    // Empty the Notification model
+    // await NotificationModel.deleteMany({});
+  } catch (err) {
+    console.error('Error:', err);
+  }
 }
 
+// deleteUnmatchedPostsAndEmptyNotifications();

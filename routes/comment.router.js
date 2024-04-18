@@ -1,6 +1,7 @@
 const express = require('express');
 const { PostModel } = require('../models/post.model');
 const { CommentModel } = require('../models/comment.model');
+const { NotificationModel } = require('../models/notifications.model');
 
 const commentRouter = express.Router();
 
@@ -14,7 +15,7 @@ commentRouter.get("/:id",async(req,res)=>{
         // );
         const post = await PostModel.findOne(
           {  _id: ID },
-          { _id: 1, authorID: 1, text: 1, CreatedAt: 1 }
+          {}
         ).populate('authorID', '_id name dp');
 
         const comments = await CommentModel.find({ parentPost: ID })
@@ -39,9 +40,12 @@ commentRouter.get("/:id",async(req,res)=>{
 
 
 commentRouter.post("/:id", async (req, res) => {
+  const {text,authorID} = req.body;
     const payload = {UserDetails:req.body.UserDetails, text:req.body.text, parentPost:req.params.id};
     try {
       const comment = new CommentModel(payload);
+      await NotificationModel.create({senderID:req.body.UserDetails.UserID,receiverID:authorID,purpose:"new comment",postID:req.params.id})
+      console.log({senderID:req.body.UserDetails.UserID,receiverID:authorID,purpose:"new comment",postID:req.params.id})
       await comment.save();
       res.status(201).json({ok:true});
     } catch (error) {

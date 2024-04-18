@@ -52,26 +52,55 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
 
   const obj = { name, email, password }
 
-  fetch("/register", {
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(obj),
-    method: "POST"
+//   fetch("/register", {
+//     headers: {
+//       "Content-Type": "application/json"
+//     },
+//     body: JSON.stringify(obj),
+//     method: "POST"
+//   })
+//     .then((res) => {
+//       if (res.ok) {
+//         window.location.href = res.url
+//       } else {
+        
+//         alert("Something is wrong")
+//         submitBtn.innerText = "Log In"
+//         submitBtn.removeAttribute("disabled")
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err)
+//       alert("Something went wrong")
+//       submitBtn.innerText = "Log In"
+//       submitBtn.removeAttribute("disabled")
+//     })
+// })
+
+
+fetch("/register", {
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(obj),
+  method: "POST"
+})
+  .then((res) => {
+    if (res.ok) {
+      window.location.href = res.url
+    } else {
+      // Return the response text for more detailed error information
+      return res.text().then((text) => {
+        console.log(text)
+        throw new Error(text);
+      });
+    }
   })
-    .then((res) => {
-      if (res.ok) {
-        window.location.href = res.url
-      } else {
-        alert("Something is wrong")
-        submitBtn.innerText = "Log In"
-        submitBtn.removeAttribute("disabled")
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-      alert("Something went wrong")
-      submitBtn.innerText = "Log In"
-      submitBtn.removeAttribute("disabled")
-    })
+  .catch((err) => {
+    console.log(err.msg)
+    alert(err.message) // Alert the error message
+    submitBtn.innerText = "Log In"
+    submitBtn.removeAttribute("disabled")
+})
+
 })

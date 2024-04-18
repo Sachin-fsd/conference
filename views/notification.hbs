@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="./styles/style.css" />
   </head>
 
-  <body onload="document.getElementById('searchInput').focus();">
+  <body>
     <nav>
       <div class="container">
         <i class='bx bx-arrow-back' onclick="window.history.back();"></i>
@@ -56,14 +56,14 @@
                 ></i></span>
               <h3>Home</h3>
             </a>
-            <a href="#" class="menu-item "><span><i
+            <a href="/search" class="menu-item "><span><i
                   class="uil uil-compass"
                 ></i></span>
-              <h3>SEARCH</h3>
+              <h3>Search</h3>
             </a>
-            <a href="#" class="menu-item active" id="notifications"><span><i
+            <a href="" class="menu-item active" id="notifications"><span><i
                   class="uil uil-bell"
-                ><small class="notification-count"></small></i></span>
+                > </i></span>
               <h3>Notifications</h3>
               <!-- NOTIFICATION POPUP -->
               
@@ -71,10 +71,10 @@
             </a>
             <a href="/message" class="menu-item" id="messages-notification"><span><i
                   class="uil uil-envelope-alt"
-                ><small class="notification-count"></small></i></span>
+                > </i></span>
               <h3>Messages</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/save" class="menu-item"><span><i
                   class="uil uil-bookmark"
                 ></i></span>
               <h3>Bookmarks</h3>
@@ -89,7 +89,7 @@
                 ></i></span>
               <h3>Theme</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/settings" class="menu-item"><span><i
                   class="uil uil-setting"
                 ></i></span>
               <h3>Settings</h3>
@@ -104,6 +104,14 @@
           
           <!-- FEEDS -->
           <div class="feeds" id="results">
+            {{#if (eq notifications.length 0)}}
+
+            <div class="feed">
+              <div class="photo">
+                <p class="post-text" style="white-space: pre-wrap;text-align: center;">No Notifications </p>
+              </div>
+            </div>
+            {{else}}
 
             {{#each notifications}}
               <div class="feed">
@@ -119,7 +127,8 @@
                       </div>
                     </div>
                   </a>
-                  <a href="/comment/{{this.postID}}"><p class="text-bold">{{this.purpose}}</p></a>
+                  {{#if (eq this.purpose "started following")}}<a href="/{{this.receiverID}}"><p class="text-bold">{{this.purpose}}</p></a>{{else}}
+                  <a href="/comment/{{this.postID}}"><p class="text-bold">{{this.purpose}}</p></a>{{/if}}
 
                   <span class="edit">
                     <i class="uil uil-ellipsis-h"></i>
@@ -135,6 +144,8 @@
                 </div>
               </div>
             {{/each}}
+
+            {{/if}}
             
           </div>
           <!-- END OF FEEDS-->
@@ -351,4 +362,3 @@
   </body>
 </html>
 <script src="./scripts/index.js"></script>
-<script src="./scripts/search.js"></script>

@@ -26,4 +26,17 @@ settingsRouter.post("/logout", async (req, res) => {
   }
 });
 
+settingsRouter.post("/logoutAll", async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    const id = req.body.UserDetails.UserID
+    res.cookie('token', '', { maxAge: 1 });
+
+    await BlackListTokenModel.create({ token,id })
+    res.redirect("/login"); 
+  } catch (error) {
+    res.status(401).render("index");
+  }
+});
+
 module.exports = { settingsRouter };
