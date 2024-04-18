@@ -27,9 +27,9 @@ searchRouter.get("/", async (req, res) => {
         {},
         { _id: 1, name: 1, dp: 1 }
       ).limit(10);
-      console.log("send users")
-      // res.render("search", { users, UserDetails: req.body.UserDetails });
-      res.send({users,posts:[]})
+      // console.log("send users")
+      res.render("search", { users, UserDetails: req.body.UserDetails });
+      // res.send({users,posts:[]})
     }
   } catch (error) {
     res.status(401).render("search");

@@ -115,14 +115,14 @@ postRouter.get("/", async (req, res) => {
         .limit(5);
     }
 
-    // res.render("index", {
-    //   UserDetails: req.body.UserDetails,
-    //   posts,
-    //   messages,
-    //   users,
-    // });
+    res.render("index", {
+      UserDetails: req.body.UserDetails,
+      posts,
+      messages,
+      users,
+    });
     // console.log(posts)
-    res.status(200).send({ posts });
+    // res.status(200).send({ posts });
   } catch (error) {
     console.log(error);
     res.json({ err: error });
@@ -242,25 +242,10 @@ postRouter.get("/:id", async (req, res) => {
     const following = await FollowModel.countDocuments({ follower: ID });
     const followers = await FollowModel.countDocuments({ following: ID });
 
-    console.log(posts)
+    // console.log(posts)
 
-
-
-    // res.render("profile", {
-    //   UserDetails: req.body.UserDetails,
-    //   ProfileDetails: {
-    //     UserID: ID,
-    //     UserName: user.name,
-    //     UserEmail: user.email,
-    //     UserBio: user.bio,
-    //     UserDp: user.dp,
-    //   },
-    //   posts,
-    //   follow,
-    //   following,
-    //   followers,
-    // });
-    res.send({
+    res.render("profile", {
+      UserDetails: req.body.UserDetails,
       ProfileDetails: {
         UserID: ID,
         UserName: user.name,
@@ -273,6 +258,19 @@ postRouter.get("/:id", async (req, res) => {
       following,
       followers,
     });
+    // res.send({
+    //   ProfileDetails: {
+    //     UserID: ID,
+    //     UserName: user.name,
+    //     UserEmail: user.email,
+    //     UserBio: user.bio,
+    //     UserDp: user.dp,
+    //   },
+    //   posts,
+    //   follow,
+    //   following,
+    //   followers,
+    // });
   } catch (error) {
     res.json({ err: error });
   }
