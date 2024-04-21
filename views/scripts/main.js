@@ -1,5 +1,4 @@
 window.onload = function () {
-  // home();
   const textarea = document.querySelector("#create-post");
   textarea.addEventListener("input", autoResize, false);
 
@@ -22,25 +21,6 @@ document.getElementById("PreLoaderBar").classList.add("show");
 // document.getElementById("PreLoaderBar").classList.add("hide");
 
 }
-
-
-function myFunction(id) {
-  document.getElementById("myDropdown-" + id).classList.toggle("show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function (event) {
-  if (!event.target.matches(".dropbtn")) {
-    const dropdowns = document.getElementsByClassName("dropdown-content");
-    let i;
-    for (i = 0; i < dropdowns.length; i++) {
-      const openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains("show")) {
-        openDropdown.classList.remove("show");
-      }
-    }
-  }
-};
 
 document.getElementById("post_form").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -145,95 +125,29 @@ async function postText(text) {
   }
 }
 
-function likePost(event, postID, authorID) {
-  console.log(event, postID, authorID);
+// function likeHeart(event,postID,authorID){
 
-  if (event.target.className == "bx bx-like") {
-    event.target.className = "bx bxs-like";
-    event.target.setAttribute("style","color: #f54a6c")
-  } else {
-    event.target.className = "bx bx-like";
-  }
+//   if(event.target.className == "bx bx-like" || event.target.className == "bx bxs-like" ){
+//     event.target.className = "bx bxs-heart";
+//     event.target.setAttribute("style","color: #f54a6c")
 
-  fetch(`/like/${postID}/${authorID}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${localStorage.getItem("token")}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
-}
+//   }
 
-function savePost(event, postID, authorID) {
-  console.log(event, postID, authorID);
-
-  if (event.target.className == "bx bx-bookmark") {
-    event.target.className = "bx bxs-bookmark";
-    event.target.setAttribute("style","color: #6a3bec")
-  } else {
-    event.target.className = "bx bx-bookmark";
-  }
-
-  fetch(`/save/${postID}/${authorID}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${localStorage.getItem("token")}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
-}
-
-
-function showDeletePopup(id) {
-  // store the id of the post to be deleted
-  document.getElementById('yesButton').dataset.postId = id;
-  // show the delete confirmation popup
-  myPopup.classList.add("show");
-}
-
-document.getElementById("yesButton").addEventListener(
-  "click",
-  function () {
-      // get the id of the post to be deleted
-      let id = this.dataset.postId;
-      deletePost(id);
-      myPopup.classList.remove("show");
-  }
-);
-
-document.getElementById("noButton").addEventListener(
-  "click",
-  function () {
-      myPopup.classList.remove("show");
-  }
-);
-
-window.addEventListener(
-  "click",
-  function (event) {
-      if (event.target == myPopup) {
-          myPopup.classList.remove("show");
-      }
-  }
-);
-
-function deletePost(id) {
-  fetch("/delete/" + id, {
-      method: "DELETE",
-  })
-  .then((response) => response.json())
-  .then(() => window.location.reload())
-  .catch((error) => {
-      console.error("Error:", error);
-  });
-}
-
+//   fetch(`/like/${postID}/${authorID}`, {
+//     method: "PUT",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `${localStorage.getItem("token")}`,
+//     },
+//   })
+//     .then((res) => res.json())
+//     .then((res) => {
+//       console.log(res);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// }
 
 function getCookie(name) {
   const cookieArr = document.cookie.split(";");

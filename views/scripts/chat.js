@@ -14,7 +14,6 @@ window.onload = function () {
   textarea.addEventListener("input", autoResize, false);
 
   function autoResize() {
-    console.log("hello")
     this.style.height = "auto";
     this.style.height = this.scrollHeight + "px";
     this.setAttribute("style", "max-height:300px");
@@ -73,7 +72,6 @@ const parentRoomDiv = document.getElementById("room");
 const room = parentRoomDiv.dataset.room;
 
 const chat_receiver = document.getElementById("chat-receiver");
-// console.log(parentRoomDiv,room);
 
 socket.emit("join room", room);
 // socket.emit("join message room", receiverID);
@@ -182,7 +180,6 @@ async function postText(text) {
     body: JSON.stringify(obj),
   });
 
-  console.log("fetched", fetched);
 }
 
 async function postMessage(room, receiverID) {

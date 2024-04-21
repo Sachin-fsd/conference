@@ -40,7 +40,7 @@ googleAuthRouter.get(
   }),
   async function (req, res) {
     // Successful authentication, redirect home.
-    // console.log(req.user);
+    console.log(req.user);
     // res.redirect("/");
     // res.send("Done");
     const user = await RegisterModel.findOne({ email: req.user.email });

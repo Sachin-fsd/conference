@@ -56,7 +56,7 @@ forgetRouter.post("/verifyotp", async (req, res) => {
   if (Number(otp) == Number(db_otp)) {
     res.status(200).send({ msg: "OTP verified successfully", ok: true });
   } else {
-    console.log(user);
+    // console.log(user);
     res.status(400).send({ msg: "invalid otp", ok: false });
   }
 });

@@ -15,7 +15,7 @@ chatRouter.get("/:id", async (req, res) => {
     const message = await MessageModel.findOne({ room });
     let read = false;
     if (!message) {
-      read = null;
+      read = true;
     } else {
       read = message.read;
     }
@@ -26,7 +26,7 @@ chatRouter.get("/:id", async (req, res) => {
       .limit(20)
       .sort({ CreatedAt: 1 });
 
-      console.log(chats,read)
+      // console.log(chats,read)
 
     res.render("chat", {
       UserDetails: req.body.UserDetails,
@@ -40,7 +40,7 @@ chatRouter.get("/:id", async (req, res) => {
       read,
     });
   } catch (error) {
-    res.status(401).json({ err: error });
+    return res.redirect("/");
   }
 });
 

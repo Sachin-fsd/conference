@@ -16,16 +16,26 @@
   </head>
 
   <body>
+    <div class="progress" id="PreLoaderBar" style="z-index: 10000;">
+      <div class="indeterminate"></div>
+    </div>
     <nav>
       <div class="container">
         <i class='bx bx-arrow-back' onclick="window.history.back();"></i>
         <h2 class="logo">Conference</h2>
-        
-        <div class="create">
-          
+        <div class="search-bar">
+          <i class="uil uil-search"></i>
+          <input
+            type="search"
+            placeholder="Search for creators, inspiration and projects"
+            onclick="window.location.href='/search'"
+          />
+        </div>
+        <div class="create"> <a href="/notification"><big> <i class="uil uil-bell" style="margin: 0 1rem;"></i></big></a> 
+         
           <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
+               src="{{UserDetails.UserDp}}" onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"/>
               />
             </div></a>
 
@@ -338,8 +348,8 @@
             </div>
             <!-- BACKGROUND COLORS -->
             <div class="background">
-              <h4>Bacground</h4>
-              <div class="choose-bg" style="border: 1px solid red;">
+              <h4>Background</h4>
+              <div class="choose-bg"  >
                 <div class="bg-1 active">
                   <span></span>
                   <h5 for="bg-1">Light</h5>
@@ -362,3 +372,15 @@
   </body>
 </html>
 <script src="./scripts/index.js"></script>
+
+<script>
+  window.onbeforeunload = function() {
+    document.getElementById("PreLoaderBar").classList.remove("hide");
+    document.getElementById("PreLoaderBar").classList.add("show");
+  }
+
+  window.onload = function () {
+    document.getElementById("PreLoaderBar").classList.remove("show");
+    document.getElementById("PreLoaderBar").classList.add("hide");
+  };
+</script>

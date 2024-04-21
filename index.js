@@ -7,7 +7,7 @@ const app = express();
 // const { userRouter } = require('./routes/user.router')
 const { authenticator } = require("./middleware/authenticator.middleware");
 const { postRouter } = require("./routes/post.router.js");
-// const { googleAuthRouter } = require('./auth/oauth.google')
+const { googleAuthRouter } = require('./auth/oauth.google')
 const path = require("path");
 const hbs = require("hbs");
 const { registerRouter } = require("./routes/register.router");
@@ -23,7 +23,7 @@ const { chatRouter } = require("./routes/chat.router.js");
 const { messageRouter } = require("./routes/message.router.js");
 const { MessageModel, FollowModel } = require("./models/message.model.js");
 const { ChatModel } = require("./models/chat.model.js");
-const { PostModel } = require("./models/post.model.js");
+const { PostModel, LikeModel } = require("./models/post.model.js");
 const { followRouter } = require("./routes/follow.router.js");
 const { settingsRouter } = require("./routes/settings.router.js");
 const { RegisterModel } = require("./models/register.model.js");
@@ -31,17 +31,19 @@ const { profileRouter } = require("./routes/profile.router.js");
 const { notificationRouter } = require("./routes/notification.router.js");
 const { saveRouter } = require("./routes/save.router.js");
 const { NotificationModel } = require("./models/notifications.model.js");
+const { likeRouter } = require("./routes/like.router.js");
+const { SaveModel } = require("./models/save.model.js");
 require("dotenv").config();
 
 const server = http.createServer(app);
-// app.use(cors());
+app.use(cors());
 
-const corsOptions = {
-  origin: 'http://localhost:3000', // replace with your React app origin
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: 'http://localhost:3000', // replace with your React app origin
+//   credentials: true,
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 app.use(cookieParser());
 app.use(express.json());
@@ -65,7 +67,8 @@ hbs.registerHelper("formatText", function (text) {
 });
 
 hbs.registerHelper("eq", function (a, b) {
-  if(typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined || typeof b === 'boolean' || typeof b === 'number' || typeof b === null || typeof b === undefined) {
+  // console.log(a,b,typeof a, typeof b, a.toString(), b.toString())
+  if(typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined) {
     return a === b;
   }
   return a.toString() === b.toString();
@@ -119,105 +122,124 @@ app.use("/forgetpwd", forgetRouter);
 
 app.get("/user",authenticator,(req,res)=>{
   let {UserDetails} = req.body;
-  console.log(UserDetails)
+  // console.log(req.user)
   res.send(req.user)
+})
+app.get("/contacts",authenticator,async(req,res)=>{
+  // console.log(req.body,req.user)
+  try {
+    const messages = await MessageModel.find({
+    $or: [{ "sender.UserID": req.user.UserID }, { "receiver.UserID": req.user.UserID }],
+  }).sort({ CreatedAt: -1 });
+  // Fetch the users
+  let users = [];
+  if (messages.length < 5) {
+    users = await RegisterModel.find({}, { _id: 1, name: 1, dp: 1 })
+      .sort({ CreatedAt: -1 })
+      .limit(5);
+  }
+  // console.log({messages,users})
+  res.send({messages,users})
+  } catch (error) {
+    console.log(error)
+    res.send({msg:error})
+  }
 })
 // app.use("/user", userRouter);
 
 // app.use("/auth", googleAuthRouter);
-// // app.use("/auth", githubAuthRouter);
+// app.use("/auth", githubAuthRouter);
 
-// app.get("/auth/github", async (req, res) => {
-//   const { code } = req.query;
-//   const Access_details = await fetch(
-//     "https://github.com/login/oauth/access_token",
-//     {
-//       method: "POST",
-//       headers: {
-//         "Content-type": "application/json",
-//         Accept: "application/json",
-//       },
-//       body: JSON.stringify({
-//         client_id: process.env.client_id_github,
-//         client_secret: process.env.client_secret_github,
-//         code,
-//       }),
-//     }
-//   )
-//     .then((res) => res.json())
-//     .catch((err) => console.log(err));
+app.get("/auth/github", async (req, res) => {
+  const { code } = req.query;
+  const Access_details = await fetch(
+    "https://github.com/login/oauth/access_token",
+    {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        client_id: process.env.client_id_github,
+        client_secret: process.env.client_secret_github,
+        code,
+      }),
+    }
+  )
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
 
-//   const User_details = await fetch("https://api.github.com/user", {
-//     headers: {
-//       "Content-type": "application/json",
-//       Authorization: `Bearer ${Access_details.access_token}`,
-//       Accept: "application/json",
-//     },
-//   })
-//     .then((res) => res.json())
-//     .catch((err) => console.log(err));
+  const User_details = await fetch("https://api.github.com/user", {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${Access_details.access_token}`,
+      Accept: "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
 
-//   const User_email = await fetch("https://api.github.com/user/emails", {
-//     headers: {
-//       "Content-type": "application/json",
-//       Authorization: `Bearer ${Access_details.access_token}`,
-//       Accept: "application/json",
-//     },
-//   })
-//     .then((res) => res.json())
-//     .catch((err) => console.log(err));
+  const User_email = await fetch("https://api.github.com/user/emails", {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${Access_details.access_token}`,
+      Accept: "application/json",
+    },
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
 
-//   console.log(User_email, "line91");
-//   const UserDetails = {
-//     name: User_details.name,
-//     email: User_email[0].email,
-//     password: "dfgdgdgdr346t3tgdfgv",
-//     dp: User_details.avatar_url,
-//   };
+  console.log(User_email, "line91");
+  const UserDetails = {
+    name: User_details.name,
+    email: User_email[0].email,
+    password: "dfgdgdgdr346t3tgdfgv",
+    dp: User_details.avatar_url,
+  };
 
-//   const user = await RegisterModel.findOne({ email: UserDetails.email });
-//   if (user) {
-//     const UserDetails = {
-//       UserID: user._id,
-//       UserName: user.name,
-//       UserEmail: user.email,
-//     };
-//     const token = jwt.sign(
-//       { UserDetails: UserDetails },
-//       process.env.secret_key,
-//       { expiresIn: "7 days" }
-//     );
-//     res.cookie("token", token, { httpOnly: true });
-//     res.cookie("UserDetails", JSON.stringify(UserDetails));
-//     res.redirect("/");
-//   } else {
-//     const newUser = new RegisterModel({
-//       name: User_details.name,
-//       email: User_email[0].email,
-//       password: "sadkiaeubai734862hiw",
-//     });
-//     await newUser.save();
-//     const user = await RegisterModel.findOne({ email: req.user.email });
-//     const UserDetails = {
-//       UserID: user._id,
-//       UserName: user.name,
-//       UserEmail: user.email,
-//     };
-//     const token = jwt.sign(
-//       { UserDetails: UserDetails },
-//       process.env.secret_key,
-//       { expiresIn: "7 days" }
-//     );
-//     res.cookie("token", token, { httpOnly: true });
-//     res.cookie("UserDetails", JSON.stringify(UserDetails));
-//     res.redirect("/");
-//   }
-// });
+  const user = await RegisterModel.findOne({ email: UserDetails.email });
+  if (user) {
+    const UserDetails = {
+      UserID: user._id,
+      UserName: user.name,
+      UserEmail: user.email,
+    };
+    const token = jwt.sign(
+      { UserDetails: UserDetails },
+      process.env.secret_key,
+      { expiresIn: "7 days" }
+    );
+    res.cookie("token", token, { httpOnly: true });
+    res.cookie("UserDetails", JSON.stringify(UserDetails));
+    res.redirect("/");
+  } else {
+    const newUser = new RegisterModel({
+      name: User_details.name,
+      email: User_email[0].email,
+      password: "sadkiaeubai734862hiw",
+    });
+    await newUser.save();
+    const user = await RegisterModel.findOne({ email: req.user.email });
+    const UserDetails = {
+      UserID: user._id,
+      UserName: user.name,
+      UserEmail: user.email,
+    };
+    const token = jwt.sign(
+      { UserDetails: UserDetails },
+      process.env.secret_key,
+      { expiresIn: "7 days" }
+    );
+    res.cookie("token", token, { httpOnly: true });
+    res.cookie("UserDetails", JSON.stringify(UserDetails));
+    res.redirect("/");
+  }
+});
 
 app.get("/welcome", (req, res) => {
   res.render("landing");
 });
-
 
 app.use("/search", authenticator, searchRouter);
 app.use("/comment", authenticator, commentRouter);
@@ -228,6 +250,7 @@ app.use("/settings", authenticator, settingsRouter);
 app.use("/profile",authenticator,profileRouter);
 app.use("/notification",authenticator,notificationRouter)
 app.use("/save",authenticator,saveRouter)
+app.use("/like",authenticator,likeRouter)
 
 app.use("/", authenticator, postRouter);
 
@@ -341,6 +364,8 @@ const fetch = (...args) =>
 
 async function deleteUnmatchedPostsAndEmptyNotifications() {
   try {
+    await PostModel.updateMany({}, { likeCount: 0 });
+
     // Get all posts
     // const posts = await PostModel.find();
     // console.log(posts)
@@ -355,11 +380,11 @@ async function deleteUnmatchedPostsAndEmptyNotifications() {
     //   }
     // }
 
-    // Empty the Notification model
-    // await NotificationModel.deleteMany({});
+    await LikeModel.deleteMany({});
+    
   } catch (err) {
     console.error('Error:', err);
   }
 }
 
-// deleteUnmatchedPostsAndEmptyNotifications();
+deleteUnmatchedPostsAndEmptyNotifications();

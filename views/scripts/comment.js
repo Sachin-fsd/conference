@@ -6,7 +6,14 @@ window.onload = function () {
     this.style.height = "auto";
     this.style.height = this.scrollHeight + "px";
   }
+  document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");
+  
 };
+window.onbeforeunload = function() {
+document.getElementById("PreLoaderBar").classList.remove("hide");
+document.getElementById("PreLoaderBar").classList.add("show");
+}
 
 function getCookie(name) {
   let cookieArr = document.cookie.split(";");
@@ -22,27 +29,7 @@ function getCookie(name) {
   // Return null if not found
   return null;
 }
-function likePost(event, postID, authorID) {
-  console.log(event, postID, authorID);
 
-  if (event.target.className == "bx bx-like") {
-    event.target.className = "bx bxs-like";
-    event.target.setAttribute("style","color: #f54a6c")
-  } else {
-    event.target.className = "bx bx-like";
-  }
-
-  fetch(`/like/${postID}/${authorID}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${localStorage.getItem("token")}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
-}
 document.getElementById("post_form").addEventListener("submit", (e) => {
   e.preventDefault();
 });
@@ -123,7 +110,7 @@ function append(comment) {
 }
 
 socket.on("new comment", (comment) => {
-  console.log(comment);
+  // console.log(comment);
   append(comment);
 });
 

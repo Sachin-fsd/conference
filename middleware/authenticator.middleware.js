@@ -13,7 +13,7 @@ const authenticator =async (req, res, next) => {
     }
     jwt.verify(token, process.env.secret_key, async(err, decoded) => {
       if (err) {
-        console.log("auth start", req.url,req.route, "line 10");
+        console.log("auth token started", req.url,req.route, "line 10");
         return res.redirect("/welcome");
       } else {
         req.user = decoded.UserDetails
@@ -23,7 +23,7 @@ const authenticator =async (req, res, next) => {
           return res.redirect("/login")
         }
         // console.log(req.body,)
-        console.log("auth start", req.url, "line 17");
+        console.log("auth end", req.url, "line 17");
         next();
       }
     });

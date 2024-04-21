@@ -10,7 +10,15 @@ loginButton.disabled = true
 username.addEventListener("change", stateHandle)
 password.addEventListener("change", stateHandle)
 
+function toTitleCase(str) {
+  return str.replace(/\w\S*/g, function(txt){
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+}
+
 function stateHandle () {
+  var nameInput = document.getElementById('name');
+  nameInput.value = toTitleCase(nameInput.value);
   if (username.value.length > 0 && password.value.length > 4) {
     loginButton.disabled = false
   } else {
@@ -91,7 +99,7 @@ fetch("/register", {
     } else {
       // Return the response text for more detailed error information
       return res.text().then((text) => {
-        console.log(text)
+        // console.log(text)
         throw new Error(text);
       });
     }
@@ -104,3 +112,23 @@ fetch("/register", {
 })
 
 })
+
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
+
+/*
+<a href="#" onclick="signOut();">Sign out</a>
+<script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
+*/

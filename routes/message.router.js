@@ -18,7 +18,7 @@ messageRouter.get("/", async (req, res) => {
       .status(200)
       .render("message", { messages, UserDetails: req.body.UserDetails });
   } catch (error) {
-    res.status(400).json({ err: error });
+    return res.redirect("/");
   }
 });
 

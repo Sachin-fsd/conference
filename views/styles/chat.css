@@ -458,7 +458,7 @@ main .container .middle .profile {
 }
 
 .middle .feeds .feed {
-  background-color: none;
+  background-color: white;
   border-radius: var(--card-border-radius);
   padding: var(--card-padding);
   margin: 1rem 0;
@@ -1004,5 +1004,21 @@ main .container .middle .profile {
     width: 100%;
     position: relative;
     overflow: hidden;
+  }
+  
+  .customize-theme .card {
+    width: 92vw;
+  }
+
+  .customize-theme .card {
+    width: 80vw;
+  }
+  .customize-theme h5,
+  .customize-theme .card .background .choose-bg span {
+    display: none;
+  }
+
+  .customize-theme .card .background .choose-bg div {
+    width: 50px;
   }
 }

@@ -18,7 +18,7 @@
     <!-- STYLESHEET -->
     <!-- <link rel="stylesheet" href="./styles/profile.css" /> -->
 
-    <link rel="stylesheet" href="../styles/profile.css" />
+    <!-- <link rel="stylesheet" href="../styles/profile.css" /> -->
     <link rel="stylesheet" href="../styles/style.css" />
 
     <style>
@@ -86,6 +86,9 @@
   </head>
 
   <body>
+    <div class="progress" id="PreLoaderBar" style="z-index: 10000;">
+      <div class="indeterminate"></div>
+    </div>
     <nav>
       <div class="container">
         <i class='bx bx-arrow-back' onclick="window.history.back();"></i>
@@ -95,16 +98,17 @@
           <input
             type="search"
             placeholder="Search for creators, inspiration and projects"
+            onclick="window.location.href='/search'"
           />
         </div>
-        <div class="create">
-          <label for="create-post" class="btn btn-primary">Create</label>
-          <div class="profile-photo">
-            <img
-            src="{{UserDetails.UserDp}}"
-              onerror='this.src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"''
-            />
-          </div>
+        <div class="create"> <a href="/notification"><big> <i class="uil uil-bell" style="margin: 0 1rem;"></i></big></a> 
+         
+          <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
+              <img
+               src="{{UserDetails.UserDp}}" onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"/>
+              />
+            </div></a>
+
         </div>
       </div>
     </nav>
@@ -117,9 +121,8 @@
           <a href="/{{UserDetails.UserID}}" class="profile">
             <div class="profile-photo">
               <img
-              src="{{UserDetails.UserDp}}"
-              onerror='this.src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"''
-            />
+               src="{{UserDetails.UserDp}}"   onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"/>
+              />
             </div>
             <div class="handle">
               <h4>{{UserDetails.UserName}}</h4>
@@ -138,21 +141,26 @@
                 ></i></span>
               <h3>Search</h3>
             </a>
-            <a href="#" class="menu-item" id="notifications"><span><i
+            <!-- <a href="/notification" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
-                > </i></span>
+                > <small class="notification-count"></small></i></span>
               <h3>Notifications</h3>
+
+            </a> -->
+            <a href="/notification" class="menu-item" id="notifications"><span><i
+                  class="uil uil-bell"
+                ></i></span>
+              <h3>Notifications</h3>
+
             </a>
             <a
               href="/message"
               class="menu-item"
               id="messages-notification"
-            ><span><i class="uil uil-envelope-alt"><small
-                    class="notification-count"
-                  ></small></i></span>
+            ><span><i class="uil uil-envelope-alt"></i></span>
               <h3>Messages</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/save" class="menu-item"><span><i
                   class="uil uil-bookmark"
                 ></i></span>
               <h3>Bookmarks</h3>
@@ -167,14 +175,13 @@
                 ></i></span>
               <h3>Theme</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/settings" class="menu-item" onclick="settings('{{UserDetails}}')"><span><i
                   class="uil uil-setting"
                 ></i></span>
               <h3>Settings</h3>
             </a>
           </div>
           <!-- END OF SIDEBAR -->
-          <label for="create-post" class="btn btn-primary">Create Post</label>
         </div>
         <!-- END OF LEFT -->
         <!-- MIDDLE -->
@@ -191,8 +198,8 @@
             
             <div class="form-only">
               <div>
-                <p class="text-bold">UserName</p>
-              <form class="create-post" id="chat_form" style="margin-top: 0rem;">
+                <p class="text-bold">Name</p>
+              <form class="create-post" style="margin-top: 0rem;">
                 <input
                   id="UserName"
                   placeholder="Enter Name"
@@ -203,12 +210,11 @@
               <br>
               <div>
                 <p class="text-bold">UserBio</p>
-              <form class="create-post" id="chat_form" style="margin-top: 0rem;">
-                <textarea
-                  id="UserBio"
-                  placeholder="Enter Bio"
-                >{{UserDetails.UserBio}}</textarea>
-
+                <form class="create-post" style="margin-top: 0rem;">
+                  <textarea
+                      id="UserBio"
+                      placeholder="Enter Bio"
+                  >{{UserDetails.UserBio}}</textarea>
               </form>
               </div>
 
@@ -224,16 +230,19 @@
 
             <div id="myPopup" class="popup">
               <div class="popup-content">
+                <form action="">
                   <label for="" class="text-bold">Enter Password</label>
                   <input type="password" name="" id="password" placeholder="Enter Password" data-email="{{UserDetails.UserEmail}}" data-id="{{UserDetails.UserID}}">
                   <button id="closePopup">
                       Submit
                   </button>
+                </form>
+                  
               </div>
             </div>
 
           </div>
-          <p class="text-muted" style="text-align: center;" onclick="document.getElementById('dp').src = `https://source.unsplash.com/random?user=1`">Profile Photos</p>
+          <p class="text-muted" style="text-align: center;">Profile Photos</p>
           <div class="photos" id="photos">
             <div>
               <img
@@ -514,7 +523,7 @@
             </div>
             <!-- BACKGROUND COLORS -->
             <div class="background">
-              <h4>Bacground</h4>
+              <h4>Background</h4>
               <div class="choose-bg">
                 <div class="bg-1 active">
                   <span></span>
@@ -541,11 +550,17 @@
 
 <script>
 
-  const textarea = document.querySelector("#UserBio");
-  textarea.addEventListener("input", autoResize, false);
-  function autoResize() {
-  this.style.height = "auto"; 
-  this.style.height = this.scrollHeight + "px"; }
+window.onload = function () {
+  document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");
+  var textarea = document.getElementById('UserBio');
+    textarea.style.height = ""; /* Reset the height*/
+    textarea.style.height = Math.min(textarea.scrollHeight) + "px";
+  };
+  window.onbeforeunload = function() {
+  document.getElementById("PreLoaderBar").classList.remove("hide");
+  document.getElementById("PreLoaderBar").classList.add("show");
+}
 
   async function editProfile(){ 
     let email = document.getElementById("password").dataset.email
@@ -577,30 +592,30 @@
   }
 
 
-    document.getElementById("profile-submit-btn").addEventListener(
-        "click",
-        function () {
-            myPopup.classList.add("show");
-        }
-      );
-      closePopup.addEventListener(
-        "click",
-        function () {
-            editProfile()
-            myPopup.classList.remove(
-                "show"
-            );
-        }
-      );
-      window.addEventListener(
-          "click",
-          function (event) {
-              if (event.target == myPopup) {
-                  myPopup.classList.remove(
-                      "show"
-                  );
-              }
+  document.getElementById("profile-submit-btn").addEventListener(
+    "click",
+    function () {
+        myPopup.classList.add("show");
+    }
+  );
+  closePopup.addEventListener(
+    "click",
+    function () {
+        editProfile()
+        myPopup.classList.remove(
+            "show"
+        );
+    }
+  );
+  window.addEventListener(
+      "click",
+      function (event) {
+          if (event.target == myPopup) {
+              myPopup.classList.remove(
+                  "show"
+              );
           }
-      );
-
+      }
+  );
+  
 </script>

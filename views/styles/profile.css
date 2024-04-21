@@ -525,6 +525,21 @@ main .container .left .profile {
 }
 
 /* End of profile */
+/* #follow:hover {
+  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80);
+} */
+.progress.hide {
+  opacity: 0;
+  height: 0;
+}
+.progress.show {
+  opacity: 1;
+  height: 5px;
+}
+
+#message,#follow{
+  cursor: pointer;
+}
 
 .middle .feeds .feed {
   background-color: var(--color-white);
@@ -546,7 +561,6 @@ main .container .left .profile {
 }
 
 .middle .feed .photo {
-  border-radius: var(--card-border-radius);
   overflow: hidden;
   margin: 0.7rem 0;
 }

@@ -4,8 +4,10 @@ const { RegisterModel } = require("../models/register.model");
 const { PostModel, LikeModel } = require("../models/post.model");
 const { MessageModel, FollowModel } = require("../models/message.model");
 const multer = require("multer");
-const Aws = require("aws-sdk");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { fromEnv } = require("@aws-sdk/credential-provider-env");
 const { NotificationModel } = require("../models/notifications.model");
+const { DeleteObjectCommand } = require("@aws-sdk/client-s3");
 require("dotenv").config();
 
 const postRouter = express.Router();
@@ -129,7 +131,6 @@ postRouter.get("/", async (req, res) => {
   }
 });
 
-
 const storage = multer.memoryStorage({
   destination: (req, file, cb) => {
     cb(null, "");
@@ -150,50 +151,53 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-const s3 = new Aws.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_ACCESS_KEY_SECRET,
+const REGION = "ap-south-1"
+const s3Client = new S3Client({ 
+  region: REGION,
+  credentials: fromEnv()
 });
-
-postRouter.post("/", upload.single("file"), (req, res) => {
+postRouter.post("/", upload.single("file"), async (req, res) => {
   // Check if a file was uploaded
+  // console.log(req.file)
+  
   if (req.file) {
     // File was uploaded, proceed with AWS upload
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
       Key: req.file.originalname,
       Body: req.file.buffer,
-      ContentType: req.file.mimetype, //ContentDisposition: 'inline' for online opening
-      ContentDisposotion: "inline",
+      ContentType: req.file.mimetype,
+      ContentDisposition: "inline",
     };
+    // console.log(params)
 
-    s3.upload(params, (error, data) => {
-      if (error) {
-        res.status(500).send({ err: error });
-      } else {
-        console.log("data", data);
+    try {
+      const data = await s3Client.send(new PutObjectCommand(params));
+      console.log("Success, file uploaded", data);
+      const fileUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${REGION}.amazonaws.com/${encodeURIComponent(req.file.originalname)}`;
+      const post = new PostModel({
+        authorID: req.body.authorID,
+        text: req.body.text,
+        photo: req.file.mimetype.startsWith("image/") ? fileUrl : null,
+        pdf: req.file.mimetype == "application/pdf" ? fileUrl : null,
+        video: req.file.mimetype == "video/mp4" ? fileUrl : null,
+      });
 
-        const post = new PostModel({
-          authorID: req.body.authorID,
-          text: req.body.text,
-          photo: req.file.mimetype.startsWith("image/") ? data.Location : null,
-          pdf: req.file.mimetype == "application/pdf" ? data.Location : null,
-          video: req.file.mimetype == "video/mp4" ? data.Location : null,
-        });
-
-        post
-          .save()
-          .then((result) => {
-            res.status(200).send({
-              _id: result._id,
-              text: data.Location,
-            });
-          })
-          .catch((err) => {
-            res.send({ message: err });
+      post
+        .save()
+        .then((result) => {
+          res.status(200).send({
+            _id: result._id,
+            text: data.Location,
           });
-      }
-    });
+        })
+        .catch((err) => {
+          res.send({ message: err });
+        });
+    } catch (error) {
+      console.log(error)
+      res.status(500).send({ err: error });
+    }
   } else {
     // No file was uploaded, just save the text to MongoDB
     const post = new PostModel({
@@ -226,9 +230,96 @@ postRouter.get("/:id", async (req, res) => {
       { _id: ID },
       { _id: 1, name: 1, email: 1, bio: 1, dp: 1 }
     );
-    const posts = await PostModel.find({ authorID: ID })
-      .sort({ CreatedAt: -1 })
-      .limit(20);
+
+    const posts = await PostModel.aggregate([
+      { $match: { authorID: new mongoose.Types.ObjectId(ID) } },
+      { $sort: { CreatedAt: -1 } },
+      { $limit: 20 },
+      {
+        $addFields: {
+          CreatedAt: { $toDate: "$CreatedAt" },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "authorID",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $unwind: "$author",
+      },
+      {
+        $addFields: {
+          "UserDetails.UserID": { $toString: "$author._id" },
+          "UserDetails.UserName": "$author.name",
+          "UserDetails.UserEmail": "$author.email",
+          "UserDetails.UserDp": "$author.dp",
+        },
+      },
+      {
+        $lookup: {
+          from: "likes",
+          let: { post_id: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$UserID", new mongoose.Types.ObjectId(req.body.UserDetails.UserID)] },
+                    { $eq: ["$postID", "$$post_id"] },
+                  ],
+                },
+              },
+            },
+            { $project: { _id: 0 } },
+          ],
+          as: "likes",
+        },
+      },
+      {
+        $lookup: {
+          from: "saves",
+          let: { post_id: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$UserID", new mongoose.Types.ObjectId(req.body.UserDetails.UserID)] },
+                    { $eq: ["$postID", "$$post_id"] },
+                  ],
+                },
+              },
+            },
+            { $project: { _id: 0 } },
+          ],
+          as: "saves",
+        },
+      },
+      { $addFields: { liked: { $size: "$likes" }, saved: { $size: "$saves" } } },
+      {
+        $project: {
+          likes: 0,
+          saves: 0,
+          author:0
+        },
+      },
+    ]);
+    const messages = await MessageModel.find({
+      $or: [{ "sender.UserID": req.body.UserDetails.UserID }, { "receiver.UserID": req.body.UserDetails.UserID }],
+    }).sort({ CreatedAt: -1 });
+
+    // Fetch the users
+    let users = [];
+    if (messages.length < 5) {
+      users = await RegisterModel.find({}, { _id: 1, name: 1, dp: 1 })
+        .sort({ CreatedAt: -1 })
+        .limit(5);
+    }
+
     let follow = await FollowModel.countDocuments({
       follower: req.body.UserDetails.UserID,
       following: ID,
@@ -257,21 +348,11 @@ postRouter.get("/:id", async (req, res) => {
       follow,
       following,
       followers,
+      messages,
+      users
     });
-    // res.send({
-    //   ProfileDetails: {
-    //     UserID: ID,
-    //     UserName: user.name,
-    //     UserEmail: user.email,
-    //     UserBio: user.bio,
-    //     UserDp: user.dp,
-    //   },
-    //   posts,
-    //   follow,
-    //   following,
-    //   followers,
-    // });
   } catch (error) {
+    console.log(error)
     res.json({ err: error });
   }
 });
@@ -301,7 +382,7 @@ postRouter.get("/profileEdit/:id", async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(400).send({ msg: error.message });
+    return res.redirect("/");
   }
 });
 
@@ -345,6 +426,7 @@ postRouter.get("/followers/:id", async (req, res) => {
           _id: 0,
           ID: "$follower",
           name: "$follower_info.name",
+          dp: "$follower_info.dp",
         },
       },
     ]);
@@ -375,6 +457,7 @@ postRouter.get("/following/:id", async (req, res) => {
           _id: 0,
           ID: "$following",
           name: "$following_info.name",
+          dp: "$following_info.dp",
         },
       },
     ]);
@@ -384,64 +467,41 @@ postRouter.get("/following/:id", async (req, res) => {
   }
 });
 
-postRouter.put("/like/:id/:authorID", async (req, res) => {
-  try {
-    const UserID = req.body.UserDetails.UserID;
-    const postID = req.params.id;
-    const authorID = req.params.authorID;
-    const like = await LikeModel.findOne({ UserID, postID });
-
-    if (like) {
-      await LikeModel.deleteOne({ _id: like._id });
-      await PostModel.updateOne({ _id: postID }, { $inc: { likeCount: -1 } });
-      await NotificationModel.deleteOne({senderID:UserID,receiverID:authorID,purpose:"Liked a post",postID})
-
-    } else {
-      await LikeModel.create({ UserID, postID, authorID });
-      await PostModel.updateOne({ _id: postID }, { $inc: { likeCount: 1 } });
-      if(UserID!==authorID){
-        await NotificationModel.create({senderID:UserID,receiverID:authorID,purpose:"Liked a post",postID})
-      }
-    }
-
-    res.send({ msg: "Done with like", ok: true });
-  } catch (error) {
-    res.send({ msg: "Error while liking the post", error });
-  }
-});
-
 postRouter.delete("/delete/:id", async (req, res) => {
   try {
     const post = await PostModel.findOne({ _id: req.params.id });
     const UserID = req.body.UserDetails.UserID;
     if (UserID == post.authorID) {
       if (post.photo || post.pdf || post.video) {
+        const fileKey = post.photo || post.pdf || post.video;
         const deleteParams = {
           Bucket: process.env.AWS_BUCKET_NAME,
-          Key: post.photo || post.pdf || post.video,
+          Key: fileKey.substring(fileKey.lastIndexOf("/") + 1),
         };
-        s3.deleteObject(deleteParams, function (err, data) {
-          if (err) {
-            console.log("Error", err);
-            res.status(500).send({ err: err });
-          } else {
-            PostModel.findByIdAndDelete({ _id: req.params.id })
-              .then(() => {
-                res
-                  .status(202)
-                  .send({ msg: "Post and file deleted successfully!" });
-              })
-              .catch((err) => {
-                res.status(500).send({ err: err });
-              });
-          }
-        });
+
+        try {
+          const data = await s3Client.send(new DeleteObjectCommand(deleteParams));
+          console.log("Success, file deleted", data);
+
+          PostModel.findByIdAndDelete({ _id: req.params.id })
+            .then(() => {
+              res
+                .status(202)
+                .send({ msg: "Post and file deleted successfully!" });
+            })
+            .catch((err) => {
+              res.status(500).send({ err: err });
+            });
+        } catch (err) {
+          console.log("Error", err);
+          res.status(500).send({ err: err });
+        }
       } else {
         PostModel.findByIdAndDelete({ _id: req.params.id })
           .then(() => {
             res
               .status(202)
-              .send({ msg: "Post and file deleted successfully!" });
+              .send({ msg: "Post deleted successfully!" });
           })
           .catch((err) => {
             res.status(500).send({ err: err });
@@ -453,7 +513,7 @@ postRouter.delete("/delete/:id", async (req, res) => {
   } catch (error) {
     res.send({ Errormsg: error });
   }
-});
+})
 
 module.exports = { postRouter };
 

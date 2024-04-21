@@ -8,7 +8,7 @@ searchRouter.get("/", async (req, res) => {
   try {
     const { query } = req.query;
     if (query && query!==null) {
-      console.log("query from search", query);
+      // console.log("query from search", query);
       const regex = new RegExp(query, "i");
       const users = await RegisterModel.find(
         { name: { $regex: regex } },

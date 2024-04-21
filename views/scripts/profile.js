@@ -1,111 +1,31 @@
 document.getElementById("message").addEventListener("click", () => {
+  let msgBtn = document.getElementById("message");
+  msgBtn.setAttribute("disabled", true);
   document.getElementById("PreLoaderBar").classList.remove("hide");
-document.getElementById("PreLoaderBar").classList.add("show");;
+  document.getElementById("PreLoaderBar").classList.add("show");
 
   console.log("message clicked");
   const profileID = window.location.pathname.split("/").pop();
   fetch(`/chat/${profileID}`).then((res) => {
     if (res.ok) {
       window.location.href = res.url;
+      msgBtn.removeAttribute("disabled");
     } else {
       console.log(res);
     }
   });
-  });
-
-function likePost(event, postID, authorID) {
-  if (event.target.className == "bx bx-like") {
-    event.target.className = "bx bxs-like";
-    event.target.setAttribute("style", "color: #f54a6c");
-  } else {
-    event.target.className = "bx bx-like";
-  }
-
-  fetch(`/like/${postID}/${authorID}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${localStorage.getItem("token")}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
-}
+});
 
 function profileEdit(ID) {
   window.location.href = `/profileEdit/${ID}`;
 }
 
-
-function showDeletePopup(id) {
-  // store the id of the post to be deleted
-  document.getElementById('yesButton').dataset.postId = id;
-  // show the delete confirmation popup
-  myPopup.classList.add("show");
-}
-
-document.getElementById("yesButton").addEventListener(
-  "click",
-  function () {
-      // get the id of the post to be deleted
-      let id = this.dataset.postId;
-      deletePost(id);
-      myPopup.classList.remove("show");
-  }
-);
-
-document.getElementById("noButton").addEventListener(
-  "click",
-  function () {
-      myPopup.classList.remove("show");
-  }
-);
-
-window.addEventListener(
-  "click",
-  function (event) {
-      if (event.target == myPopup) {
-          myPopup.classList.remove("show");
-      }
-  }
-);
-
-function deletePost(id) {
-  fetch("/delete/" + id, {
-      method: "DELETE",
-  })
-  .then((response) => response.json())
-  .then(() => window.location.reload())
-  .catch((error) => {
-      console.error("Error:", error);
-  });
-}
-
-function myFunction(id) {
-  document.getElementById("myDropdown-" + id).classList.toggle("show");
-}
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function (event) {
-  if (!event.target.matches(".dropbtn")) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains("show")) {
-        openDropdown.classList.remove("show");
-      }
-    }
-  }
-};
-
 async function follow(ID) {
   let follow = document.getElementById("follow");
   follow.setAttribute("disabled", true);
   let followerCount = Number(document.getElementById("followers").innerText);
-  const fetched = await fetch(`/follow/${ID}`,{
-    method:"POST"
+  const fetched = await fetch(`/follow/${ID}`, {
+    method: "POST",
   });
   if (fetched.ok) {
     if (follow.innerText == "Following") {
@@ -124,11 +44,13 @@ async function follow(ID) {
 }
 
 function getFollowers(ID) {
+  document.getElementById("PreLoaderBar").classList.remove("hide");
+  document.getElementById("PreLoaderBar").classList.add("show");
   let feeds = document.getElementById("feeds");
   fetch(`/followers/${ID}`)
     .then((res) => res.json())
     .then((data) => {
-      console.log("data",data);
+      // console.log("data", data);
       feeds.innerHTML = data
         .map((user) => {
           return `<div class="feed">
@@ -136,7 +58,7 @@ function getFollowers(ID) {
           <div class="user">
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
+                src="${user.dp}"
               />
             </div>
             <div class="info">
@@ -160,8 +82,12 @@ function getFollowers(ID) {
         })
         .join("");
     });
+  document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");
 }
 function getFollowing(ID) {
+  document.getElementById("PreLoaderBar").classList.remove("hide");
+  document.getElementById("PreLoaderBar").classList.add("show");
   let feeds = document.getElementById("feeds");
   fetch(`/following/${ID}`)
     .then((res) => res.json())
@@ -173,7 +99,7 @@ function getFollowing(ID) {
           <div class="user">
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg"
+                src="${user.dp}"
               />
             </div>
             <div class="info">
@@ -197,12 +123,16 @@ function getFollowing(ID) {
         })
         .join("");
     });
+  document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");
 }
 
-document.onreadystatechange = function () {
-  if (document.readyState === "complete") {
-      console.log(document.readyState);
-      document.getElementById("PreLoaderBar").classList.remove("show");
-  document.getElementById("PreLoaderBar").classList.add("hide");;
-  }
-}
+window.onload = () => {
+  document.getElementById("PreLoaderBar").classList.remove("show");
+  document.getElementById("PreLoaderBar").classList.add("hide");
+};
+
+window.onbeforeunload = () => {
+  document.getElementById("PreLoaderBar").classList.remove("hide");
+  document.getElementById("PreLoaderBar").classList.add("show");
+};

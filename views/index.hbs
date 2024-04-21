@@ -18,6 +18,7 @@
     />
     <!-- STYLESHEET -->
     <link rel="stylesheet" href="./styles/style.css" />
+    <link rel="stylesheet" href="./styles/dropdown.css">
 
   </head>
 
@@ -27,7 +28,7 @@
     </div>
     <nav>
       <div class="container">
-        <i class='bx bx-arrow-back' onclick="window.history.back();"></i>
+        <!-- <i class='bx bx-arrow-back' onclick="window.history.back();"></i> -->
         <h2 class="logo">Conference</h2>
         <div class="search-bar">
           <i class="uil uil-search"></i>
@@ -48,7 +49,6 @@
         </div>
       </div>
     </nav>
-    <!-- MAIN -->
     <main>
       <div class="container">
         <!-- LEFT -->
@@ -219,12 +219,12 @@
           <div id="myPopup" class="popup">
             <div class="popup-content">
                 <label for="" class="text-bold">Delete Post Permanently</label>
-                <button id="yesButton" class="formal-button">
-                    Yes
-                </button>
                 <button id="noButton" class="formal-button">
                     No
                 </button>
+                <button id="yesButton" class="formal-button">
+                  Yes
+              </button>
             </div>
           </div>
         
@@ -260,7 +260,7 @@
                   </span>
 
                 </div>
-                <a href="/comment/{{this._id}}">
+                <a href="/comment/{{this._id}}" >
                   <div class="photo">
                     <p class="post-text">{{this.text}}</p>
                     {{#if this.photo}}
@@ -271,21 +271,21 @@
                       />
                     {{/if}}
                     {{#if this.video}}
-                    <video width="" height="" controls src="{{this.video}}" onerror="this.style.display='none'" class="preview-video">
+                    <video width="" height="" controls src="{{this.video}}" onerror="this.style.display='none'" class="preview-video" style="overflow: auto;width: 100%;object-fit: cover;">
                       
                     </video>
                     {{/if}}
                     {{#if this.pdf}}
                       <div
                         id="pdf-loader"
-                        style="width:475px; height:400px; display: flex; align-items: center; justify-content: center;"
+                        style="width:100%; height:300px; display: flex; align-items: center; justify-content: center;"
                       >
                         <p>Loading PDF...</p>
                       </div>
                       <iframe
                         id="pdf-preview"
                         src="http://docs.google.com/gview?url={{this.pdf}}&embedded=true"
-                        style="width:475px; height:400px; display: none;"
+                        style="width:100%; height:300px; display: none;"
                         frameborder="0"
                         onload="document.getElementById('pdf-loader').style.display='none'; this.style.display='block';"
                       ></iframe>
@@ -300,13 +300,27 @@
                 <div class="action-buttons">
                   <div class="interaction-buttons">
                     <!-- <span><i class="uil uil-thumbs-up"></i></span> -->
-                    <span class="like-post" onclick="likePost(event,'{{this._id}}','{{this.authorID}}')">
-                    {{#if (eq this.liked 1)}}<i class='bx bxs-like' style="color: #f54a6c;"></i>{{else}}<i class='bx bx-like' style="color: #f54a6c"></i>{{/if}}
+                    <span class="like-post" >
+                    {{#if (eq this.liked 1)}}
+                    <i onclick="likePost(event,'{{this._id}}','{{this.authorID}}')" ondblclick="likePost(event,'{{this._id}}','{{this.authorID}}')" class='bx bxs-like' style="color: #f54a6c;"></i>
+                    {{else}}
+                    <i onclick="likePost(event,'{{this._id}}','{{this.authorID}}')" ondblclick="likePost(event,'{{this._id}}','{{this.authorID}}')" class='bx bx-like' style="color: #f54a6c"></i>
+                    {{/if}}
                     </span>
                     <span><a href="/comment/{{this._id}}"><i
                           class="uil uil-comment-dots" style="color: rgb(51, 100, 51);"
                         ></i></a></span>
-                    <span><i class="uil uil-share-alt"></i></span>
+                    <!-- <span><i class="uil uil-share-alt"></i></span> -->
+                    <span class="dropdown edit">
+                      <i onclick="shareFunction('{{this._id}}')" class="dropbtn uil uil-share-alt" style="color: rgb(104, 49, 192);"></i>
+                      <div id="shareDropdown-{{this._id}}" class="dropdown-content-share">
+                        <a onclick="sharePost('{{this._id}}','linkedin')" target="_blank"><i class='bx bxl-linkedin-square' style="border-radius: 50%;"></i></a>
+                        <a onclick="sharePost('{{this._id}}','twitter')" target="_blank"><i class='bx bxl-twitter' style="border-radius: 50%;"></i></a>
+                        <a onclick="sharePost('{{this._id}}','whatsapp')" target="_blank"><i class='bx bxl-whatsapp-square' style="border-radius: 50%;"></i></a>
+                        <a onclick="sharePost('{{this._id}}','facebook')" target="_blank"><i class='bx bxl-facebook-circle'></i></a>
+                        <a onclick="sharePost('{{this._id}}','instagram')" target="_blank"><i class='bx bxl-instagram-alt' style="border-radius: 50%;"></i></a>
+                    </div>
+                    </span>
                   </div>
                   <div class="bookmark" onclick="savePost(event,'{{this._id}}','{{this.authorID}}')">
                     <span>
@@ -343,7 +357,7 @@
                     2301350008
 
                   </p>
-                  <p><span class="harsh-tag">#lifestyle</span></p>
+                  <!-- <p><span class="harsh-tag">#lifestyle</span></p> -->
                 </div>
                 <a href="/comment/{{this._id}}"><div
                     class="comments text-muted"
@@ -586,8 +600,8 @@
             </div>
             <!-- BACKGROUND COLORS -->
             <div class="background">
-              <h4>Bacground</h4>
-              <div class="choose-bg" style="border: 1px solid red;">
+              <h4>Background</h4>
+              <div class="choose-bg"  >
                 <div class="bg-1 active">
                   <span></span>
                   <h5 for="bg-1">Light</h5>
@@ -611,3 +625,7 @@
 </html>
 <script src="./scripts/index.js"></script>
 <script src="./scripts/main.js"></script>
+<script src="./scripts/savePost.js"></script>
+<script src="./scripts/likePost.js"></script>
+<script src="./scripts/sharePost.js"></script>
+<script src="./scripts/dropdown.js"></script>

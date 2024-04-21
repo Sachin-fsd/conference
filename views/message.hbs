@@ -27,13 +27,22 @@
       <div class="container">
         <i class='bx bx-arrow-back' onclick="window.history.back();"></i>
         <h2 class="logo">Conference</h2>
-       
-        <div class="create">
-          <div class="profile-photo">
-            <img
-              src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
-            />
-          </div>
+        <div class="search-bar">
+          <i class="uil uil-search"></i>
+          <input
+            type="search"
+            placeholder="Search for creators, inspiration and projects"
+            onclick="window.location.href='/search'"
+          />
+        </div>
+        <div class="create"> <a href="/notification"><big> <i class="uil uil-bell" style="margin: 0 1rem;"></i></big></a> 
+         
+          <a href="/{{UserDetails.UserID}}"><div class="profile-photo">
+              <img
+               src="{{UserDetails.UserDp}}" onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"/>
+              />
+            </div></a>
+
         </div>
       </div>
     </nav>
@@ -47,7 +56,7 @@
           <a href="/{{UserDetails.UserID}}" class="profile">
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
+               src="{{UserDetails.UserDp}}"   onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'"/>
               />
             </div>
             <div class="handle">
@@ -67,20 +76,26 @@
                 ></i></span>
               <h3>Search</h3>
             </a>
-            <a href="#" class="menu-item" id="notifications"><span><i
+            <!-- <a href="/notification" class="menu-item" id="notifications"><span><i
                   class="uil uil-bell"
-                > </i></span>
+                > <small class="notification-count"></small></i></span>
               <h3>Notifications</h3>
-              <!-- NOTIFICATION POPUP -->
-            
-              <!-- END OF NOTIFICATION POPUP -->
+
+            </a> -->
+            <a href="/notification" class="menu-item" id="notifications"><span><i
+                  class="uil uil-bell"
+                ></i></span>
+              <h3>Notifications</h3>
+
             </a>
-            <a href="/message" class="menu-item active" id="messages-notification"><span><i
-                  class="uil uil-envelope-alt"
-                > </i></span>
+            <a
+              href="/message"
+              class="menu-item active"
+              id="messages-notification"
+            ><span><i class="uil uil-envelope-alt"></i></span>
               <h3>Messages</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/save" class="menu-item"><span><i
                   class="uil uil-bookmark"
                 ></i></span>
               <h3>Bookmarks</h3>
@@ -95,18 +110,26 @@
                 ></i></span>
               <h3>Theme</h3>
             </a>
-            <a href="#" class="menu-item"><span><i
+            <a href="/settings" class="menu-item" onclick="settings('{{UserDetails}}')"><span><i
                   class="uil uil-setting"
                 ></i></span>
               <h3>Settings</h3>
             </a>
           </div>
           <!-- END OF SIDEBAR -->
-          <label for="create-post" class="btn btn-primary">Create Post</label>
         </div>
         <!-- END OF LEFT -->
         <!-- MIDDLE -->
         <div class="middle" id="middle">
+          <div class="feeds" id="results">
+          {{#if (eq messages.length 0)}}
+
+            <div class="feed">
+              <div class="photo">
+                <p class="post-text" style="white-space: pre-wrap;text-align: center;">No Messages </p>
+              </div>
+            </div>
+            {{else}}
           {{#each messages}}
             <a href="/chat/{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserID}}{{else}}{{this.sender.UserID}}{{/if}}" class="profile {{#if (eq this.read false)}}unread{{else}}{{/if}} users-profile">
             <div class="profile-photo">
@@ -121,6 +144,9 @@
           </a>
           
           {{/each}}
+          {{/if}}
+        </div>
+
         </div>
         <!-- END OF MIDDLE -->
         <!-- RIGHT -->
@@ -310,7 +336,7 @@
             </div>
             <!-- BACKGROUND COLORS -->
             <div class="background">
-              <h4>Bacground</h4>
+              <h4>Background</h4>
               <div class="choose-bg">
                 <div class="bg-1 active">
                   <span></span>

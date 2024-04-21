@@ -24,28 +24,3 @@ CloseBtnId.addEventListener("click", () => {
 });
 
 AOS.init();
-
-// function fetchToken(token) {
-//   fetch("/home", {
-//     headers: {
-//       "Content-type": "application/json",
-//       Authorization: `Bearer ${token}`,
-//     },
-//   })
-//     .then((res) => {
-//         console.log(res)
-//         if(res?.redirected){
-//             window.location.href = res.url;
-//         }
-    
-//     })
-//     .catch((res) => console.log(res));
-// }
-
-
-// window.addEventListener("load",()=> {
-//   let token = localStorage?.getItem("token") || sessionStorage?.getItem("token")
-//   if(token !== "" || token !== null || token !== undefined ) {
-//     fetchToken(token)
-//   }
-// });

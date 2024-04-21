@@ -10,21 +10,89 @@ saveRouter.get("/", async (req, res) => {
   try {
     const UserID = req.body.UserDetails.UserID;
 
-    const saves = await SaveModel.find(
-      { UserID },
-      { _id: 1, authorID: 1, postID: 1, CreatedAt: 1 }
-    )
-      .sort({ CreatedAt: -1 })
-      .populate({
-        path: "postID",
-        select: "_id text CreatedAt",
-        model: "post",
-      })
-      .populate({
-        path: "authorID",
-        select: "_id name dp",
-        model: "user",
-      });
+    const saves = await SaveModel.aggregate([
+      { $match: { UserID: new mongoose.Types.ObjectId(UserID) } },
+      {
+        $lookup: {
+          from: "posts",
+          localField: "postID",
+          foreignField: "_id",
+          as: "post",
+        },
+      },
+      {
+        $unwind: "$post",
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "authorID",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      {
+        $unwind: "$author",
+      },
+      {
+        $addFields: {
+          "authorDetails.UserID": { $toString: "$author._id" },
+          "authorDetails.UserName": "$author.name",
+          "authorDetails.UserEmail": "$author.email",
+          "authorDetails.UserDp": "$author.dp",
+        },
+      },
+      {
+        $lookup: {
+          from: "likes",
+          let: { post_id: "$post._id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$UserID", new mongoose.Types.ObjectId(UserID)] },
+                    { $eq: ["$postID", "$$post_id"] },
+                  ],
+                },
+              },
+            },
+            { $project: { _id: 0 } },
+          ],
+          as: "likes",
+        },
+      },
+      {
+        $lookup: {
+          from: "saves",
+          let: { post_id: "$post._id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$UserID", new mongoose.Types.ObjectId(UserID)] },
+                    { $eq: ["$postID", "$$post_id"] },
+                  ],
+                },
+              },
+            },
+            { $project: { _id: 0 } },
+          ],
+          as: "saves",
+        },
+      },
+      { $addFields: { liked: { $size: "$likes" }, saved: { $size: "$saves" } } },
+      {
+        $project: {
+          likes: 0,
+          saves: 0,
+          author:0
+        },
+      },
+    ]);
+
+    // console.log(saves)
 
     res.render("save", {
       UserDetails: req.body.UserDetails,
@@ -32,7 +100,7 @@ saveRouter.get("/", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.json({ err: error });
+    return res.redirect("/");
   }
 });
 

@@ -21,3 +21,199 @@ UserDetails{
 changs for react
  --> postRouter / get
  --> login router / post
+
+ inside right sidebar
+ <div class="messages">
+            <div class="heading">
+              <h4>Messages</h4>
+              <i class="uil uil-edit"></i>
+            </div>
+            <!-- SEARCH BAR -->
+            <div class="search-bar">
+              <i class="uil uil-search"></i>
+              <input
+                type="search"
+                id="message-search"
+                placeholder="Search messages"
+              />
+            </div>
+            <!-- MESSAGES CATEGORY -->
+            <div class="category">
+              <h6 class="active">Primary</h6>
+              <h6>General</h6>
+              <h6 class="message-requests">Requests{3}</h6>
+            </div>
+            <!-- MESSAGE -->
+            {{#each messages}}
+            <div class="message">
+              <div class="profile-photo">
+                <img
+                  src="{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserDp}}{{else}}{{this.sender.UserDp}}{{/if}}"
+                />
+              </div>
+              <div class="message-body">
+                <a href="/chat/{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserID}}{{else}}{{this.sender.UserID}}{{/if}}" class="profile unread users-profile">
+                <h5>{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserName}} {{else}} {{this.sender.UserName}} {{/if}}</h5>
+                <p class="text-muted">user at conference</p>
+                </a>
+              </div>
+            </div>
+            {{/each}}
+            
+            {{#if (eq users.length 0)}}{{else}}
+            <p class="text-muted">New Users</p>
+            {{#each users}}
+           <div class="message">
+            <div class="profile-photo">
+              <img
+                src="{{this.dp}}"
+              />
+            </div>
+            <div class="message-body">
+              <a href="/{{this._id}}" class="profile unread users-profile">
+              <h5>{{this.name}}</h5>
+              <p class="text-muted">user at conference</p>
+              </a>
+            </div>
+          </div>
+           {{/each}}
+            {{/if}}
+           
+            <!-- <div class="message">
+              <div class="profile-photo">
+                <img
+                  src="https://cdn.pixabay.com/photo/2023/12/15/15/52/bird-8450958_640.png"
+                />
+                <div class="active"></div>
+              </div>
+              <div class="message-body">
+                <h5>Chantal Msiza</h5>
+                <p class="text-bold">Birthday tomorrow!</p>
+              </div>
+            </div> -->
+          </div>
+          <!-- END OF MESSAGES -->
+          <!-- FRIEND REQUSTS -->
+          <div class="friend-requests">
+            <h4>Requests</h4>
+            <p class="text-muted">No requests at the moment</p>
+            <!-- <div class="request">
+              <div class="info">
+                <div class="profile-photo">
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/03/29/19/32/man-7886201_640.jpg"
+                  />
+                </div>
+                <div>
+                  <h5>Hajia Bintu</h5>
+                  <p class="text-muted">8 mutual friends</p>
+                </div>
+              </div>
+              <div class="action">
+                <button class="btn btn-primary">Accept</button>
+                <button class="btn">Decline</button>
+              </div>
+            </div>
+            <div class="request">
+              <div class="info">
+                <div class="profile-photo">
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/12/02/11/21/winter-8425500_640.jpg"
+                  />
+                </div>
+                <div>
+                  <h5>Jacqueline Mensah</h5>
+                  <p class="text-muted">1 mutual friend</p>
+                </div>
+              </div>
+              <div class="action">
+                <button class="btn btn-primary">Accept</button>
+                <button class="btn">Decline</button>
+              </div>
+            </div>
+            <div class="request">
+              <div class="info">
+                <div class="profile-photo">
+                  <img
+                    src="https://cdn.pixabay.com/photo/2023/06/10/14/48/giraffe-8054174_640.jpg"
+                  />
+                </div>
+                <div>
+                  <h5>Sarah King</h5>
+                  <p class="text-muted">5 mutual friends</p>
+                </div>
+              </div>
+              <div class="action">
+                <button class="btn btn-primary">Accept</button>
+                <button class="btn">Decline</button>
+              </div>
+            </div> -->
+          </div>
+
+// Fetch the right sidebar
+let contacts = [],
+  users = [];
+fetch("/contacts")
+  .then((res) => res.json())
+  .then((res) => {
+    (contacts = res.messages), (users = res.users);
+	console.log(contacts)
+  }).catch(err=>console.log(err));
+
+let UserDetail = {};
+
+fetch("/user")
+  .then((res) => res.json())
+  .then((res) => (UserDetail = res.user)).catch(err=>console.log(err));
+
+document.getElementById("right").innerHTML = `
+<div class="right" id="right">
+<div class="messages">
+  <div class="heading">
+	<h4>Messages</h4>
+	<i class="uil uil-edit"></i>
+  </div>
+  <div class="search-bar">
+	<i class="uil uil-search"></i>
+	<input
+	  type="search"
+	  id="message-search"
+	  placeholder="Search messages"
+	/>
+  </div>
+  <div class="category">
+	<h6 class="active">Primary</h6>
+	<h6>General</h6>
+	<h6 class="message-requests">Requests</h6>
+  </div>
+  ${contacts
+    .map((message) => {
+      return `<div class="message">
+		<div class="profile-photo">
+		<img
+			src="${
+        message.sender.UserID == UserDetail.UserID
+          ? message.receiver.UserDp
+          : message.sender.UserDp
+      }"
+		/>
+		</div>
+		<div class="message-body">
+		<a href="/chat/${
+      message.sender.UserID == UserDetail.UserID
+        ? message.receiver.UserID
+        : message.sender.UserID
+    }" class="profile unread users-profile">
+		<h5>${
+      message.sender.UserID == UserDetail.UserID
+        ? message.receiver.UserName
+        : message.sender.UserName
+    }</h5>
+		<p class="text-muted">in your chats</p>
+		</a>
+		</div>
+	</div>`;
+    })
+    .join("")}
+
+	`;

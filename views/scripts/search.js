@@ -20,7 +20,7 @@ async function seachUser(event) {
       `/search?query=${encodeURIComponent(searchInput)}`
     );
     const { users, posts } = await response.json();
-    console.log("res", posts);
+    // console.log("res", posts,users);
 
     if (users.length === 0 && posts.length === 0) {
       let div = document.createElement("div");
@@ -105,7 +105,7 @@ async function seachUser(event) {
           <a href="/${user._id}"><div class="user">
               <div class="profile-photo">
                 <img
-                  src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"
+                  src="${user.dp}"
                 />
               </div>
               <div class="info">

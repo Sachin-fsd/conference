@@ -39,11 +39,13 @@ loginRouter.post("/", async (req, res) => {
           res.cookie(
             "token",
             token,
-            { httpOnly: true, maxAge: 60 * 60 * 24 * 7 * 1000, sameSite: 'None', secure: true }
+            { httpOnly: true, maxAge: 60 * 60 * 24 * 7 * 1000,
+              //  sameSite: 'None', secure: true 
+              }
           );
           res.cookie("UserDetails", UserDetails);
           // req.session.UserDetails = UserDetails
-          console.log("line 38");
+          console.log("login successfull");
           res.status(200).redirect("/");
           // res.status(200).send({url:"/",UserDetails,token})
         } else {

@@ -40,14 +40,14 @@ notificationRouter.get("/", async (req, res) => {
         },
       ]);
 
-      console.log(notifications)
+      // console.log(notifications)
       res.render("notification", {
         UserDetails: req.body.UserDetails,
         notifications,
       });
     } catch (error) {
       console.log(error);
-      res.json({ err: error });
+      return res.redirect("/");
     }
   });
 
