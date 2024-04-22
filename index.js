@@ -115,10 +115,10 @@ app.use("/pic5",(req,res)=>{
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/forgetpwd", forgetRouter);
-// app.get("/favicon.ico", (req, res) => {
-//   let filePath = path.join(__dirname, "favicon.ico");
-//   res.sendFile(filePath);
-// });
+app.get("/favicon.ico", (req, res) => {
+  let filePath = path.join(__dirname, "favicon.ico");
+  res.sendFile(filePath);
+});
 
 app.get("/user",authenticator,(req,res)=>{
   let {UserDetails} = req.body;

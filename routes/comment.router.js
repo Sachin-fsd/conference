@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 const { PostModel } = require("../models/post.model");
 const { CommentModel } = require("../models/comment.model");
 const { NotificationModel } = require("../models/notifications.model");
@@ -18,7 +18,7 @@ commentRouter.get("/:id", async (req, res) => {
     let post = await PostModel.aggregate([
       {
         $match: {
-          _id:new mongoose.Types.ObjectId(ID), // replace ID with your post id
+          _id: new mongoose.Types.ObjectId(ID), // replace ID with your post id
         },
       },
       {
@@ -94,30 +94,30 @@ commentRouter.get("/:id", async (req, res) => {
         },
       },
     ]);
-    post = post[0]
+    post = post[0];
 
     const comments = await CommentModel.find({ parentPost: ID })
       .sort({ CreatedAt: -1 })
       .limit(20);
 
-    let activePost = {
-      UserID: post._id,
-      UserDetails: post.UserDetails,
-      CreatedAt: post.CreatedAt,
-      text: post.text,
-    };
-    if (post.photo) {
-      activePost.photo = post.photo;
-    }
+    // let activePost = {
+    //   UserID: post._id,
+    //   UserDetails: post.UserDetails,
+    //   CreatedAt: post.CreatedAt,
+    //   text: post.text,
+    // };
+    // if (post.photo) {
+    //   activePost.photo = post.photo;
+    // }
     // console.log(req.body.UserDetails, post);
     res.render("comment", {
       UserDetails: req.body.UserDetails,
-      activePost,
+      // activePost,
       comments,
       post,
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.redirect("/");
   }
 });
