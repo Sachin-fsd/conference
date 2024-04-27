@@ -410,9 +410,15 @@ main .container .middle .profile {
   background-color: var(--color-white);
   padding: 0.5rem 0.6rem;;
   border-radius: var(--border-radius);
+ 
   /* position: fixed;
   bottom: 70px;
   right: inherit; */
+}
+
+#create-post{
+  width: 100%;
+  padding: 10px;
 }
 
 .middle .create-post textarea {
@@ -879,7 +885,10 @@ main .container .middle .profile {
 =====================================================================*/
 
 @media screen and (max-width: 992px) {
-  nav .search-bar {
+  main{
+    top: 1rem;
+  }
+  nav{
     display: none;
   }
 
@@ -952,14 +961,24 @@ main .container .middle .profile {
   .left .notifications-popup {
     display: none !important;
   }
+  .chat-profile-photo{
+    width: 2.2rem;
+    
+  }
+  .middle .chat-handle{
+    font-size: small;
+  }
+
+  main .container .middle .chat-top-profile {
+    padding: 0.5rem;
+    
+  }
 
   main .container .middle {
     grid-column: 1/-1;
   }
   .middle .content-only {
-    height: calc(100vh - 350px);
     border-radius: 10px;
-
     overflow-y: scroll;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none;

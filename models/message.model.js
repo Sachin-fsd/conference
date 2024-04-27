@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const messageSchema = mongoose.Schema({
-  sender: Object,
-  receiver: Object,
+  senderID: {type:mongoose.Schema.Types.ObjectId, ref:"user"},
+  receiverID: {type:mongoose.Schema.Types.ObjectId, ref:"user"},
   room:String,
   read:{ type: Boolean, default: false },
   CreatedAt: { type: Date, default: Date.now }

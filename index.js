@@ -33,6 +33,7 @@ const { saveRouter } = require("./routes/save.router.js");
 const { NotificationModel } = require("./models/notifications.model.js");
 const { likeRouter } = require("./routes/like.router.js");
 const { SaveModel } = require("./models/save.model.js");
+const { CommentModel } = require("./models/comment.model.js");
 require("dotenv").config();
 
 const server = http.createServer(app);
@@ -258,6 +259,8 @@ app.use((req, res) => {
   res.status(404).send({ title: 'Not Found' });
 });
 
+const fetch = (...args) =>
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 const io = new Server(server);
 io.on("connection", (socket) => {
@@ -274,7 +277,7 @@ io.on("connection", (socket) => {
     socket.leave(postID);
   });
 
-  socket.on("new comment", (comment) => {
+  socket.on("new comment",async (comment) => {
     io.to(comment.postID).emit("new comment", comment);
   });
 
@@ -297,8 +300,6 @@ connectDB().then(() => {
   });
 });
 
-const fetch = (...args) =>
-  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 // async function r(){
 //   console.log("a")
@@ -364,7 +365,7 @@ const fetch = (...args) =>
 
 async function deleteUnmatchedPostsAndEmptyNotifications() {
   try {
-    await PostModel.updateMany({}, { likeCount: 0 });
+    // await PostModel.updateMany({}, { likeCount: 0 });
 
     // Get all posts
     // const posts = await PostModel.find();
@@ -380,7 +381,7 @@ async function deleteUnmatchedPostsAndEmptyNotifications() {
     //   }
     // }
 
-    await LikeModel.deleteMany({});
+    // await MessageModel.deleteMany({});
     
   } catch (err) {
     console.error('Error:', err);

@@ -224,15 +224,15 @@
               {{#each comments}}
                 <div class="feed">
                   <div class="head">
-                    <a href="/{{this.authorID._id}}"><div class="user">
+                    <a href="/{{this.commenterID._id}}"><div class="user">
                         <div class="profile-photo">
                           <img
-                            src="{{UserDetails.UserDp}}"
+                            src="{{this.commenterID.dp}}"
                             onerror='this.src="https://cdn.pixabay.com/photo/2016/11/07/09/07/river-1805188_640.jpg"'
                           />
                         </div>
                         <div class="info">
-                          <h3>{{this.UserDetails.UserName}}</h3>
+                          <h3>{{this.commenterID.name}}</h3>
                           <small>{{formatDate this.CreatedAt}}</small>
                         </div>
                       </div></a>
@@ -259,18 +259,24 @@
                   onerror="this.src='https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg'"
                 />
               </div>
-              <textarea
+              <input
+                onkeypress="if(event.key == 'Enter') { sendComment(); }"
                 onload="this.focus()"
                 id="create-post"
                 placeholder="Write a comment."
-              ></textarea>
+                oninput="commentInput()"
+              ></input>
               <input
+                onclick="sendComment()"
                 type="submit"
                 id="post-submit-btn"
                 value="Send"
                 class="btn btn-primary"
                 data-postID="{{post._id}}"
                 data-authorID="{{post.authorID._id}}"
+                data-userid="{{UserDetails.UserID}}"
+                data-username="{{UserDetails.UserName}}"
+                data-userdp="{{UserDetails.UserDp}}"
               />
 
             </form>

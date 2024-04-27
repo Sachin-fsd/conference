@@ -20,7 +20,17 @@ chatRouter.get("/:id", async (req, res) => {
       read = message.read;
     }
 
-    const ProfileUser = await RegisterModel.findOne({ _id: ID });
+    let last = false
+    // console.log(message.senderID.toString(),UserID,message.senderID.toString() !== UserID)
+    if(message.senderID.toString() !== UserID){
+      last = true;
+    }
+    // console.log(last)
+
+    //const read = await MessageModel.findOne({ room },{read});  <== try this
+
+    const ProfileUser = await RegisterModel.findOne({ _id: ID },{_id:1,name:1,dp:1});
+    // console.log(ProfileUser)
     let chats = await ChatModel.find({ room })
       .sort({ CreatedAt: -1 })
       .limit(20)
@@ -38,8 +48,10 @@ chatRouter.get("/:id", async (req, res) => {
       room,
       chats,
       read,
+      last
     });
   } catch (error) {
+    console.log(error)
     return res.redirect("/");
   }
 });

@@ -123,14 +123,16 @@
         </div>
         <!-- END OF LEFT -->
         <!-- MIDDLE -->
+        
         <div class="middle">
+          <small>
           <a href="/{{ProfileUser.UserID}}" class="profile chat-top-profile {{#if (eq read false)}} unread {{else}} read {{/if}}" id="chat-receiver">
-            <div class="profile-photo">
+            <div class="profile-photo chat-profile-photo">
               <img
                 src="{{ProfileUser.UserDp}}"
               />
             </div>
-            <div class="handle">
+            <div class="chat-handle">
               <h4>{{ProfileUser.UserName}}</h4>
               <p class="text-muted">@{{ProfileUser.UserName}}</p>
             </div>
@@ -143,17 +145,17 @@
           </div>
           <div class="form-only">
             <form class="create-post" id="chat_form">
-              <div class="profile-photo">
+              <div class="profile-photo chat-profile-photo">
                 <img
                 src="{{UserDetails.UserDp}}"
                 onerror='this.src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"'
               />
               </div>
-              <textarea
+              <input
                 onkeypress="if(event.key == 'Enter') { event.preventDefault();sendChat() }"
                 id="create-post"
                 placeholder="Message" 
-              ></textarea>
+              ></input>
               <input
                 type="submit"
                 id="post-submit-btn"
@@ -163,7 +165,7 @@
 
             </form>
           </div>
-
+        </small>
         </div>
         <!-- END OF MIDDLE -->
         <!-- RIGHT -->
@@ -389,7 +391,7 @@
         <!-- END OF THEME CUSTOMIZATION -->
       </div>
     </main>
-  <div id="room" data-room="{{room}}"></div>
+  <div id="room" data-room="{{room}}" data-userid="{{UserDetails.UserID}}" data-receiverid="{{ProfileUser.UserID}}" data-last="{{last}}"></div>
 
   </body>
 </html>

@@ -131,15 +131,15 @@
             </div>
             {{else}}
           {{#each messages}}
-            <a href="/chat/{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserID}}{{else}}{{this.sender.UserID}}{{/if}}" class="profile {{#if (eq this.read false)}}unread{{else}}{{/if}} users-profile">
+            <a href="/chat/{{#if (eq this.senderID._id ../UserDetails.UserID)}}{{this.receiverID._id}}{{else}}{{this.senderID._id}}{{/if}}" class="profile {{#if (eq this.read false)}}unread{{else}}{{/if}} users-profile">
             <div class="profile-photo">
               <img
-                src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg"
+                src="{{#if (eq this.senderID._id ../UserDetails.UserID)}}{{this.receiverID.dp}} {{else}} {{this.senderID.dp}} {{/if}}"
               />
             </div>
             <div class="handle">
-              <h4>{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserName}} {{else}} {{this.sender.UserName}} {{/if}}</h4>
-              <p class="text-muted">@{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserName}} {{else}} {{this.sender.UserName}} {{/if}}</p>
+              <h4>{{#if (eq this.senderID._id ../UserDetails.UserID)}}{{this.receiverID.name}} {{else}} {{this.senderID.name}} {{/if}}</h4>
+              <p class="text-muted">@{{#if (eq this.senderID._id ../UserDetails.UserID)}}{{this.receiverID.name}} {{else}} {{this.senderID.name}} {{/if}}</p>
             </div>
           </a>
           

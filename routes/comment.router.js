@@ -98,18 +98,11 @@ commentRouter.get("/:id", async (req, res) => {
 
     const comments = await CommentModel.find({ parentPost: ID })
       .sort({ CreatedAt: -1 })
-      .limit(20);
+      .limit(20)
+      .populate("commenterID", "_id name dp");
 
-    // let activePost = {
-    //   UserID: post._id,
-    //   UserDetails: post.UserDetails,
-    //   CreatedAt: post.CreatedAt,
-    //   text: post.text,
-    // };
-    // if (post.photo) {
-    //   activePost.photo = post.photo;
-    // }
-    // console.log(req.body.UserDetails, post);
+    // console.log(comments)
+
     res.render("comment", {
       UserDetails: req.body.UserDetails,
       // activePost,
@@ -125,18 +118,22 @@ commentRouter.get("/:id", async (req, res) => {
 commentRouter.post("/:id", async (req, res) => {
   const { text, authorID } = req.body;
   const payload = {
-    UserDetails: req.body.UserDetails,
-    text: req.body.text,
+    commenterID: req.body.UserDetails.UserID,
+    text,
     parentPost: req.params.id,
   };
   try {
     const comment = new CommentModel(payload);
-    await NotificationModel.create({
-      senderID: req.body.UserDetails.UserID,
-      receiverID: authorID,
-      purpose: "new comment",
-      postID: req.params.id,
-    });
+
+    if (req.body.UserDetails.UserID !== authorID) {
+      await NotificationModel.create({
+        senderID: req.body.UserDetails.UserID,
+        receiverID: authorID,
+        purpose: "new comment",
+        postID: req.params.id,
+      });
+    }
+
     // console.log({
     //   senderID: req.body.UserDetails.UserID,
     //   receiverID: authorID,

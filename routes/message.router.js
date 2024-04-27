@@ -11,8 +11,10 @@ messageRouter.get("/", async (req, res) => {
 
   try {
     const messages = await MessageModel.find({
-      $or: [{ "sender.UserID": userID }, { "receiver.UserID": userID }],
-    }).sort({ CreatedAt: -1 });
+      $or: [{ "senderID": userID }, { "receiverID": userID }],
+    }).sort({ CreatedAt: -1 }).populate("senderID","_id name dp").populate("receiverID","_id name dp");
+
+    // console.log(messages)
 
     res
       .status(200)
@@ -27,25 +29,15 @@ messageRouter.post("/", async (req, res) => {
   const { room, receiverID } = req.body;
   try {
     let messages = await MessageModel.findOne({ room });
-    const receivedUser = await RegisterModel.findOne(
-      { _id: receiverID },
-      { _id: 1, name: 1, email: 1,dp:1 }
-    );
-    const receiver = {
-      UserID: receivedUser._id.toString(),
-      UserName: receivedUser.name,
-      UserEmail: receivedUser.email,
-      UserDp: receivedUser.dp
-    };
     if (!messages) {
       messages = new MessageModel({
-        sender: req.body.UserDetails,
-        receiver,
+        senderID: req.body.UserDetails.UserID,
+        receiverID,
         room,
       });
     } else {
-      messages.sender = req.body.UserDetails;
-      messages.receiver = receiver;
+      messages.senderID = req.body.UserDetails.UserID;
+      messages.receiverID = receiverID;
       messages.read = false;
       messages.CreatedAt = Date.now();
     }
