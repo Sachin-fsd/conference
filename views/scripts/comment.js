@@ -69,7 +69,7 @@ async function sendComment() {
   post.value = null;
 };
 
-post_submit_btn.onclick = sendComment()
+post_submit_btn.onclick = sendComment
 
 function append(comment) {
   let div = document.createElement("div");
