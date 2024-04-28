@@ -21,8 +21,8 @@ chatRouter.get("/:id", async (req, res) => {
     }
 
     let last = false
-    // console.log(message.senderID.toString(),UserID,message.senderID.toString() !== UserID)
-    if(message.senderID.toString() !== UserID){
+    console.log(message,UserID)
+    if(message && message.senderID.toString() !== UserID){
       last = true;
     }
     // console.log(last)

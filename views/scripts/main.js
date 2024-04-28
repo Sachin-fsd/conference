@@ -45,6 +45,7 @@ post_submit_btn.onclick = async () => {
   post.value = null;
 };
 let UserDetails = getCookie("UserDetails").substring(2);
+console.log(UserDetails)
 UserDetails = JSON.parse(UserDetails)
 
 document.getElementById("fileinput").addEventListener("change", function (e) {

@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 // const { RegisterModel } = require('./models/register.model')
 const app = express();
@@ -34,6 +35,7 @@ const { NotificationModel } = require("./models/notifications.model.js");
 const { likeRouter } = require("./routes/like.router.js");
 const { SaveModel } = require("./models/save.model.js");
 const { CommentModel } = require("./models/comment.model.js");
+const { BlackListTokenModel } = require("./models/blackListToken.model.js");
 require("dotenv").config();
 
 const server = http.createServer(app);
@@ -74,22 +76,107 @@ hbs.registerHelper("eq", function (a, b) {
   }
   return a.toString() === b.toString();
 });
+// app.use("/user", userRouter);
 
-app.get("/usersList", async (req, res) => {
-  const users = await RegisterModel.find();
-  res.send(users);
+// app.use("/auth", googleAuthRouter);
+// app.use("/auth", githubAuthRouter);
+
+app.get("/auth/github", async (req, res) => {
+  const { code } = req.query;
+
+  // Fetch access token
+  const Access_details = await fetch("https://github.com/login/oauth/access_token", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      client_id: process.env.client_id_github,
+      client_secret: process.env.client_secret_github,
+      code,
+    }),
+  }).then((res) => res.json());
+
+  // Fetch user details
+  const User_details = await fetch("https://api.github.com/user", {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${Access_details.access_token}`,
+      Accept: "application/json",
+    },
+  }).then((res) => res.json());
+
+  // Fetch user email
+  const User_email = await fetch("https://api.github.com/user/emails", {
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${Access_details.access_token}`,
+      Accept: "application/json",
+    },
+  }).then((res) => res.json());
+
+  console.log(User_details)
+
+  let UserDetails = {
+    name: User_details.name,
+    email: User_email[0].email,
+    password: "dfgdgdgdr346t3tgdfgv",
+    dp: User_details.avatar_url,
+    bio:User_details.bio
+  };
+
+  // Check if user exists
+  let user = await RegisterModel.findOne({ email: UserDetails.email });
+  console.log(user)
+  if(!user){
+    await RegisterModel.create(UserDetails)
+      user = await RegisterModel.findOne({ email:UserDetails.email })
+      UserDetails = {
+        UserID: user._id,
+        UserName: user.name,
+        UserEmail: user.email,
+        UserDp: user.dp
+      }
+      
+      transporter.sendMail({
+        to: email,
+        from: process.env.mail_admin,
+        subject: 'Welcome to Conference!',
+        text: `Dear ${name},
+      
+      Thank you for registering at Conference! We're thrilled to have you on board.
+      
+      We're committed to providing you with the best experience possible.
+      If you have any questions, need help, want to report a bug, or just want to share your thoughts,
+      Please feel free to reply to this email. We're here to help!
+      
+      Looking forward to seeing you on Conference.
+      
+      Best,
+      Sachin
+      Founder and CEO`
+      })
+  }else{
+    UserDetails = {
+      UserID: user._id,
+      UserName: user.name,
+      UserEmail: user.email,
+      UserDp: user.dp
+    }
+  }
+  const token = jwt.sign(
+    { UserDetails },
+    process.env.secret_key,
+    { expiresIn: "7 days" }
+  )
+  res.cookie("token",token,{httpOnly: true, maxAge: 60 * 60 * 24 * 7 * 1000});
+  res.cookie("UserDetails", UserDetails);
+  res.status(201).redirect("/")
 });
-app.get("/messagesList", async (req, res) => {
-  const users = await MessageModel.find();
-  res.send(users);
-});
-app.get("/chatList", async (req, res) => {
-  const users = await ChatModel.find();
-  res.send(users);
-});
-app.get("/postList", async (req, res) => {
-  const users = await PostModel.find();
-  res.send(users);
+
+app.get("/welcome", (req, res) => {
+  res.render("landing");
 });
 
 app.use("/pic1",(req,res)=>{
@@ -146,101 +233,6 @@ app.get("/contacts",authenticator,async(req,res)=>{
     res.send({msg:error})
   }
 })
-// app.use("/user", userRouter);
-
-// app.use("/auth", googleAuthRouter);
-// app.use("/auth", githubAuthRouter);
-
-app.get("/auth/github", async (req, res) => {
-  const { code } = req.query;
-  const Access_details = await fetch(
-    "https://github.com/login/oauth/access_token",
-    {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        client_id: process.env.client_id_github,
-        client_secret: process.env.client_secret_github,
-        code,
-      }),
-    }
-  )
-    .then((res) => res.json())
-    .catch((err) => console.log(err));
-
-  const User_details = await fetch("https://api.github.com/user", {
-    headers: {
-      "Content-type": "application/json",
-      Authorization: `Bearer ${Access_details.access_token}`,
-      Accept: "application/json",
-    },
-  })
-    .then((res) => res.json())
-    .catch((err) => console.log(err));
-
-  const User_email = await fetch("https://api.github.com/user/emails", {
-    headers: {
-      "Content-type": "application/json",
-      Authorization: `Bearer ${Access_details.access_token}`,
-      Accept: "application/json",
-    },
-  })
-    .then((res) => res.json())
-    .catch((err) => console.log(err));
-
-  console.log(User_email, "line91");
-  const UserDetails = {
-    name: User_details.name,
-    email: User_email[0].email,
-    password: "dfgdgdgdr346t3tgdfgv",
-    dp: User_details.avatar_url,
-  };
-
-  const user = await RegisterModel.findOne({ email: UserDetails.email });
-  if (user) {
-    const UserDetails = {
-      UserID: user._id,
-      UserName: user.name,
-      UserEmail: user.email,
-    };
-    const token = jwt.sign(
-      { UserDetails: UserDetails },
-      process.env.secret_key,
-      { expiresIn: "7 days" }
-    );
-    res.cookie("token", token, { httpOnly: true });
-    res.cookie("UserDetails", JSON.stringify(UserDetails));
-    res.redirect("/");
-  } else {
-    const newUser = new RegisterModel({
-      name: User_details.name,
-      email: User_email[0].email,
-      password: "sadkiaeubai734862hiw",
-    });
-    await newUser.save();
-    const user = await RegisterModel.findOne({ email: req.user.email });
-    const UserDetails = {
-      UserID: user._id,
-      UserName: user.name,
-      UserEmail: user.email,
-    };
-    const token = jwt.sign(
-      { UserDetails: UserDetails },
-      process.env.secret_key,
-      { expiresIn: "7 days" }
-    );
-    res.cookie("token", token, { httpOnly: true });
-    res.cookie("UserDetails", JSON.stringify(UserDetails));
-    res.redirect("/");
-  }
-});
-
-app.get("/welcome", (req, res) => {
-  res.render("landing");
-});
 
 app.use("/search", authenticator, searchRouter);
 app.use("/comment", authenticator, commentRouter);
@@ -254,6 +246,29 @@ app.use("/save",authenticator,saveRouter)
 app.use("/like",authenticator,likeRouter)
 
 app.use("/", authenticator, postRouter);
+
+// to get data from database
+
+app.get("/api/users", async (req, res) => {
+  const users = await RegisterModel.find();
+  res.send(users);
+});
+app.get("/api/messages", async (req, res) => {
+  const users = await MessageModel.find();
+  res.send(users);
+});
+app.get("/api/chats", async (req, res) => {
+  const users = await ChatModel.find();
+  res.send(users);
+});
+app.get("/api/post", async (req, res) => {
+  const users = await PostModel.find();
+  res.send(users);
+});
+app.get("/api/blacklist", async (req, res) => {
+  const users = await BlackListTokenModel.find();
+  res.send(users);
+});
 
 app.use((req, res) => {
   res.status(404).send({ title: 'Not Found' });
@@ -292,7 +307,6 @@ io.on("connection", (socket) => {
 });
 
 const PORT = process.env.port || 8080;
-
 
 connectDB().then(() => {
   server.listen(PORT, () => {
@@ -381,7 +395,7 @@ async function deleteUnmatchedPostsAndEmptyNotifications() {
     //   }
     // }
 
-    // await MessageModel.deleteMany({});
+    await BlackListTokenModel.deleteMany({});
     
   } catch (err) {
     console.error('Error:', err);

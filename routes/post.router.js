@@ -386,24 +386,24 @@ postRouter.get("/profileEdit/:id", async (req, res) => {
   }
 });
 
-postRouter.put("/profileEdit/:id", async (req, res) => {
-  let { UserName, UserBio, dp } = req.body;
-  let ID = req.params.id;
-  try {
-    if (ID == req.body.UserDetails.UserID) {
-      let user = await RegisterModel.findOne({ _id: ID });
-      user.name = UserName;
-      user.bio = UserBio;
-      user.dp = dp;
-      await user.save();
-      res.status(201).send({ msg: "Done with editting" });
-    } else {
-      res.status(400).send({ msg: "Error" });
-    }
-  } catch (error) {
-    res.status(400).send({ msg: error.message });
-  }
-});
+// postRouter.put("/profileEdit/:id", async (req, res) => {
+//   let { UserName, UserBio, dp } = req.body;
+//   let ID = req.params.id;
+//   try {
+//     if (ID == req.body.UserDetails.UserID) {
+//       let user = await RegisterModel.findOne({ _id: ID });
+//       user.name = UserName;
+//       user.bio = UserBio;
+//       user.dp = dp;
+//       await user.save();
+//       res.status(201).send({ msg: "Done with editting" });
+//     } else {
+//       res.status(400).send({ msg: "Error" });
+//     }
+//   } catch (error) {
+//     res.status(400).send({ msg: error.message });
+//   }
+// });
 
 postRouter.get("/followers/:id", async (req, res) => {
   let ID = new mongoose.Types.ObjectId(req.params.id);

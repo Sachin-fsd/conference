@@ -157,7 +157,7 @@ opacity: .6;
       }
       
       input:not(:placeholder-shown) + .floating-label {
-          transform: translate(.75em, -3.15em) scale(.8);
+          transform: translate(.75em, -3.39em) scale(.8);
       }
 
       #username:not(:placeholder-shown) {

@@ -11,12 +11,12 @@ username.addEventListener("change", stateHandle)
 password.addEventListener("change", stateHandle)
 
 function toTitleCase(str) {
-  return str.replace(/\w\S*/g, function(txt){
+  return str.replace(/\w\S*/g, function (txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 }
 
-function stateHandle () {
+function stateHandle() {
   var nameInput = document.getElementById('name');
   nameInput.value = toTitleCase(nameInput.value);
   if (username.value.length > 0 && password.value.length > 4) {
@@ -26,7 +26,7 @@ function stateHandle () {
   }
 }
 
-function stateHandleUp () {
+function stateHandleUp() {
   if (password.value.length > 5) {
     loginButton.dsabled = false
   } else {
@@ -35,7 +35,7 @@ function stateHandleUp () {
 }
 
 // PASSWORD SHOW/HIDE BUTTON SWTICH
-function showPassword () {
+function showPassword() {
   if (password.type === "password") {
     password.type = "text"
     showButton.style.display = "none"
@@ -60,66 +60,69 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
 
   const obj = { name, email, password }
 
-//   fetch("/register", {
-//     headers: {
-//       "Content-Type": "application/json"
-//     },
-//     body: JSON.stringify(obj),
-//     method: "POST"
-//   })
-//     .then((res) => {
-//       if (res.ok) {
-//         window.location.href = res.url
-//       } else {
-        
-//         alert("Something is wrong")
-//         submitBtn.innerText = "Log In"
-//         submitBtn.removeAttribute("disabled")
-//       }
-//     })
-//     .catch((err) => {
-//       console.log(err)
-//       alert("Something went wrong")
-//       submitBtn.innerText = "Log In"
-//       submitBtn.removeAttribute("disabled")
-//     })
-// })
+  //   fetch("/register", {
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify(obj),
+  //     method: "POST"
+  //   })
+  //     .then((res) => {
+  //       if (res.ok) {
+  //         window.location.href = res.url
+  //       } else {
+
+  //         alert("Something is wrong")
+  //         submitBtn.innerText = "Log In"
+  //         submitBtn.removeAttribute("disabled")
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //       alert("Something went wrong")
+  //       submitBtn.innerText = "Log In"
+  //       submitBtn.removeAttribute("disabled")
+  //     })
+  // })
 
 
-fetch("/register", {
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(obj),
-  method: "POST"
-})
-  .then((res) => {
-    if (res.ok) {
-      window.location.href = res.url
-    } else {
-      // Return the response text for more detailed error information
-      return res.text().then((text) => {
-        // console.log(text)
-        throw new Error(text);
-      });
-    }
+  fetch("/register", {
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(obj),
+    method: "POST"
   })
-  .catch((err) => {
-    console.log(err.msg)
-    alert(err.message) // Alert the error message
-    submitBtn.innerText = "Log In"
-    submitBtn.removeAttribute("disabled")
-})
+    .then((res) => {
+      console.log(res)
+      if (res.ok) {
+        window.location.href = res.url
+      } else {
+        let errorBox = document.getElementById('errorBox');
+        errorBox.innerText = "User Already Exists";
+        errorBox.style.display = 'block'
+        return;
+
+      }
+    })
+    .catch((err) => {
+      let errorBox = document.getElementById('errorBox');
+      errorBox.innerText = err.message;
+      errorBox.style.display = 'block'
+      console.log(err)
+      submitBtn.innerText = "Sign Up"
+      submitBtn.removeAttribute("disabled")
+    })
 
 })
 
-function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-}
+// function onSignIn(googleUser) {
+//   var profile = googleUser.getBasicProfile();
+//   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+//   console.log('Name: ' + profile.getName());
+//   console.log('Image URL: ' + profile.getImageUrl());
+//   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+// }
 
 /*
 <a href="#" onclick="signOut();">Sign out</a>

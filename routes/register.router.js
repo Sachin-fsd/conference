@@ -32,20 +32,28 @@ registerRouter.post("/", async (req, res) => {
             res.status(400).send({ msg: "Error while Hashing" })
           } else {
             await RegisterModel.create({ name, email, password: hashed, dp })
-            const user = await RegisterModel.find({ email })
+            const user = await RegisterModel.findOne({ email })
             const UserDetails = {
               UserID: user._id,
               UserName: user.name,
               UserEmail: user.email,
-              UserDp:user.dp
+              UserDp: user.dp
             }
             const token = jwt.sign(
               { UserDetails },
               process.env.secret_key,
               { expiresIn: "7 days" }
             )
-            res.cookie("token", token, { httpOnly: true })
-            res.cookie("UserDetails", UserDetails)
+            res.cookie(
+              "token",
+              token,
+              {
+                httpOnly: true, maxAge: 60 * 60 * 24 * 7 * 1000,
+                //  sameSite: 'None', secure: true 
+              }
+            );
+            res.cookie("UserDetails", UserDetails);
+            // console.log("login from",user,UserDetails,token)
             transporter.sendMail({
               to: email,
               from: process.env.mail_admin,
@@ -72,7 +80,7 @@ registerRouter.post("/", async (req, res) => {
                 console.log("Error while sendig mail")
                 console.log(err)
               })
-            res.status(201).redirect("/login")
+            res.status(201).redirect("/")
           }
         })
       }

@@ -20,68 +20,7 @@
 
     <!-- <link rel="stylesheet" href="../styles/profile.css" /> -->
     <link rel="stylesheet" href="../styles/style.css" />
-
-    <style>
-      .popup {
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: none;
-}
-
-.popup-content {
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #888888;
-    width: 80%;
-    max-width: 500px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    font-weight: bolder;
-    border-radius: 10px;
-}
-
-.popup-content label {
-    display: block;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.popup-content input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-}
-
-.popup-content button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.popup-content button:hover {
-    background-color: #0056b3;
-}
-
-.show {
-    display: flex;
-}
-
-            
-    </style>
+    <link rel="stylesheet" href="../styles/popup.css"/>
 
   </head>
 
@@ -199,7 +138,7 @@
             <div class="form-only">
               <div>
                 <p class="text-bold">Name</p>
-              <form class="create-post" style="margin-top: 0rem;">
+              <form class="create-post" style="margin-top: 0rem;" onsubmit="event.preventDefault()">
                 <input
                   id="UserName"
                   placeholder="Enter Name"
@@ -210,7 +149,7 @@
               <br>
               <div>
                 <p class="text-bold">UserBio</p>
-                <form class="create-post" style="margin-top: 0rem;">
+                <form class="create-post" style="margin-top: 0rem;" onsubmit="event.preventDefault()">
                   <textarea
                       id="UserBio"
                       placeholder="Enter Bio"
@@ -230,7 +169,7 @@
 
             <div id="myPopup" class="popup">
               <div class="popup-content">
-                <form action="">
+                <form onsubmit="event.preventDefault()">
                   <label for="" class="text-bold">Enter Password</label>
                   <input type="password" name="" id="password" placeholder="Enter Password" data-email="{{UserDetails.UserEmail}}" data-id="{{UserDetails.UserID}}">
                   <button id="closePopup">
@@ -578,12 +517,15 @@ window.onload = function () {
     if(UserName && UserBio && password){ 
       let dp = document.getElementById("dp").src 
       let obj = {UserName,UserBio,dp,email,password} 
+      console.log(obj,`/profile/${ID}`)
       let fetched = await fetch(`/profile/${ID}`, { 
         headers: { "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token") ||sessionStorage.getItem("token") ||""}`, }, 
         method: "PUT", 
         body: JSON.stringify(obj), }); 
+      console.log(fetched)
       if(fetched.ok){ 
+        console.log(fetched);
         window.location.href = `/${ID}` 
       }else{
         alert("Update Failed")
@@ -595,6 +537,7 @@ window.onload = function () {
   document.getElementById("profile-submit-btn").addEventListener(
     "click",
     function () {
+        event.preventDefault();
         myPopup.classList.add("show");
     }
   );
