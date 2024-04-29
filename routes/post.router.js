@@ -353,7 +353,7 @@ postRouter.get("/:id", async (req, res) => {
     });
   } catch (error) {
     console.log(error)
-    res.json({ err: error });
+    res.status(400).redirect("/");
   }
 });
 

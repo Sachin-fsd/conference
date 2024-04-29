@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer")
 const cookieParser = require("cookie-parser");
 // const { RegisterModel } = require('./models/register.model')
 const app = express();
@@ -76,6 +77,13 @@ hbs.registerHelper("eq", function (a, b) {
   }
   return a.toString() === b.toString();
 });
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.mail_admin,
+    pass: process.env.mail_password
+  }
+})
 // app.use("/user", userRouter);
 
 // app.use("/auth", googleAuthRouter);
@@ -116,20 +124,24 @@ app.get("/auth/github", async (req, res) => {
     },
   }).then((res) => res.json());
 
-  console.log(User_details)
+  // console.log(User_details)
+  // console.log(User_email)
 
   let UserDetails = {
-    name: User_details.name,
+    name: User_details.login,
     email: User_email[0].email,
     password: "dfgdgdgdr346t3tgdfgv",
     dp: User_details.avatar_url,
-    bio:User_details.bio
+    // bio:User_details.bio
   };
+
+  // console.log(UserDetails)
 
   // Check if user exists
   let user = await RegisterModel.findOne({ email: UserDetails.email });
-  console.log(user)
+  // console.log("user",user)
   if(!user){
+    // console.log(UserDetails)
     await RegisterModel.create(UserDetails)
       user = await RegisterModel.findOne({ email:UserDetails.email })
       UserDetails = {
@@ -140,10 +152,10 @@ app.get("/auth/github", async (req, res) => {
       }
       
       transporter.sendMail({
-        to: email,
+        to: user.email,
         from: process.env.mail_admin,
         subject: 'Welcome to Conference!',
-        text: `Dear ${name},
+        text: `Dear ${user.name},
       
       Thank you for registering at Conference! We're thrilled to have you on board.
       
@@ -158,6 +170,10 @@ app.get("/auth/github", async (req, res) => {
       Founder and CEO`
       })
   }else{
+    const id = await BlackListTokenModel.findOne({id:user._id})
+      if(id){
+        await BlackListTokenModel.deleteOne({id:user._id})
+      }
     UserDetails = {
       UserID: user._id,
       UserName: user.name,
@@ -402,4 +418,4 @@ async function deleteUnmatchedPostsAndEmptyNotifications() {
   }
 }
 
-deleteUnmatchedPostsAndEmptyNotifications();
+// deleteUnmatchedPostsAndEmptyNotifications();
