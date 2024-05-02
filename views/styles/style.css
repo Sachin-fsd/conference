@@ -294,7 +294,9 @@ main .container .left .profile {
   background-color: var(--color-white);
   border-radius: var(--card-border-radius);
 }
-
+.left .sidebar P{
+  display: none;
+}
 .left .sidebar .menu-item {
   display: flex;
   align-items: center;
@@ -521,7 +523,6 @@ main .container .left .profile {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1rem;
   background-color: var(--color-white);
   padding: 0.5rem 0.6rem;
   border-radius: var(--border-radius);
@@ -564,7 +565,7 @@ main .container .left .profile {
 .middle .feed .photo {
   text-align: center;
   overflow: hidden;
-  margin: 0.7rem 0;
+  margin: 0.7rem;
   max-height: 500px;
 }
 .middle .feed .photo img {
@@ -584,7 +585,7 @@ main .container .left .profile {
   justify-content: space-between;
   align-items: center;
   font-size: 1.4rem;
-  margin: 0.6rem;
+  /* margin: 0.6rem; */
 }
 
 .like-post {
@@ -1254,6 +1255,8 @@ main .container .left .profile {
   }
 
   main .container .left .sidebar a {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     flex: 1;
@@ -1284,6 +1287,10 @@ main .container .left .profile {
 
   .left .sidebar .active::before {
     display: none !important;
+  }
+  .left .sidebar P{
+    font-size: small;
+    display: block;
   }
 
   .left .notifications-popup {
@@ -1326,7 +1333,7 @@ main .container .left .profile {
   }
 
   .middle {
-    padding-bottom: 50px;
+    padding-bottom: 110px;
   }
 
   /* .post-text {

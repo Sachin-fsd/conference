@@ -835,6 +835,10 @@ main .container .middle .profile {
   padding-bottom: 100px;
 }
 
+.left .sidebar p{
+  display: none;
+}
+
 /*====================================================================
 =            MEDIA QUERIES - SMALL LAPTOP AND BIG TABLETS            =
 =====================================================================*/
@@ -849,6 +853,10 @@ main .container .middle .profile {
     gap: 1rem;
   }
 
+  .middle .feeds{
+    margin-top: 80px;
+  }
+
   .left {
     width: 5rem;
     z-index: 5;
@@ -859,7 +867,7 @@ main .container .middle .profile {
   }
 
   .middle .content-only {
-    height: calc(100vh - 250px);
+    height: calc(100vh - 280px);
     border-radius: 10px;
 
     overflow-y: scroll;
@@ -888,7 +896,13 @@ main .container .middle .profile {
   main{
     top: 1rem;
   }
-  nav{
+  /* nav{
+    display: none;
+  } */
+  .chat-nav{
+    display: none;
+  }
+  nav .search-bar {
     display: none;
   }
 
@@ -924,8 +938,13 @@ main .container .middle .profile {
     background-color: var(--color-white);
     border-radius: var(--card-border-radius);
   }
-
+  .left .sidebar p{
+    display: block;
+    font-size: small;
+  }
   main .container .left .sidebar a {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     flex: 1;
@@ -976,6 +995,9 @@ main .container .middle .profile {
 
   main .container .middle {
     grid-column: 1/-1;
+  }
+  .middle{
+    margin-top: 10px;
   }
   .middle .content-only {
     border-radius: 10px;

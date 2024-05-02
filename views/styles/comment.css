@@ -181,6 +181,10 @@ main .container .left .profile {
   border-radius: var(--card-border-radius);
 }
 
+.sidebar p{
+  display: none;
+}
+
 .left .sidebar .menu-item {
   display: flex;
   align-items: center;
@@ -957,6 +961,8 @@ main .container .left .profile {
   }
 
   main .container .left .sidebar a {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     flex: 1;
@@ -964,6 +970,10 @@ main .container .left .profile {
 
   main .container .left .sidebar .active {
     border-bottom: 5px solid var(--color-primary);
+  }
+  .sidebar p{
+    display: block;
+    font-size: small;
   }
 
   .left .sidebar i {

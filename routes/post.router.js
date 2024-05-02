@@ -117,12 +117,17 @@ postRouter.get("/", async (req, res) => {
         .limit(5);
     }
 
-    res.render("index", {
+    if(!req.query.page){
+      res.render("index", {
       UserDetails: req.body.UserDetails,
       posts,
       messages,
       users,
     });
+    }else{
+    // console.log(posts)
+    res.status(200).send({posts})
+    }
     // console.log(posts)
     // res.status(200).send({ posts });
   } catch (error) {
@@ -130,6 +135,8 @@ postRouter.get("/", async (req, res) => {
     res.json({ err: error });
   }
 });
+
+
 
 const storage = multer.memoryStorage({
   destination: (req, file, cb) => {

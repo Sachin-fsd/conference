@@ -80,14 +80,7 @@ async function seachUser(event) {
         </div>
 
         <div class="caption">
-          <p>
-            <b>B.tech CSE FSD</b>
-            | Section 1 | Group 1 |
-            <b>Roll No.</b>
-            2301350008
-
-          </p>
-          <p><span class="harsh-tag">#lifestyle</span></p>
+         
         </div>
         <a href="/comment/${post._id}"><div
             class="comments text-muted"
@@ -119,15 +112,7 @@ async function seachUser(event) {
         </div>
 
         <div class="caption">
-          <p>
-            <b>B.tech CSE FSD</b>
-            | Section 1 | Group 1 |
-            <b>Roll No.</b>
-            2301350008
-
-          </p>
-          <p><span class="harsh-tag">#lifestyle</span></p>
-        </div>
+          
       `;
 
       resultDiv.append(div);

@@ -72,11 +72,7 @@ function getFollowers(ID) {
       </div>
 
       <div class="caption">
-        <p><b>SOET</b>
-          | B.tech CSE FSD | Section 1 | Group 1 |
-          <b>Roll No.</b>
-          2301350008
-        </p>
+        
       </div>
     </div>`;
         })

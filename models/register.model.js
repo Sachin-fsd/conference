@@ -5,8 +5,8 @@ const registerSchema = mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    dp: { type: String , default:"https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png"},
-    bio: { type: String, default: "The only limit to our realization of tomorrow will be our doubts of today. 📷✈️🏕️" }
+    dp: { type: String , default:"https://cdn-icons-png.flaticon.com/128/3177/3177440.png"},
+    bio: { type: String, default: "I Love Conference💖" }
   },
   { timestamps: true }
 )
