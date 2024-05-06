@@ -8,6 +8,7 @@ const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { fromEnv } = require("@aws-sdk/credential-provider-env");
 const { NotificationModel } = require("../models/notifications.model");
 const { DeleteObjectCommand } = require("@aws-sdk/client-s3");
+const sharp = require('sharp');
 require("dotenv").config();
 
 const postRouter = express.Router();
@@ -16,19 +17,19 @@ postRouter.get("/", async (req, res) => {
   try {
     const page = req.query.page || 1;
     const limit = 10;
-    const skip = (page-1)*limit
+    const skip = (page - 1) * limit
     const UserID = req.body.UserDetails.UserID;
 
     // Fetch the user details
     const user = await RegisterModel.findOne(
       { _id: UserID },
-      { _id: 1, name: 1, email: 1, dp: 1 }
+      { password: 0 }
     );
 
     // Fetch the posts and populate the author details
     const posts = await PostModel.aggregate([
       { $sort: { CreatedAt: -1 } },
-      {$skip:skip},
+      { $skip: skip },
       { $limit: limit },
       {
         $addFields: {
@@ -52,6 +53,10 @@ postRouter.get("/", async (req, res) => {
           "UserDetails.UserName": "$author.name",
           "UserDetails.UserEmail": "$author.email",
           "UserDetails.UserDp": "$author.dp",
+          "UserDetails.UserSchool": "$author.school",
+          "UserDetails.UserSection": "$author.section",
+          "UserDetails.UserCourse": "$author.course",
+          "UserDetails.UserRollno": "$author.rollno",
         },
       },
       {
@@ -116,17 +121,18 @@ postRouter.get("/", async (req, res) => {
         .sort({ CreatedAt: -1 })
         .limit(5);
     }
-
-    if(!req.query.page){
-      res.render("index", {
-      UserDetails: req.body.UserDetails,
-      posts,
-      messages,
-      users,
-    });
-    }else{
     // console.log(posts)
-    res.status(200).send({posts})
+
+    if (!req.query.page) {
+      res.render("index", {
+        UserDetails: req.body.UserDetails,
+        posts,
+        messages,
+        users,
+      });
+    } else {
+      // console.log(posts)
+      res.status(200).send({ posts })
     }
     // console.log(posts)
     // res.status(200).send({ posts });
@@ -135,8 +141,6 @@ postRouter.get("/", async (req, res) => {
     res.json({ err: error });
   }
 });
-
-
 
 const storage = multer.memoryStorage({
   destination: (req, file, cb) => {
@@ -159,20 +163,33 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage, fileFilter });
 
 const REGION = "ap-south-1"
-const s3Client = new S3Client({ 
+const s3Client = new S3Client({
   region: REGION,
   credentials: fromEnv()
 });
 postRouter.post("/", upload.single("file"), async (req, res) => {
   // Check if a file was uploaded
   // console.log(req.file)
-  
+
+
+
   if (req.file) {
+    let fileBuffer = req.file.buffer;
+
+    // If the file is an image, compress it using sharp
+    if (req.file.mimetype.startsWith("image/")) {
+      fileBuffer = await sharp(req.file.buffer)
+        .rotate()
+        .resize({ width: 500 }) // Resize the image to a width of 500 pixels
+        .jpeg({ quality: 80 }) // Convert to JPEG with 80% quality
+        .toBuffer(); // Convert the result to a Buffer
+    }
+
     // File was uploaded, proceed with AWS upload
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
       Key: req.file.originalname,
-      Body: req.file.buffer,
+      Body: fileBuffer,
       ContentType: req.file.mimetype,
       ContentDisposition: "inline",
     };
@@ -235,7 +252,7 @@ postRouter.get("/:id", async (req, res) => {
 
     const user = await RegisterModel.findOne(
       { _id: ID },
-      { _id: 1, name: 1, email: 1, bio: 1, dp: 1 }
+      { password: 0 }
     );
 
     const posts = await PostModel.aggregate([
@@ -264,6 +281,10 @@ postRouter.get("/:id", async (req, res) => {
           "UserDetails.UserName": "$author.name",
           "UserDetails.UserEmail": "$author.email",
           "UserDetails.UserDp": "$author.dp",
+          "UserDetails.UserSchool": "$author.school",
+          "UserDetails.UserSection": "$author.section",
+          "UserDetails.UserCourse": "$author.course",
+          "UserDetails.UserRollno": "$author.rollno",
         },
       },
       {
@@ -311,7 +332,7 @@ postRouter.get("/:id", async (req, res) => {
         $project: {
           likes: 0,
           saves: 0,
-          author:0
+          author: 0
         },
       },
     ]);
@@ -350,6 +371,10 @@ postRouter.get("/:id", async (req, res) => {
         UserEmail: user.email,
         UserBio: user.bio,
         UserDp: user.dp,
+        UserSchool: user.school,
+        UserCourse: user.course,
+        UserSection: user.section,
+        UserRollno: user.rollno,
       },
       posts,
       follow,

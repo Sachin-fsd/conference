@@ -26,6 +26,7 @@ document.getElementById("post_form").addEventListener("submit", (e) => {
   e.preventDefault();
 });
 
+const loader = document.getElementById("loader")
 const post = document.getElementById("create-post");
 
 const post_submit_btn = document.getElementById("post-submit-btn");
@@ -241,6 +242,7 @@ async function fetchMoreData(page) {
                 class="comments text-muted"
               >View all comments</div></a>
           `;
+        loader.style.display = "none";
         feeds.append(div);
         isLoading = false;
       });
@@ -249,4 +251,6 @@ async function fetchMoreData(page) {
     .catch(error => {
       console.error('Error:', error);
     });
+    loader.style.display = "block"
+
 }

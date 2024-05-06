@@ -12,7 +12,7 @@ const { postRouter } = require("./routes/post.router.js");
 const { googleAuthRouter } = require('./auth/oauth.google')
 const path = require("path");
 const hbs = require("hbs");
-const { registerRouter } = require("./routes/register.router");
+const registerRouter  = require("./routes/register.router");
 const { loginRouter } = require("./routes/login.router");
 const { forgetRouter } = require("./routes/forget_pwd.route");
 const { Server } = require("socket.io");
@@ -75,6 +75,7 @@ hbs.registerHelper("eq", function (a, b) {
   if(typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined) {
     return a === b;
   }
+  // console.log(a,b)??
   return a.toString() === b.toString();
 });
 const transporter = nodemailer.createTransport({

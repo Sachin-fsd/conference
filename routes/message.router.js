@@ -2,6 +2,7 @@ const express = require("express");
 const { RegisterModel } = require("../models/register.model");
 const { ChatModel } = require("../models/chat.model");
 const { MessageModel } = require("../models/message.model");
+const { NotificationModel } = require("../models/notifications.model");
 // const { CommentModel } = require('../models/comment.model');
 
 const messageRouter = express.Router();
@@ -28,6 +29,7 @@ messageRouter.get("/", async (req, res) => {
 messageRouter.post("/", async (req, res) => {
   const { room, receiverID } = req.body;
   try {
+    const UserID = req.body.UserDetails.UserID;
     let messages = await MessageModel.findOne({ room });
     if (!messages) {
       messages = new MessageModel({
@@ -35,8 +37,9 @@ messageRouter.post("/", async (req, res) => {
         receiverID,
         room,
       });
+      await NotificationModel.create({senderID:UserID,receiverID,purpose:"Sent a message",postID:UserID})
     } else {
-      messages.senderID = req.body.UserDetails.UserID;
+      messages.senderID = UserID;
       messages.receiverID = receiverID;
       messages.read = false;
       messages.CreatedAt = Date.now();

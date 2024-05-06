@@ -46,6 +46,9 @@ body {
   background-color: var(--color-light);
   overflow-y: auto;
 }
+.chat-body{
+  overflow-y: hidden;
+}
 
 .progress {
   position: relative;
@@ -59,17 +62,21 @@ body {
   overflow: hidden;
   transition: opacity 0.5s, height 0.5s;
 }
+
 .progress.hide {
   opacity: 0;
   height: 0;
 }
+
 .progress.show {
   opacity: 1;
   height: 5px;
 }
+
 .progress .indeterminate {
   background-color: black;
 }
+
 .progress .indeterminate:before {
   content: "";
   position: absolute;
@@ -78,10 +85,10 @@ body {
   left: 0;
   bottom: 0;
   will-change: left, right;
-  -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395)
-    infinite;
+  -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
   animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
 }
+
 .progress .indeterminate:after {
   content: "";
   position: absolute;
@@ -90,10 +97,8 @@ body {
   left: 0;
   bottom: 0;
   will-change: left, right;
-  -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1)
-    infinite;
-  animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1)
-    infinite;
+  -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+  animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
   -webkit-animation-delay: 1.15s;
   animation-delay: 1.15s;
 }
@@ -103,52 +108,63 @@ body {
     left: -35%;
     right: 100%;
   }
+
   60% {
     left: 100%;
     right: -90%;
   }
+
   100% {
     left: 100%;
     right: -90%;
   }
 }
+
 @keyframes indeterminate {
   0% {
     left: -35%;
     right: 100%;
   }
+
   60% {
     left: 100%;
     right: -90%;
   }
+
   100% {
     left: 100%;
     right: -90%;
   }
 }
+
 @-webkit-keyframes indeterminate-short {
   0% {
     left: -200%;
     right: 100%;
   }
+
   60% {
     left: 107%;
     right: -8%;
   }
+
   100% {
     left: 107%;
     right: -8%;
   }
 }
+
 @keyframes indeterminate-short {
   0% {
     left: -200%;
     right: 100%;
   }
+
   60% {
     left: 107%;
     right: -8%;
   }
+
   100% {
     left: 107%;
     right: -8%;
@@ -294,9 +310,11 @@ main .container .left .profile {
   background-color: var(--color-white);
   border-radius: var(--card-border-radius);
 }
-.left .sidebar P{
+
+.left .sidebar P {
   display: none;
 }
+
 .left .sidebar .menu-item {
   display: flex;
   align-items: center;
@@ -396,7 +414,7 @@ main .container .left .profile {
   transform: rotate(45deg);
 }
 
-.left .notifications-popup > div {
+.left .notifications-popup>div {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
@@ -408,9 +426,65 @@ main .container .left .profile {
 }
 
 /* ------------ MIDDLE ------------ */
-/* .middle{
-  padding-bottom: 100px;
-} */
+
+
+.middle .content-only {
+  /* border: 1px solid #575656; */
+  border-radius: 10px;
+  height: 55%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+}
+
+main .container .middle .profile {
+  padding: var(--card-padding);
+  background-color: var(--color-white);
+  color: var(--color-dark);
+  border-radius: var(--card-border-radius);
+  display: flex;
+  align-items: center;
+  -moz-column-gap: 1rem;
+  column-gap: 1rem;
+  width: 100%;
+  margin: 5px 0 5px 0;
+}
+
+.unread {
+  border: 2px solid #5f5f5f;
+}
+
+.chat-message {
+  padding: 10px;
+  margin: 10px 2px;
+  /* border: 1px solid #5f5f5f; */
+  border-radius: 10px;
+  width: fit-content;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.chat-left {
+  float: left;
+  clear: both;
+  background-color: #b5c1c7;
+  max-width: 80%;
+
+}
+
+.chat-right {
+  float: right;
+  clear: both;
+  background-color: rgb(114, 114, 247);
+  max-width: 80%;
+}
+
+.chat-time {
+  background-color: transparent;
+  font-size: 12px;
+}
 
 .middle .stories {
   display: flex;
@@ -449,36 +523,31 @@ main .container .left .profile {
 }
 
 .middle .stories .story:nth-child(1) {
-  background: url("https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg")
-    no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2024/01/18/00/36/boat-8515980_640.jpg") no-repeat center center/cover;
 }
 
 .middle .stories .story:nth-child(2) {
-  background: url("https://cdn.pixabay.com/photo/2023/10/24/21/15/nature-8339115_640.jpg")
-    no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2023/10/24/21/15/nature-8339115_640.jpg") no-repeat center center/cover;
 }
+
 /* .middle .stories .story:nth-child(2) {
   background: url("./images/story-2.jpg") no-repeat center center/cover;
 } */
 
 .middle .stories .story:nth-child(3) {
-  background: url("https://cdn.pixabay.com/photo/2023/12/12/16/15/winter-8445565_640.jpg")
-    no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2023/12/12/16/15/winter-8445565_640.jpg") no-repeat center center/cover;
 }
 
 .middle .stories .story:nth-child(4) {
-  background: url("https://cdn.pixabay.com/photo/2024/01/15/21/16/dog-8510901_640.jpg")
-    no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2024/01/15/21/16/dog-8510901_640.jpg") no-repeat center center/cover;
 }
 
 .middle .stories .story:nth-child(5) {
-  background: url("https://cdn.pixabay.com/photo/2023/05/07/11/57/surfboard-7976219_640.jpg")
-    no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2023/05/07/11/57/surfboard-7976219_640.jpg") no-repeat center center/cover;
 }
 
 .middle .stories .story:nth-child(6) {
-  background: url("https://cdn.pixabay.com/photo/2023/11/11/08/23/woman-8380758_640.jpg")
-    no-repeat center center/cover;
+  background: url("https://cdn.pixabay.com/photo/2023/11/11/08/23/woman-8380758_640.jpg") no-repeat center center/cover;
 }
 
 .middle .stories .story .profile-photo {
@@ -517,6 +586,20 @@ main .container .left .profile {
   margin: 1rem 0;
   font-size: 0.85rem;
 }
+.middle .chat-create-post {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  background-color: var(--color-white);
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--border-radius);
+}
+
+#create-post {
+  width: 100%;
+  padding: 10px;
+}
 
 .middle .create-post {
   width: 100%;
@@ -541,6 +624,11 @@ main .container .left .profile {
 /* FEED */
 .middle {
   z-index: 1;
+}
+
+.chat-middle {
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 .middle .feeds .feed {
@@ -568,12 +656,15 @@ main .container .left .profile {
   margin: 0.7rem;
   max-height: 500px;
 }
+
 .middle .feed .photo img {
   border-radius: var(--card-border-radius);
 }
+
 .bookmark {
   cursor: pointer;
 }
+
 .post-text {
   font-size: 15px;
   text-align: left;
@@ -751,6 +842,7 @@ main .container .left .profile {
   align-items: center;
   grid-row-gap: 20px;
 }
+
 .photos {
   display: flex;
   flex-wrap: wrap;
@@ -879,6 +971,7 @@ main .container .left .profile {
   opacity: 0;
   height: 0;
 }
+
 .progress.show {
   opacity: 1;
   height: 5px;
@@ -919,7 +1012,7 @@ main .container .left .profile {
   margin-top: 5rem;
 }
 
-.customize-theme .font-size > div {
+.customize-theme .font-size>div {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1006,7 +1099,7 @@ main .container .left .profile {
   gap: 1.5rem;
 }
 
-.customize-theme .choose-bg > div {
+.customize-theme .choose-bg>div {
   padding: var(--card-padding);
   display: flex;
   width: 100%;
@@ -1017,7 +1110,7 @@ main .container .left .profile {
   cursor: pointer;
 }
 
-.customize-theme .choose-bg > div.active {
+.customize-theme .choose-bg>div.active {
   border: 2px solid var(--color-primary);
 }
 
@@ -1036,7 +1129,7 @@ main .container .left .profile {
   color: white;
 }
 
-.customize-theme .choose-bg > div span {
+.customize-theme .choose-bg>div span {
   width: 2.2rem;
   height: 2.2rem;
   border-radius: 50%;
@@ -1051,6 +1144,7 @@ main .container .left .profile {
   height: 100vh;
   scrollbar-width: 0;
 }
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 *::-webkit-scrollbar,
 .left::-webkit-scrollbar,
@@ -1064,8 +1158,10 @@ main .container .left .profile {
 .left,
 .middle,
 .right {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .serach-page-top {
@@ -1165,11 +1261,40 @@ main .container .left .profile {
   background-color: #e2e6ea;
 }
 
+
+
+/* Loader CSS */
+
+.loader {
+  width: 5rem;
+  height: 5rem;
+  border: 0.6rem solid #999;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: loader 500ms linear infinite;
+}
+
+@keyframes loader {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /*====================================================================
 =            MEDIA QUERIES - SMALL LAPTOP AND BIG TABLETS            =
 =====================================================================*/
 
 @media screen and (max-width: 1200px) {
+  .middle .content-only {
+    height: calc(100vh - 280px);
+    border-radius: 10px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+  }
+
   .container {
     width: 96%;
     overflow: hidden !important;
@@ -1221,12 +1346,49 @@ main .container .left .profile {
     z-index: 10;
   }
 
+  .chat-nav {
+    display: none;
+  }
+
+  .chat-profile-photo {
+    width: 2.2rem;
+
+  }
+
+  .middle .chat-handle {
+    font-size: small;
+  }
+
+  main .container .middle .chat-top-profile {
+    padding: 0.5rem;
+
+  }
+
+  .middle .content-only {
+    border-radius: 10px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+  }
+
   nav .search-bar {
     display: none;
   }
 
   main .container {
     margin-top: -18px;
+    grid-template-columns: 0 auto;
+    gap: 0;
+  }
+  main .chat-container {
+    margin-top: -50px;
+    grid-template-columns: 0 auto;
+    gap: 0;
+  }
+
+  main .chat-container {
+    margin-top: -88px;
     grid-template-columns: 0 auto;
     gap: 0;
   }
@@ -1288,7 +1450,8 @@ main .container .left .profile {
   .left .sidebar .active::before {
     display: none !important;
   }
-  .left .sidebar P{
+
+  .left .sidebar P {
     font-size: small;
     display: block;
   }
@@ -1336,6 +1499,11 @@ main .container .left .profile {
     padding-bottom: 110px;
   }
 
+  .chat-middle {
+    /* margin-top: -50px; */
+    padding-bottom: 0;
+  }
+
   /* .post-text {
     font-size: 15px;
     text-align: left;
@@ -1345,6 +1513,7 @@ main .container .left .profile {
   .customize-theme .card {
     width: 80vw;
   }
+
   .customize-theme h5,
   .customize-theme .card .background .choose-bg span {
     display: none;

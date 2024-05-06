@@ -40,6 +40,10 @@ saveRouter.get("/", async (req, res) => {
           "authorDetails.UserName": "$author.name",
           "authorDetails.UserEmail": "$author.email",
           "authorDetails.UserDp": "$author.dp",
+          "authorDetails.UserSchool": "$author.school",
+          "authorDetails.UserCourse": "$author.course",
+          "authorDetails.UserSection": "$author.section",
+          "authorDetails.UserRollno": "$author.rollno",
         },
       },
       {

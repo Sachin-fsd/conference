@@ -7,7 +7,7 @@ function savePost(event, postID, authorID) {
   } else {
     event.target.className = "bx bx-bookmark";
   }
-
+console.log(event.className,event.target.className)
   fetch(`/save/${postID}/${authorID}`, {
     method: "POST",
     headers: {

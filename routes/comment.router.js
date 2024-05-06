@@ -38,6 +38,10 @@ commentRouter.get("/:id", async (req, res) => {
           "UserDetails.UserName": "$author.name",
           "UserDetails.UserEmail": "$author.email",
           "UserDetails.UserDp": "$author.dp",
+          "UserDetails.UserSchool": "$author.school",
+          "UserDetails.UserSection": "$author.section",
+          "UserDetails.UserCourse": "$author.course",
+          "UserDetails.UserRollno": "$author.rollno",
         },
       },
       {
@@ -101,7 +105,7 @@ commentRouter.get("/:id", async (req, res) => {
       .limit(20)
       .populate("commenterID", "_id name dp");
 
-    // console.log(comments)
+    console.log(post)
 
     res.render("comment", {
       UserDetails: req.body.UserDetails,

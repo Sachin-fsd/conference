@@ -15,7 +15,7 @@ profileRouter.put("/:id", async (req, res) => {
   if (ID !== req.body.UserDetails.UserID) {
     res.status(400).json({ err: "Unauthorised" });
   } else {
-    const {UserName,UserBio,dp,email,password} = req.body;
+    const {UserHandle,UserBio,dp,email,password} = req.body;
     try {
       let user = await RegisterModel.findOne({ email });
       if (Object.keys(user).length === 0) {
@@ -23,7 +23,7 @@ profileRouter.put("/:id", async (req, res) => {
       } else {
         bcrypt.compare(password, user.password, async (err, result) => {
           if (result) {
-            user.name = UserName;
+            user.handle = UserHandle;
             user.bio = UserBio;
             user.dp = dp;
             await user.save();
@@ -33,6 +33,11 @@ profileRouter.put("/:id", async (req, res) => {
               UserName: user.name,
               UserEmail: user.email,
               UserDp: user.dp,
+              UserSchool: user.school,
+              UserCourse: user.course,
+              UserSection: user.section,
+              UserRollno: user.rollno,
+              UserHandle: user.handle,
             };
             const token = jwt.sign(
               { UserDetails: UserDetails },

@@ -1,137 +1,104 @@
-// GLOBAL VARIABLE DECLERATIONS
-const username = document.querySelector("#username")
-const password = document.querySelector("#password")
-const loginButton = document.querySelector("#submit-btn")
-const showButton = document.querySelector("#show-btn")
-const hideButton = document.querySelector("#hide-btn")
-
-// LOGIN BUTTON ENABLE + DISABLE FUNCTION
-loginButton.disabled = true
-username.addEventListener("change", stateHandle)
-password.addEventListener("change", stateHandle)
-
-function toTitleCase(str) {
-  return str.replace(/\w\S*/g, function (txt) {
-    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-  });
-}
-
-function stateHandle() {
-  var nameInput = document.getElementById('name');
-  nameInput.value = toTitleCase(nameInput.value);
-  if (username.value.length > 0 && password.value.length > 4) {
-    loginButton.disabled = false
-  } else {
-    loginButton.disabled = true
-  }
-}
-
-function stateHandleUp() {
-  if (password.value.length > 5) {
-    loginButton.dsabled = false
-  } else {
-    loginButton.disabled = true
-  }
-}
-
-// PASSWORD SHOW/HIDE BUTTON SWTICH
-function showPassword() {
-  if (password.type === "password") {
-    password.type = "text"
-    showButton.style.display = "none"
-    hideButton.style.visibility = "visible"
-  } else {
-    password.type = "password"
-    hideButton.style.visibility = "hidden"
-    showButton.style.display = "inline-block"
-  }
-}
-
-hideButton.style.visibility = "hidden"
-
+let myPopup = document.getElementById('myPopup');
+document.getElementById("yesButton").addEventListener("click", function () {
+  myPopup.classList.remove("show");
+  window.location.href = "/welcome"
+});
 document.getElementById("register_form").addEventListener("submit", (event) => {
   event.preventDefault()
   const submitBtn = document.getElementById("submit-btn")
   submitBtn.innerText = "Wait..."
   submitBtn.setAttribute("disabled", true)
+
+  console.log("he;llllo")
+
   const name = document.getElementById("name").value
-  const email = document.getElementById("username").value
+  const school = document.getElementById("school").value
+  const course = document.getElementById("course").value
+  const section = document.getElementById("section").value
+  const rollno = document.getElementById("rollno").value
+  const email = document.getElementById("email").value
   const password = document.getElementById("password").value
+  const idcard = document.getElementById("idcard").files[0]
 
-  const obj = { name, email, password }
+  // Validation
+  if (!name || !school || !course || !section || !rollno || !email || !password || !idcard) {
+    alert("All fields are required!");
+    submitBtn.innerText = "Submit"
+    submitBtn.removeAttribute("disabled")
+    return;
+  }
 
-  //   fetch("/register", {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify(obj),
-  //     method: "POST"
-  //   })
-  //     .then((res) => {
-  //       if (res.ok) {
-  //         window.location.href = res.url
-  //       } else {
+  if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+    alert("Please enter a valid email address!");
+    submitBtn.innerText = "Submit"
+    submitBtn.removeAttribute("disabled")
+    return;
+  }
 
-  //         alert("Something is wrong")
-  //         submitBtn.innerText = "Log In"
-  //         submitBtn.removeAttribute("disabled")
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //       alert("Something went wrong")
-  //       submitBtn.innerText = "Log In"
-  //       submitBtn.removeAttribute("disabled")
-  //     })
-  // })
+  if (password.length < 8) {
+    alert("Password must be at least 8 characters long!");
+    submitBtn.innerText = "Submit"
+    submitBtn.removeAttribute("disabled")
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("school", school);
+  formData.append("course", course);
+  formData.append("section", section);
+  formData.append("rollno", rollno);
+  formData.append("email", email);
+  formData.append("password", password);
+  formData.append("idcard", idcard);
+
+  for (var pair of formData.entries()) {
+    console.log(pair[0] + ', ' + pair[1]);
+  }
 
 
-  fetch("/register", {
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(obj),
-    method: "POST"
+  // showDeletePopup()
+  fetch('/register', {
+    method: 'POST',
+    body: formData
   })
-    .then((res) => {
-      console.log(res)
-      if (res.ok) {
-        window.location.href = res.url
-      } else {
-        let errorBox = document.getElementById('errorBox');
-        errorBox.innerText = "User Already Exists";
-        errorBox.style.display = 'block'
-        return;
-
+    .then(response => {
+      console.log(response)
+      if (response.ok === false) {
+        myPopup.innerHTML = `
+        <div class="popup-content">
+            <label for="" class="text-bold">Wrong Credentials</label>
+            <p>User Already Exists</p>
+            <button id="yesButton" class="formal-button">
+                OK
+            </button>
+        </div>
+        `
+        document.getElementById("yesButton").addEventListener("click", function () {
+          myPopup.classList.remove("show");
+          // window.location.href = "/welcome"
+        });
+        showPopup()
+        return
       }
+      return response.json()
+
     })
-    .catch((err) => {
-      let errorBox = document.getElementById('errorBox');
-      errorBox.innerText = err.message;
-      errorBox.style.display = 'block'
-      console.log(err)
-      submitBtn.innerText = "Sign Up"
+    .then(data => {
+      console.log(data);
+      showPopup()
+      submitBtn.innerText = "Submit"
       submitBtn.removeAttribute("disabled")
     })
-
-})
-
-// function onSignIn(googleUser) {
-//   var profile = googleUser.getBasicProfile();
-//   console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-//   console.log('Name: ' + profile.getName());
-//   console.log('Image URL: ' + profile.getImageUrl());
-//   console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-// }
-
-/*
-<a href="#" onclick="signOut();">Sign out</a>
-<script>
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
+    .catch((error) => {
+      console.error('Error:', error);
+      let errorBox = document.getElementById('errorBox');
+      errorBox.innerText = "Something bad Happened";
+      errorBox.style.display = 'block'
+      submitBtn.innerText = "Submit"
+      submitBtn.removeAttribute("disabled")
     });
-  }
-</script>
-*/
+});
+function showPopup() {
+  myPopup.classList.add("show");
+}

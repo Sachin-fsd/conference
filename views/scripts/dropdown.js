@@ -29,7 +29,7 @@ document.getElementById("yesButton").addEventListener("click", function () {
   myPopup.classList.remove("show");
 });
 
-document.getElementById("noButton").addEventListener("click", function () {
+document.getElementById("noButton")?.addEventListener("click", function () {
   myPopup.classList.remove("show");
 });
 

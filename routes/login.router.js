@@ -26,6 +26,11 @@ loginRouter.post("/", async (req, res) => {
             UserName: user.name,
             UserEmail: user.email,
             UserDp: user.dp,
+            UserSchool: user.school,
+            UserCourse: user.course,
+            UserSection: user.section,
+            UserRollno: user.rollno,
+            UserHandle: user.handle,
           };
           const id = await BlackListTokenModel.findOne({id:user._id})
           if(id){

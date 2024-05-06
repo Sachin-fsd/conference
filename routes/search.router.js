@@ -12,7 +12,7 @@ searchRouter.get("/", async (req, res) => {
       const regex = new RegExp(query, "i");
       const users = await RegisterModel.find(
         { name: { $regex: regex } },
-        { _id: 1, name: 1,dp:1 }
+        { password:0 }
       );
       
       const posts = await PostModel.find(
@@ -25,8 +25,8 @@ searchRouter.get("/", async (req, res) => {
     } else {
       const users = await RegisterModel.find(
         {},
-        { _id: 1, name: 1, dp: 1 }
-      ).limit(10);
+        { password:0}
+      ).sort({updatedAt:-1}).limit(10);
       // console.log("send users")
       res.render("search", { users, UserDetails: req.body.UserDetails });
       // res.send({users,posts:[]})

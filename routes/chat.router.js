@@ -10,6 +10,10 @@ chatRouter.get("/:id", async (req, res) => {
   const UserDetails = req.body.UserDetails;
   const UserID = UserDetails.UserID;
   const ID = req.params.id;
+  if(UserID==ID){
+    res.redirect("/profileEdit/:id")
+    return;
+  }
   const room = `${UserID}${ID}`.split("").sort().join("");
   try {
     const message = await MessageModel.findOne({ room });

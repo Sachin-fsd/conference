@@ -90,6 +90,8 @@ async function seachUser(event) {
       resultDiv.append(div);
     });
 
+    console.log(users)
+
     users.forEach((user) => {
       let div = document.createElement("div");
       div.classList.add("feed");
@@ -112,6 +114,13 @@ async function seachUser(event) {
         </div>
 
         <div class="caption">
+          <p>
+            <b>${user.school}</b>
+            | ${user.course} | <b>Section</b> ${user.section} |
+            <b>Roll No.</b>
+            ${user.rollno}
+          </p>
+        </div>
           
       `;
 

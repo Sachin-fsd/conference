@@ -135,12 +135,12 @@
             
             <div class="form-only">
               <div>
-                <p class="text-bold">Name</p>
+                <p class="text-bold">Handle</p>
               <form class="create-post" style="margin-top: 0rem;" onsubmit="event.preventDefault()">
                 <input
-                  id="UserName"
-                  placeholder="Enter Name"
-                  value="{{UserDetails.UserName}}"
+                  id="UserHandle"
+                  placeholder="Enter UserHandle"
+                  value="{{UserDetails.UserHandle}}"
                 />
               </form>
               </div>
@@ -503,18 +503,18 @@ window.onload = function () {
     let email = document.getElementById("password").dataset.email
     let password = document.getElementById("password").value;
     let ID = document.getElementById("password").dataset.id;
-    let UserName = document.getElementById("UserName").value 
+    let UserHandle = document.getElementById("UserHandle").value 
     let UserBio = document.getElementById("UserBio").value
 
 
-    if(!UserName || !UserBio || !password){ 
+    if(!UserHandle || !UserBio || !password){ 
       alert("Enter correct Details") 
       return;
     } 
     
-    if(UserName && UserBio && password){ 
+    if(UserHandle && UserBio && password){ 
       let dp = document.getElementById("dp").src 
-      let obj = {UserName,UserBio,dp,email,password} 
+      let obj = {UserHandle,UserBio,dp,email,password} 
       console.log(obj,`/profile/${ID}`)
       let fetched = await fetch(`/profile/${ID}`, { 
         headers: { "Content-Type": "application/json",

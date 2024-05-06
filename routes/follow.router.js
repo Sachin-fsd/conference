@@ -12,9 +12,9 @@ followRouter.post("/:id",async(req,res)=>{
         let follow = await FollowModel.findOne({follower:UserID, following:ID})
         if(!follow){
             await FollowModel.create({follower:UserID, following:ID})
-            await NotificationModel.create({receiverID:ID,purpose:"started following",senderID:UserID})
+            await NotificationModel.create({receiverID:ID,purpose:"Started following",senderID:UserID})
         }else{
-            await NotificationModel.deleteOne({receiverID:ID,purpose:"started following",senderID:UserID})
+            await NotificationModel.deleteOne({receiverID:ID,purpose:"Started following",senderID:UserID})
             await FollowModel.deleteOne({follower:UserID, following:ID})
         }
         res.status(201).send({msg:"Done with following"})
