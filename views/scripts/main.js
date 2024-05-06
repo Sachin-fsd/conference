@@ -131,8 +131,8 @@ let isLoading = false;
 window.onscroll = async function(ev) {
   console.log("window.innerHeight:",window.innerHeight,"window.scrollY:",window.scrollY,"document.body.offsetHeight:",document.body.offsetHeight)
 
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-      document.body.offsetHeight = window.innerHeight + window.scrollY
+  if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight){
+      // document.body.offsetHeight = window.innerHeight + window.scrollY
         // you're at the bottom of the page
         console.log("window.innerHeight:",window.innerHeight,"window.scrollY:",window.scrollY,"document.body.offsetHeight:",document.body.offsetHeight)
         if (!isLoading) {
@@ -147,7 +147,8 @@ window.onscroll = async function(ev) {
 let feeds = document.getElementById("feeds");
 
 async function fetchMoreData(page) {
-  fetch(`/?page=${page}`)
+  try {
+    fetch(`/?page=${page}`)
     .then(response => response.json())
     .then(posts => {
       console.log(posts,"1")
@@ -242,7 +243,6 @@ async function fetchMoreData(page) {
                 class="comments text-muted"
               >View all comments</div></a>
           `;
-        loader.style.display = "none";
         feeds.append(div);
         isLoading = false;
       });
@@ -251,6 +251,10 @@ async function fetchMoreData(page) {
     .catch(error => {
       console.error('Error:', error);
     });
-    loader.style.display = "block"
-
+  } catch (error) {
+    console.log(error)
+  } finally {
+    loader.style.display = "none";
+    isLoading = false;
+  }
 }
