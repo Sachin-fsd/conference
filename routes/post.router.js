@@ -57,6 +57,7 @@ postRouter.get("/", async (req, res) => {
           "UserDetails.UserSection": "$author.section",
           "UserDetails.UserCourse": "$author.course",
           "UserDetails.UserRollno": "$author.rollno",
+          "UserDetails.UserHandle": "$author.handle",
         },
       },
       {
@@ -285,6 +286,7 @@ postRouter.get("/:id", async (req, res) => {
           "UserDetails.UserSection": "$author.section",
           "UserDetails.UserCourse": "$author.course",
           "UserDetails.UserRollno": "$author.rollno",
+          "UserDetails.UserHandle": "$author.handle",
         },
       },
       {
@@ -375,6 +377,7 @@ postRouter.get("/:id", async (req, res) => {
         UserCourse: user.course,
         UserSection: user.section,
         UserRollno: user.rollno,
+        UserHandle: user.handle,
       },
       posts,
       follow,
@@ -410,6 +413,7 @@ postRouter.get("/profileEdit/:id", async (req, res) => {
           UserBio: user.bio,
           UserDp: user.dp,
           UserEmail: user.email,
+          UserHandle: user.handle,
         },
       });
     }

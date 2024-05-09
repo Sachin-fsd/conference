@@ -42,6 +42,7 @@ commentRouter.get("/:id", async (req, res) => {
           "UserDetails.UserSection": "$author.section",
           "UserDetails.UserCourse": "$author.course",
           "UserDetails.UserRollno": "$author.rollno",
+          "UserDetails.UserHandle": "$author.handle",
         },
       },
       {

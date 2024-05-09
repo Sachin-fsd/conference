@@ -175,12 +175,17 @@ app.get("/auth/github", async (req, res) => {
       if(id){
         await BlackListTokenModel.deleteOne({id:user._id})
       }
-    UserDetails = {
-      UserID: user._id,
-      UserName: user.name,
-      UserEmail: user.email,
-      UserDp: user.dp
-    }
+      UserDetails = {
+        UserID: user._id,
+        UserName: user.name,
+        UserEmail: user.email,
+        UserDp: user.dp,
+        UserSchool: user.school,
+        UserCourse: user.course,
+        UserSection: user.section,
+        UserRollno: user.rollno,
+        UserHandle: user.handle,
+      };
   }
   const token = jwt.sign(
     { UserDetails },
@@ -235,7 +240,7 @@ app.get("/contacts",authenticator,async(req,res)=>{
   try {
     const messages = await MessageModel.find({
     $or: [{ "sender.UserID": req.user.UserID }, { "receiver.UserID": req.user.UserID }],
-  }).sort({ CreatedAt: -1 });
+  }).sort({ updatedAt: -1 });
   // Fetch the users
   let users = [];
   if (messages.length < 5) {

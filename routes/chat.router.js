@@ -48,6 +48,7 @@ chatRouter.get("/:id", async (req, res) => {
         UserID: ProfileUser._id,
         UserName: ProfileUser.name,
         UserDp: ProfileUser.dp,
+        UserHandle: ProfileUser.handle,
       },
       room,
       chats,

@@ -44,6 +44,7 @@ saveRouter.get("/", async (req, res) => {
           "authorDetails.UserCourse": "$author.course",
           "authorDetails.UserSection": "$author.section",
           "authorDetails.UserRollno": "$author.rollno",
+          "authorDetails.UserHandle": "$author.handle",
         },
       },
       {
