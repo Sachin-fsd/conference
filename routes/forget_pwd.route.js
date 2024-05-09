@@ -14,6 +14,7 @@ forgetRouter.post("/getotp", async (req, res) => {
   const otp = Math.floor(1000 + Math.random() * 9000);
 
   const email = req.body.email;
+  console.log(otp,email)
 
   const user = await RegisterModel.findOne({ email });
   if (Object.keys(user).length > 0) {

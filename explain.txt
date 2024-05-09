@@ -217,3 +217,85 @@ document.getElementById("right").innerHTML = `
     .join("")}
 
 	`;
+
+<section id="details-ctr">
+        <div id="login-ctr">
+          <div id="logo">
+            <!-- <img
+              src="https://pbs.twimg.com/media/E_mOsqtXoAQLmN0?format=png&name=240x240"
+              alt="Instragram logo; the text reads 'Instagram', written in the platform's iconic cursive font."
+            /> -->
+            <h1 style="font-size: 30px;">CONFERENCE</h1>
+          </div>
+          <div id="login">
+            <form id="pwd_forget_form" >
+              <div class="form-group">
+                <input
+                  id="username"
+                  class="form-input"
+                  name="username"
+                  pattern=".{1,}"
+                  placeholder="Phone number, username, or email"
+                  title="Enter Email"
+                  onkeyup="stateHandle()"
+                  required
+                  type="text"
+                />
+                <label class="floating-label" for="username">Email</label>
+              </div>
+              <div class="form-group" id="otp_div">
+                <input
+                  id="otp"
+                  class="form-input"
+                  placeholder="Enter OTP"
+                  title="Enter OTP"
+                  type="number"
+                />
+                <label class="floating-label" for="otp" id="otp_placeholder">Enter otp</label>
+              </div>
+              <input
+                formaction="#"
+                href="#"
+                id="submit"
+                name="submit"
+                type="submit"
+                value="Get OTP"
+              />
+            </form>
+          </div>
+          <div id="alt-options">
+            <div id="or-separator">
+              <div></div>
+              <p>Or</p>
+              <div></div>
+            </div>
+            <div id="fb-login">
+              <a href="https://github.com/login/oauth/authorize?client_id=39521ba78547704f90d1&scope=user:email"><span class="fab fa-github"></span>
+                <h5>Log in with Github</h5></a>
+            </div>
+            <div id="forgot_password">
+              <p><a href="/forgetpwd">Forgot password?</a></p>
+            </div>
+          </div>
+        </div>
+        <div id="sign-up-ctr">
+          <p>Don't have an account? <span><a href="/register">Sign Up</a></span></p>
+        </div>
+        <div id="get-app-ctr">
+          <p>Get the app.</p>
+          <div>
+            <a
+              href=""
+            ><img
+                src="https://www.instagram.com/static/images/appstore-install-badges/badge_ios_english-en.png/180ae7a0bcf7.png"
+                alt="Download on the App Store"
+              /></a>
+            <a
+              href=""
+            ><img
+                src="https://www.instagram.com/static/images/appstore-install-badges/badge_android_english-en.png/e9cd846dc748.png"
+                alt="Get it on Google Play"
+              /></a>
+          </div>
+        </div>
+      </section>

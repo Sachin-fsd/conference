@@ -4,19 +4,18 @@ document
     event.preventDefault();
   });
 
-let otp_div = document.getElementById("otp_div");
-otp_div.setAttribute("style", "display:none");
+let otp = document.getElementById("otp");
+otp.setAttribute("style", "display:none");
 
 let username = document.getElementById("username");
-let otp = document.getElementById("otp");
 
 let submit = document.getElementById("submit");
-
+console.log(submit.innerText)
 
 submit.addEventListener("click", () => {
   if (username.value !== "" || username.value !== null) {
-    if (submit.value == "Get OTP") {
-      submit.value = "Loading...";
+    if (submit.innerText == "Get OTP") {
+      submit.innerText = "Loading...";
       submit.setAttribute("disabled",true)
       const email = username.value;
       fetch("/forgetpwd/getotp", {
@@ -28,17 +27,17 @@ submit.addEventListener("click", () => {
       })
         .then((res) => {
           if (res.ok==true) {
-            otp_div.setAttribute("style", "display:block");
+            otp.setAttribute("style", "display:block");
             submit.removeAttribute("disabled")
-            submit.value = "Submit OTP";
+            submit.innerText = "Submit OTP";
           } else {
             alert("Something is Wrong");
           }
         })
         .catch((err) => console.log(err));
       return;
-    } else if (submit.value == "Submit OTP") {
-      submit.value = "Loading...";
+    } else if (submit.innerText == "Submit OTP") {
+      submit.innerText = "Loading...";
       submit.setAttribute("disabled",true)
 
       fetch("/forgetpwd/verifyotp", {
@@ -52,26 +51,18 @@ submit.addEventListener("click", () => {
           console.log(res);
           if (res.ok) {
             alert("OTP verified");
-            otp_div.innerHTML = `
-            <input
-            id="otp"
-            class="form-input"
-            placeholder="Enter New Password"
-            title="Enter New Password"
-            type="password"
-          />
-          <label class="floating-label" for="otp" id="otp_placeholder">Enter New Password</label>
-          `;
-            submit.value = "Login";
+            otp.value = null
+            otp.placeholder = `Enter New Password`;
+            submit.innerText = "Login";
             submit.removeAttribute("disabled");
           } else {
-            submit.value = "Submit OTP";
+            submit.innerText = "Submit OTP";
             alert("Something is Wrong");
           }
         })
         .catch((err) => console.log(err));
       return;
-    } else if (submit.value == "Login") {
+    } else if (submit.innerText == "Login") {
       let pass = document.getElementById("otp");
       let obj = { email: username.value, password: pass.value };
 
