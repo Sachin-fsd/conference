@@ -52,10 +52,10 @@ body {
 
 .progress {
   position: relative;
-  height: 5px;
+  height: 3px;
   display: block;
   width: 100%;
-  background-color: rgb(124, 102, 247);
+  background-color: rgb(247, 102, 102);
   border-radius: 2px;
   background-clip: padding-box;
   /*margin: 0.5rem 0 1rem 0;*/
@@ -70,7 +70,7 @@ body {
 
 .progress.show {
   opacity: 1;
-  height: 5px;
+  height: 3px;
 }
 
 .progress .indeterminate {
@@ -599,6 +599,9 @@ main .container .middle .profile {
 #create-post {
   width: 100%;
   /* padding: 10px; */
+}
+.chat-input{
+  padding: 10px;
 }
 
 .middle .create-post {

@@ -427,13 +427,13 @@
           <div class="message">
             <div class="profile-photo">
               <img
-                src="{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserDp}}{{else}}{{this.sender.UserDp}}{{/if}}" />
+                src="{{#if (eq this.senderID._id ../UserDetails.UserID)}}{{this.receiverID.dp}}{{else}}{{this.senderID.dp}}{{/if}}" />
             </div>
             <div class="message-body">
-              <a href="/chat/{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserID}}{{else}}{{this.sender.UserID}}{{/if}}"
+              <a href="/chat/{{#if (eq this.senderID._id ../UserDetails.UserID)}}{{this.receiverID._id}}{{else}}{{this.senderID._id}}{{/if}}"
                 class="profile users-profile">
-                <h5>{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserName}} {{else}}
-                  {{this.sender.UserName}} {{/if}}</h5>
+                <h5>{{#if (eq this.senderID._id ../UserDetails.UserID)}}{{this.receiverID.name}} {{else}}
+                  {{this.senderID.name}} {{/if}}</h5>
                 <p class="text-muted">in your chats</p>
               </a>
             </div>

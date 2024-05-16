@@ -56,7 +56,6 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
     console.log(pair[0] + ', ' + pair[1]);
   }
 
-
   // showDeletePopup()
   fetch('/register', {
     method: 'POST',

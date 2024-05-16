@@ -32,7 +32,7 @@
           <div class="profile-photo">
             <img src="{{UserDetails.UserDp}}"
               onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'" />
-            />
+            
           </div>
         </a>
 
@@ -47,7 +47,7 @@
       <div class="left">
         <a href="/{{UserDetails.UserID}}" class="profile">
           <div class="profile-photo">
-            <img src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_1280.jpg" />
+            <img src="{{UserDetails.UserDp}}" />
           </div>
           <div class="handle">
             <h4>{{UserDetails.UserName}}</h4>
@@ -91,7 +91,6 @@
           </a>
         </div>
         <!-- END OF SIDEBAR -->
-        <label for="create-post" class="btn btn-primary">Create Post</label>
       </div>
       <!-- END OF LEFT -->
       <!-- MIDDLE -->
@@ -129,7 +128,9 @@
               {{#if (eq this.purpose "Sent a message")}}<a href="/chat/{{this.senderID}}">
                 <p class="text-bold">{{this.purpose}}</p>
               </a>{{else}}{{/if}}
-
+              {{#if (eq this.purpose "New comment")}}<a href="/comment/{{this.postID}}">
+                <p class="text-bold">{{this.purpose}}</p>
+              </a>{{else}}{{/if}}
 
               <span class="edit">
                 <i class="uil uil-ellipsis-h"></i>

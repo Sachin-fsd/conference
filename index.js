@@ -75,7 +75,7 @@ hbs.registerHelper("eq", function (a, b) {
   if(typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined) {
     return a === b;
   }
-  // console.log(a,b)??
+  // console.log("ab=>",a,b,a.toString(),b.toString())
   return a.toString() === b.toString();
 });
 const transporter = nodemailer.createTransport({

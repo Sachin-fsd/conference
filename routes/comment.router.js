@@ -134,7 +134,7 @@ commentRouter.post("/:id", async (req, res) => {
       await NotificationModel.create({
         senderID: req.body.UserDetails.UserID,
         receiverID: authorID,
-        purpose: "new comment",
+        purpose: "New comment",
         postID: req.params.id,
       });
     }

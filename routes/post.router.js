@@ -112,8 +112,10 @@ postRouter.get("/", async (req, res) => {
 
     // Fetch the messages
     const messages = await MessageModel.find({
-      $or: [{ "sender.UserID": UserID }, { "receiver.UserID": UserID }],
-    }).sort({ CreatedAt: -1 });
+      $or: [{ senderID: UserID }, { receiverID: UserID }],
+    }).populate('senderID', '_id name dp handle') //  fetch from sender
+      .populate('receiverID', '_id name dp handle') //  fetch from receiver
+      .sort({ CreatedAt: -1 }).limit(5)
 
     // Fetch the users
     let users = [];
@@ -122,7 +124,7 @@ postRouter.get("/", async (req, res) => {
         .sort({ CreatedAt: -1 })
         .limit(5);
     }
-    // console.log(posts)
+    // console.log(messages)
 
     if (!req.query.page) {
       res.render("index", {
