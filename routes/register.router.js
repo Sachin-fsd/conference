@@ -50,7 +50,7 @@ registerRouter.post("/", upload.single("idcard"), async (req, res) => {
         let { name, email, password, section, course, rollno, school } = req.body;
         const user = await RegisterModel.findOne({ email });
         const pendinguser = await PendingUserModel.findOne({ email })
-        if (user || pendinguser) {
+        if (!user || pendinguser) {
             return res.status(400).json({ message: "User already exists." })
         } else {
             console.log(req.file, "req.file")

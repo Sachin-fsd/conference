@@ -272,19 +272,19 @@ app.use("/", authenticator, postRouter);
 // to get data from database
 
 app.get("/api/users", async (req, res) => {
-  const users = await RegisterModel.find();
+  const users = await RegisterModel.find().limit(10);
   res.send(users);
 });
 app.get("/api/messages", async (req, res) => {
-  const users = await MessageModel.find();
+  const users = await MessageModel.find().limit(10);
   res.send(users);
 });
 app.get("/api/chats", async (req, res) => {
-  const users = await ChatModel.find();
+  const users = await ChatModel.find().limit(10);
   res.send(users);
 });
 app.get("/api/post", async (req, res) => {
-  const users = await PostModel.find();
+  const users = await PostModel.find().limit(10);
   res.send(users);
 });
 app.get("/api/blacklist", async (req, res) => {
