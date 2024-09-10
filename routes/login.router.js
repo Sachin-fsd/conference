@@ -16,7 +16,7 @@ loginRouter.post("/", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await RegisterModel.findOne({ email });
-    if (Object.keys(user).length === 0) {
+    if (Object.keys(user).length === 0 || !user) {
       res.status(401).send({ msg: "Wrong credentials." });
     } else {
       bcrypt.compare(password, user.password, async (err, result) => {
@@ -31,6 +31,7 @@ loginRouter.post("/", async (req, res) => {
             UserSection: user.section,
             UserRollno: user.rollno,
             UserHandle: user.handle,
+            UserRole: user.role,
           };
           const id = await BlackListTokenModel.findOne({id:user._id})
           if(id){

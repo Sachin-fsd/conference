@@ -158,7 +158,7 @@
 
           </div> -->
         <div class="preview" id="preview" style="display: none;">
-          <img id="preview-photo" style="display: none;" class="preview-photo">
+          <img id="preview-photo" style="display: none;" class="preview-photo" />
           <video id="preview-video" style="display: none;" class="preview-video"></video>
           <p id="file-name" style="display: none;" class="pdf-name"></p>
         </div>
@@ -167,16 +167,30 @@
           <div class="profile-photo">
             <img src="{{UserDetails.UserDp}}"
               onerror="this.src='https://cdn.pixabay.com/photo/2022/02/26/18/16/peace-7036144_640.png'" />
-            />
           </div>
 
           <textarea id="create-post" placeholder="What's on your mind, {{UserDetails.UserName}}?" required></textarea>
 
+          <!-- Target Audience Dropdown -->
+          <!-- <label for="target-audience" class="audience-label">Target</label> -->
+          <!-- <select id="target-audience" name="target_audience">
+            <option value="all">To All</option>
+            <option value="btech">B.Tech</option>
+            <option value="bca">BCA</option>
+            <option value="mba">MBA</option>
+            <option value="psychology">Psychology</option>
+            <option value="commerce">Commerce</option>
+            <option value="arts">Arts</option>
+            <option value="science">Science</option>
+            <option value="law">Law</option>
+            <option value="other">Other</option>
+          </select> -->
+
           <input type="file" id="fileinput" name="fileinput" accept="image/*,application/pdf,video/*"
             style="display: none;" />
 
-          <label for="fileinput" class="btn"> <big><i class='bx bx-paperclip bx-rotate-90'></i></big>
-
+          <label for="fileinput" class="btn">
+            <big><i class='bx bx-paperclip bx-rotate-90'></i></big>
           </label>
 
           <input type="submit" id="post-submit-btn" value="Post" class="btn btn-primary" />
@@ -220,13 +234,15 @@
               <span class="dropdown edit">
                 <i onclick="myFunction('{{this._id}}')" class="dropbtn uil uil-ellipsis-h"></i>
                 <div id="myDropdown-{{this._id}}" class="dropdown-content">
-                  {{#if (eq this.UserDetails.UserID ../UserDetails.UserID)}}
+                  {{#if (or (eq this.UserDetails.UserID ../UserDetails.UserID) (eq ../UserDetails.UserRole
+                  'superadmin'))}}
                   <a href="#" onclick="showDeletePopup('{{this._id}}')">Delete</a>
-                  {{else}}{{/if}}
+                  {{/if}}
                   <a href="/comment/{{this._id}}">Comment</a>
                   <a href="/{{this.authorID}}">Profile</a>
                 </div>
               </span>
+
 
             </div>
             <a href="/comment/{{this._id}}">
@@ -291,10 +307,12 @@
                   </div>
                 </span>
               </div>
-              <div class="bookmark" >
+              <div class="bookmark">
                 <span>
-                  {{#if (eq this.saved 1)}}<i class='bx bxs-bookmark' onclick="savePost(event,'{{this._id}}','{{this.authorID}}')" style="color: #6a3bec;"></i>{{else}}<i
-                    class='bx bx-bookmark' style="color: #6a3bec" onclick="savePost(event,'{{this._id}}','{{this.authorID}}')"></i>{{/if}}
+                  {{#if (eq this.saved 1)}}<i class='bx bxs-bookmark'
+                    onclick="savePost(event,'{{this._id}}','{{this.authorID}}')" style="color: #6a3bec;"></i>{{else}}<i
+                    class='bx bx-bookmark' style="color: #6a3bec"
+                    onclick="savePost(event,'{{this._id}}','{{this.authorID}}')"></i>{{/if}}
                 </span>
               </div>
             </div>
@@ -322,7 +340,7 @@
             <div class="caption">
               <p>
                 <b>{{UserDetails.UserSchool}}</b>
-               | {{UserDetails.UserCourse}} | <b>Section</b> {{UserDetails.UserSection}} |
+                | {{UserDetails.UserCourse}} | <b>Section</b> {{UserDetails.UserSection}} |
                 <b>Roll No.</b>
                 {{UserDetails.UserRollno}}
               </p>

@@ -69,6 +69,9 @@ hbs.registerHelper("formatDate", function (date) {
 hbs.registerHelper("formatText", function (text) {
   return new hbs.SafeString(text.replace(/\\n|\n/g, "<br>"));
 });
+hbs.registerHelper('or', function (a, b) {
+  return a || b;
+});
 
 hbs.registerHelper("eq", function (a, b) {
   // console.log(a,b,typeof a, typeof b, a.toString(), b.toString())
@@ -337,91 +340,19 @@ connectDB().then(() => {
 });
 
 
-// async function r(){
-//   console.log("a")
-//   let a =await fetch("https://api.quotable.io/random")
-//   let b = await a.json()
-//   console.log(b)
-// }
-// r()
-
-// async function updateDp() {
-//   // Fetch all posts
-//   let posts = await PostModel.find();
-
-//   // Iterate over each post
-//   await Promise.all(
-//     posts.map(async (post) => {
-//       // Fetch the corresponding user from RegisterModel
-//       if (post.UserDetails) {
-//         let user = await RegisterModel.findById(post.UserDetails.UserID);
-
-//         // If the user exists and has a dp
-//         if (user && user.dp) {
-//           // Update the dp in the post's UserDetails
-//           post.UserDetails.UserDp = user.dp;
-//           post.markModified('UserDetails');
-//           // Save the updated post
-//           console.log(post.UserDetails.UserDp===user.dp)
-//           return post.save().catch(err => console.error(err));
-
-//         }
-//       }
-//     })
-//   );
-// }
-
-// Call the function
-// updateDp();
-
-// dlt()
-
-// function dlt () {
-//   RegisterModel.find()
-//     .sort({ CreatedAt: 1 })
-//     .limit(3)
-//     .then((docs) => {
-
-//       docs.forEach((doc) => {
-//         console.log(doc)
-//         RegisterModel.findByIdAndDelete(doc._id)
-//           .then((deletedDoc) => {
-//             console.log('Deleted document:', deletedDoc)
-//           })
-//           .catch((err) => {
-//             console.error('Error deleting document:', err)
-//           })
-//       })
-//     })
-//     .catch((err) => {
-//       console.error('Error finding documents:', err)
-//     })
-// }
-
-
-async function deleteUnmatchedPostsAndEmptyNotifications() {
-  try {
-    // await PostModel.updateMany({}, { likeCount: 0 });
-
-    // Get all posts
-    // const posts = await PostModel.find();
-    // console.log(posts)
-    // Loop through all posts
-    // for (let post of posts) {
-    //   // Check if authorID is null or does not exist in Register model
-    //   // const author = await RegisterModel.findById(post.authorID);
-    //   if (!post.authorID) {
-    //     // Delete the post
-    //     console.log(post)
-    //     await PostModel.findByIdAndDelete(post._id);
-    //   }
-    // }
-
-    await BlackListTokenModel.deleteMany({});
+// async function updateFieldForStudents() {
+//   try {
+//     // Update a specific field for all users where role is 'student'
+//     const result = await RegisterModel.updateMany(
+//       { },       // Condition
+//       { $set: { role: 'student' } } // Update operation: set the field with a new value
+//     );
     
-  } catch (err) {
-    console.error('Error:', err);
-  }
-}
+//     // console.log(`Updated ${result.nModified} student records.`);
+//   } catch (err) {
+//     console.error('Error updating students:', err);
+//   }
+// }
 
-// deleteUnmatchedPostsAndEmptyNotifications();
+// // Call the function to update the field
+// updateFieldForStudents();

@@ -3,13 +3,24 @@ document.getElementById("yesButton").addEventListener("click", function () {
   myPopup.classList.remove("show");
   window.location.href = "/welcome"
 });
+
+const role = document.getElementById("role");
+
+role.onchange = () => {
+  if (role.value == "faculty") {
+    document.getElementById("school").style.display = "none"
+    document.getElementById("course").style.display = "none"
+    document.getElementById("section").style.display = "none"
+    document.getElementById("rollno").style.display = "none"
+  }
+}
+
+
 document.getElementById("register_form").addEventListener("submit", (event) => {
   event.preventDefault()
   const submitBtn = document.getElementById("submit-btn")
   submitBtn.innerText = "Wait..."
-  submitBtn.setAttribute("disabled", true)
-
-  console.log("he;llllo")
+  submitBtn.setAttribute("disabled", true);
 
   const name = document.getElementById("name").value
   const school = document.getElementById("school").value
@@ -20,12 +31,27 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
   const password = document.getElementById("password").value
   const idcard = document.getElementById("idcard").files[0]
 
+
+
+  console.log("he;llllo")
+
+
   // Validation
-  if (!name || !school || !course || !section || !rollno || !email || !password || !idcard) {
-    alert("All fields are required!");
-    submitBtn.innerText = "Submit"
-    submitBtn.removeAttribute("disabled")
-    return;
+  if (role.value == "student") {
+    if (!name || !school || !course || !section || !rollno || !email || !password || !idcard) {
+      alert("All fields are required!");
+      submitBtn.innerText = "Submit"
+      submitBtn.removeAttribute("disabled")
+      return;
+    }
+  }
+  if (role.value == "faculty") {
+    if (!name || !email || !password || !idcard) {
+      alert("All fields are required!");
+      submitBtn.innerText = "Submit"
+      submitBtn.removeAttribute("disabled")
+      return;
+    }
   }
 
   if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
@@ -43,14 +69,26 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
   }
 
   const formData = new FormData();
-  formData.append("name", name);
-  formData.append("school", school);
-  formData.append("course", course);
-  formData.append("section", section);
-  formData.append("rollno", rollno);
-  formData.append("email", email);
-  formData.append("password", password);
-  formData.append("idcard", idcard);
+
+
+  if (role.value == "student") {
+    formData.append("name", name);
+    formData.append("school", school);
+    formData.append("course", course);
+    formData.append("section", section);
+    formData.append("rollno", rollno);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("idcard", idcard);
+    formData.append("role", role.value);
+  }
+  else if (role.value == "faculty") {
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("idcard", idcard);
+    formData.append("role", role.value.trim());
+  }
 
   for (var pair of formData.entries()) {
     console.log(pair[0] + ', ' + pair[1]);
@@ -61,13 +99,52 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
     method: 'POST',
     body: formData
   })
-    .then(response => {
-      console.log(response)
-      if (response.ok === false) {
+    .then(res => res.json())
+    // .then(response => {
+    //   console.log(response)
+    //   if (response.ok === false) {
+    //     myPopup.innerHTML = `
+    //     <div class="popup-content">
+    //         <label for="" class="text-bold">Wrong Credentials</label>
+    //         <p>User Already Exists</p>
+    //         <button id="yesButton" class="formal-button">
+    //             OK
+    //         </button>
+    //     </div>
+    //     `
+    //     document.getElementById("yesButton").addEventListener("click", function () {
+    //       myPopup.classList.remove("show");
+    //       // window.location.href = "/welcome"
+    //     });
+    //     showPopup()
+    //     return
+    //   }
+    //   return response.json()
+
+    // })
+    .then(data => {
+      console.log(data);
+      if (data.ok === true) {
         myPopup.innerHTML = `
         <div class="popup-content">
-            <label for="" class="text-bold">Wrong Credentials</label>
-            <p>User Already Exists</p>
+          <label for="" class="text-bold">Details sent for Verification</label>
+            <p>You will be notified in few days</p>
+            <button id="yesButton" class="formal-button">
+              OK
+            </button>
+        </div>
+        `
+        document.getElementById("yesButton").addEventListener("click", function () {
+          myPopup.classList.remove("show");
+          window.location.href = "/welcome"
+        });
+        showPopup();
+        
+      } else {
+        myPopup.innerHTML = `
+        <div class="popup-content">
+            <label for="" class="text-bold">Something Went Wrong</label>
+            <p>${data.msg}</p>
             <button id="yesButton" class="formal-button">
                 OK
             </button>
@@ -77,17 +154,10 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
           myPopup.classList.remove("show");
           // window.location.href = "/welcome"
         });
-        showPopup()
-        return
+        showPopup();
+        submitBtn.innerText = "Submit"
+        submitBtn.removeAttribute("disabled")
       }
-      return response.json()
-
-    })
-    .then(data => {
-      console.log(data);
-      showPopup()
-      submitBtn.innerText = "Submit"
-      submitBtn.removeAttribute("disabled")
     })
     .catch((error) => {
       console.error('Error:', error);
