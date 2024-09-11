@@ -172,8 +172,8 @@
           <textarea id="create-post" placeholder="What's on your mind, {{UserDetails.UserName}}?" required></textarea>
 
           <!-- Target Audience Dropdown -->
-          <!-- <label for="target-audience" class="audience-label">Target</label> -->
-          <!-- <select id="target-audience" name="target_audience">
+          {{#if (neq UserDetails.UserRole 'student')}}
+          <select id="target-audience" name="target_audience">
             <option value="all">To All</option>
             <option value="btech">B.Tech</option>
             <option value="bca">BCA</option>
@@ -184,7 +184,9 @@
             <option value="science">Science</option>
             <option value="law">Law</option>
             <option value="other">Other</option>
-          </select> -->
+          </select>
+          {{/if}}
+
 
           <input type="file" id="fileinput" name="fileinput" accept="image/*,application/pdf,video/*"
             style="display: none;" />
@@ -339,10 +341,14 @@
                   </div> -->
             <div class="caption">
               <p>
+                {{#if (eq this.UserDetails.UserRole 'student')}}
                 <b>{{UserDetails.UserSchool}}</b>
                 | {{UserDetails.UserCourse}} | <b>Section</b> {{UserDetails.UserSection}} |
                 <b>Roll No.</b>
                 {{UserDetails.UserRollno}}
+                {{else}}
+                <b>Target:{{this.target}}</b>
+                {{/if}}
               </p>
               <!-- <p><span class="harsh-tag">#lifestyle</span></p> -->
             </div>

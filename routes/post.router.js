@@ -17,20 +17,44 @@ postRouter.get("/", async (req, res) => {
   try {
     const page = req.query.page || 1;
     const limit = 10;
-    const skip = (page - 1) * limit
+    const skip = (page - 1) * limit;
     const UserID = req.body.UserDetails.UserID;
 
-    // Fetch the user details
+    // Fetch the user details to check if the user is a student and get their course
     const user = await RegisterModel.findOne(
       { _id: UserID },
       { password: 0 }
     );
 
-    // Fetch the posts and populate the author details
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userCourse = user.course;
+    const isStudent = user.role === 'student';  // Assuming the 'role' field indicates whether the user is a student
+
+    // Define the match condition
+    let matchCondition = {};
+
+    if (isStudent) {
+      // If the user is a student, filter posts based on 'target'
+      matchCondition = {
+        $or: [
+          { target: 'all' }, // Show posts with target 'all' to everyone
+          { target: userCourse } // Show posts where the target matches the user's course
+        ]
+      };
+    } else {
+      // If the user is not a student, show all posts
+      matchCondition = {};
+    }
+
+    // Fetch posts based on the match condition
     const posts = await PostModel.aggregate([
       { $sort: { CreatedAt: -1 } },
       { $skip: skip },
       { $limit: limit },
+      { $match: matchCondition },
       {
         $addFields: {
           CreatedAt: { $toDate: "$CreatedAt" },
@@ -58,6 +82,7 @@ postRouter.get("/", async (req, res) => {
           "UserDetails.UserCourse": "$author.course",
           "UserDetails.UserRollno": "$author.rollno",
           "UserDetails.UserHandle": "$author.handle",
+          "UserDetails.UserRole": "$author.role",
         },
       },
       {
@@ -113,19 +138,19 @@ postRouter.get("/", async (req, res) => {
     // Fetch the messages
     const messages = await MessageModel.find({
       $or: [{ senderID: UserID }, { receiverID: UserID }],
-    }).populate('senderID', '_id name dp handle') //  fetch from sender
-      .populate('receiverID', '_id name dp handle') //  fetch from receiver
-      .sort({ CreatedAt: -1 }).limit(5)
+    })
+      .populate('senderID', '_id name dp handle') // fetch from sender
+      .populate('receiverID', '_id name dp handle') // fetch from receiver
+      .sort({ CreatedAt: -1 }).limit(5);
 
-    // Fetch the users
+    // Fetch the users if less than 5 messages
     let users = [];
     if (messages.length < 5) {
       users = await RegisterModel.find({}, { _id: 1, name: 1, dp: 1 })
         .sort({ CreatedAt: -1 })
         .limit(5);
     }
-    // console.log(messages)
-
+    // console.log(posts)
     if (!req.query.page) {
       res.render("index", {
         UserDetails: req.body.UserDetails,
@@ -134,11 +159,8 @@ postRouter.get("/", async (req, res) => {
         users,
       });
     } else {
-      // console.log(posts)
-      res.status(200).send({ posts })
+      res.status(200).send({ posts });
     }
-    // console.log(posts)
-    // res.status(200).send({ posts });
   } catch (error) {
     console.log(error);
     res.json({ err: error });
@@ -174,8 +196,6 @@ postRouter.post("/", upload.single("file"), async (req, res) => {
   // Check if a file was uploaded
   // console.log(req.file)
 
-
-
   if (req.file) {
     let fileBuffer = req.file.buffer;
 
@@ -205,6 +225,7 @@ postRouter.post("/", upload.single("file"), async (req, res) => {
       const post = new PostModel({
         authorID: req.body.authorID,
         text: req.body.text,
+        target: req.body.target,
         photo: req.file.mimetype.startsWith("image/") ? fileUrl : null,
         pdf: req.file.mimetype == "application/pdf" ? fileUrl : null,
         video: req.file.mimetype == "video/mp4" ? fileUrl : null,
@@ -230,6 +251,7 @@ postRouter.post("/", upload.single("file"), async (req, res) => {
     const post = new PostModel({
       authorID: req.body.authorID,
       text: req.body.text,
+      target: req.body.target,
     });
     post
       .save()
@@ -289,6 +311,7 @@ postRouter.get("/:id", async (req, res) => {
           "UserDetails.UserCourse": "$author.course",
           "UserDetails.UserRollno": "$author.rollno",
           "UserDetails.UserHandle": "$author.handle",
+          "UserDetails.UserRole": "$author.role",
         },
       },
       {
@@ -380,6 +403,7 @@ postRouter.get("/:id", async (req, res) => {
         UserSection: user.section,
         UserRollno: user.rollno,
         UserHandle: user.handle,
+        UserRole: user.role,
       },
       posts,
       follow,

@@ -8,6 +8,7 @@ const postSchema = mongoose.Schema({
   video: String,
   likeCount: { type: Number, default: 0 },
   CreatedAt: { type: Date, default: Date.now },
+  target: {type: String, default:"all"}
 });
 
 const PostModel = mongoose.model("post", postSchema);

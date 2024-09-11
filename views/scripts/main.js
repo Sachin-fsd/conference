@@ -97,11 +97,15 @@ async function postText(text) {
   post_submit_btn.setAttribute("disabled", true);
   post_submit_btn.setAttribute("style", "opacity:0.8");
 
+  const target = document.getElementById("target-audience").value
+
   // Create a new FormData instance
   const formData = new FormData();
   // Append the text and UserDetails data to the form
   formData.append("text", text);
   formData.append("authorID", UserID);
+  formData.append("target", target);
+
   // Check if an image file is being uploaded
   const file = document.querySelector("#fileinput").files[0];
   if (file) {
@@ -128,20 +132,20 @@ document.getElementById("PreLoaderBar").classList.add("hide");
 let page = 1;
 let isLoading = false;
 
-window.onscroll = async function(ev) {
-  console.log("window.innerHeight:",window.innerHeight,"window.scrollY:",window.scrollY,"document.body.offsetHeight:",document.body.offsetHeight)
+window.onscroll = async function (ev) {
+  console.log("window.innerHeight:", window.innerHeight, "window.scrollY:", window.scrollY, "document.body.offsetHeight:", document.body.offsetHeight)
 
-  if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight){
-      // document.body.offsetHeight = window.innerHeight + window.scrollY
-        // you're at the bottom of the page
-        console.log("window.innerHeight:",window.innerHeight,"window.scrollY:",window.scrollY,"document.body.offsetHeight:",document.body.offsetHeight)
-        if (!isLoading) {
-            isLoading = true;
-            page++;
-            console.log("bottom", page);
-            await fetchMoreData(page);
-        }
+  if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight) {
+    // document.body.offsetHeight = window.innerHeight + window.scrollY
+    // you're at the bottom of the page
+    console.log("window.innerHeight:", window.innerHeight, "window.scrollY:", window.scrollY, "document.body.offsetHeight:", document.body.offsetHeight)
+    if (!isLoading) {
+      isLoading = true;
+      page++;
+      console.log("bottom", page);
+      await fetchMoreData(page);
     }
+  }
 };
 
 let feeds = document.getElementById("feeds");
@@ -149,19 +153,19 @@ let feeds = document.getElementById("feeds");
 async function fetchMoreData(page) {
   try {
     fetch(`/?page=${page}`)
-    .then(response => response.json())
-    .then(posts => {
-      console.log(posts,"1")
-      posts = posts.posts
-      console.log(posts,"2")
+      .then(response => response.json())
+      .then(posts => {
+        console.log(posts, "1")
+        posts = posts.posts
+        console.log(posts, "2")
 
-      // for(let post of posts){
+        // for(let post of posts){
 
-      // }
-      posts.forEach((post) => {
-        let div = document.createElement("div");
-        div.classList.add("feed");
-        div.innerHTML = ` 
+        // }
+        posts.forEach((post) => {
+          let div = document.createElement("div");
+          div.classList.add("feed");
+          div.innerHTML = ` 
             <div class="head">
               <a href="/${post.UserDetails.UserID}}"><div class="user">
                   <div class="profile-photo">
@@ -176,7 +180,7 @@ async function fetchMoreData(page) {
               <span class="dropdown edit">
                 <i onclick="myFunction('${post._id}')" class="dropbtn uil uil-ellipsis-h"></i>
                 <div id="myDropdown-${post._id}" class="dropdown-content">
-                ${post.UserDetails.UserID==UserID && `<a href="#" onclick="showDeletePopup('${post._id}')">Delete</a>`}
+                ${post.UserDetails.UserID == UserID && `<a href="#" onclick="showDeletePopup('${post._id}')">Delete</a>`}
                     <a href="/comment/${this._id}">Comment</a>
                     <a href="/${post.authorID}">Profile</a>
                 </div>
@@ -186,12 +190,12 @@ async function fetchMoreData(page) {
             <a href="/comment/${post._id}" >
               <div class="photo">
                 <p class="post-text">${post.text}</p>
-                ${post.photo===undefined?``:`<img src="${post?.photo}" onerror="this.style.display='none'"
+                ${post.photo === undefined ? `` : `<img src="${post?.photo}" onerror="this.style.display='none'"
                 />`}
-                ${post.video===undefined?``:`<video width="" height="" controls src="${post?.video}" onerror="this.style.display='none'" class="preview-video" style="overflow: auto;width: 100%;object-fit: cover;">
+                ${post.video === undefined ? `` : `<video width="" height="" controls src="${post?.video}" onerror="this.style.display='none'" class="preview-video" style="overflow: auto;width: 100%;object-fit: cover;">
                   
                 </video>`}
-                ${post.pdf===undefined?``:`
+                ${post.pdf === undefined ? `` : `
                 <div
                 id="pdf-loader"
                 style="width:100%; height:300px; display: flex; align-items: center; justify-content: center;"
@@ -213,8 +217,8 @@ async function fetchMoreData(page) {
             <div class="action-buttons">
               <div class="interaction-buttons">
                 <span class="like-post" >
-                ${post.liked===1 ? `<i onclick="likePost(event,'${post._id}','${post.UserDetails.UserID}')" ondblclick="likePost(event,'${post._id}','${post.UserDetails.UserID}')" class='bx bxs-like' style="color: #f54a6c;"></i>`
-                 : `<i onclick="likePost(event,'${post._id}','${post.UserDetails.UserID}')" ondblclick="likePost(event,'${post._id}','${post.UserDetails.UserID}')" class='bx bx-like' style="color: #f54a6c"></i>`}
+                ${post.liked === 1 ? `<i onclick="likePost(event,'${post._id}','${post.UserDetails.UserID}')" ondblclick="likePost(event,'${post._id}','${post.UserDetails.UserID}')" class='bx bxs-like' style="color: #f54a6c;"></i>`
+              : `<i onclick="likePost(event,'${post._id}','${post.UserDetails.UserID}')" ondblclick="likePost(event,'${post._id}','${post.UserDetails.UserID}')" class='bx bx-like' style="color: #f54a6c"></i>`}
                 </span>
                 <span><a href="/comment/${post._id}}"><i
                       class="uil uil-comment-dots" style="color: rgb(51, 100, 51);"
@@ -232,7 +236,7 @@ async function fetchMoreData(page) {
               </div>
               <div class="bookmark" onclick="savePost(event,'${post._id}','${post.UserDetails.UserID}')">
                 <span>
-                ${post.saved===1 ? `<i class='bx bxs-bookmark' style="color: #6a3bec;"></i>`:`<i class='bx bx-bookmark' style="color: #6a3bec"></i>`}
+                ${post.saved === 1 ? `<i class='bx bxs-bookmark' style="color: #6a3bec;"></i>` : `<i class='bx bx-bookmark' style="color: #6a3bec"></i>`}
                 </span>
               </div>
             </div>
@@ -243,14 +247,14 @@ async function fetchMoreData(page) {
                 class="comments text-muted"
               >View all comments</div></a>
           `;
-        feeds.append(div);
-        isLoading = false;
-      });
+          feeds.append(div);
+          isLoading = false;
+        });
 
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   } catch (error) {
     console.log(error)
   } finally {

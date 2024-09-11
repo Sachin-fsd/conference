@@ -141,10 +141,12 @@
 
             <div class="caption">
               <p>
-                <b>{{ProfileDetails.UserSchool}}</b>
-                | {{ProfileDetails.UserCourse}} | <b>Section</b> {{ProfileDetails.UserSection}} |
+                {{#if (eq this.UserDetails.UserRole 'student')}}
+                <b>{{UserDetails.UserSchool}}</b>
+                | {{UserDetails.UserCourse}} | <b>Section</b> {{UserDetails.UserSection}} |
                 <b>Roll No.</b>
-                {{ProfileDetails.UserRollno}}
+                {{UserDetails.UserRollno}}
+                {{/if}}
               </p>
               <!-- <p><span class="harsh-tag">#lifestyle</span></p> -->
             </div>
@@ -262,11 +264,16 @@
 
             <div class="caption">
               <p>
+                {{#if (eq this.UserDetails.UserRole 'student')}}
                 <b>{{UserDetails.UserSchool}}</b>
                 | {{UserDetails.UserCourse}} | <b>Section</b> {{UserDetails.UserSection}} |
                 <b>Roll No.</b>
                 {{UserDetails.UserRollno}}
+                {{else}}
+                <b>Target:{{this.target}}</b>
+                {{/if}}
               </p>
+              <!-- <p><span class="harsh-tag">#lifestyle</span></p> -->
             </div>
             <a href="/comment/{{this._id}}">
               <div class="comments text-muted">View all comments</div>

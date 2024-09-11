@@ -31,11 +31,6 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
   const password = document.getElementById("password").value
   const idcard = document.getElementById("idcard").files[0]
 
-
-
-  console.log("he;llllo")
-
-
   // Validation
   if (role.value == "student") {
     if (!name || !school || !course || !section || !rollno || !email || !password || !idcard) {
@@ -100,28 +95,6 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
     body: formData
   })
     .then(res => res.json())
-    // .then(response => {
-    //   console.log(response)
-    //   if (response.ok === false) {
-    //     myPopup.innerHTML = `
-    //     <div class="popup-content">
-    //         <label for="" class="text-bold">Wrong Credentials</label>
-    //         <p>User Already Exists</p>
-    //         <button id="yesButton" class="formal-button">
-    //             OK
-    //         </button>
-    //     </div>
-    //     `
-    //     document.getElementById("yesButton").addEventListener("click", function () {
-    //       myPopup.classList.remove("show");
-    //       // window.location.href = "/welcome"
-    //     });
-    //     showPopup()
-    //     return
-    //   }
-    //   return response.json()
-
-    // })
     .then(data => {
       console.log(data);
       if (data.ok === true) {

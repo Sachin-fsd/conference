@@ -63,14 +63,28 @@
                         </select>
                         <input type="text" placeholder="Name" id="name">
                         <input type="text" placeholder="School" id="school">
-                        <input type="text" placeholder="Course" id="course">
+                        <!-- <label for="course" class="audience-label">Course</label> -->
+                        <select id="course" name="target_audience">
+                            <option hidden value="">Select Course</option>
+                            <option value="btech">B.Tech</option>
+                            <option value="bca">BCA</option>
+                            <option value="mba">MBA</option>
+                            <option value="psychology">Psychology</option>
+                            <option value="commerce">Commerce</option>
+                            <option value="arts">Arts</option>
+                            <option value="science">Science</option>
+                            <option value="law">Law</option>
+                            <option value="other">Other</option>
+                        </select>
                         <input type="text" placeholder="Section" id="section">
                         <input type="text" placeholder="RollNo" id="rollno">
                         <input type="email" placeholder="Email" id="email">
                         <input type="password" placeholder="Password" id="password">
                         <input type="file" id="idcard" style="display: none;"
                             onchange="document.getElementById('fileLabel').innerText = this.files[0].name">
-                        <label for="idcard" id="fileLabel" style="cursor: pointer;"><p style="color: rgb(59, 55, 55);">Upload your ID Card</p></label>
+                        <label for="idcard" id="fileLabel" style="cursor: pointer;">
+                            <p style="color: rgb(59, 55, 55);">Upload your ID Card</p>
+                        </label>
                         <button type="submit" class="login_btn" id="submit-btn">Send for Verification</button>
                     </form>
 

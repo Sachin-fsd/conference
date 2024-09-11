@@ -171,10 +171,18 @@
               </div>
             </div>
 
-            <div class="caption">
-
-              <p><span class="harsh-tag">#lifestyle</span></p>
-            </div>
+            <!-- <div class="caption">
+              <p>
+                {{#if (eq this.UserDetails.UserRole 'student')}}
+                <b>{{UserDetails.UserSchool}}</b>
+                | {{UserDetails.UserCourse}} | <b>Section</b> {{UserDetails.UserSection}} |
+                <b>Roll No.</b>
+                {{UserDetails.UserRollno}}
+                {{else}}
+                <b>Target:{{this.target}}</b>
+                {{/if}}
+              </p>
+            </div> -->
             <a href="/comment/{{this._id}}">
               <div class="comments text-muted">View all comments</div>
             </a>
@@ -200,10 +208,14 @@
 
             <div class="caption">
               <p>
+                {{#if (eq this.role 'student')}}
                 <b>{{this.school}}</b>
-                | {{this.course}} | <b>Section</b> {{section}} |
+                | {{this.course}} | <b>Section</b> {{this.section}} |
                 <b>Roll No.</b>
                 {{this.rollno}}
+                {{else}}
+                <b>Role: {{this.role}}</b>
+                {{/if}}
               </p>
             </div>
           </div>

@@ -74,12 +74,17 @@ hbs.registerHelper('or', function (a, b) {
 });
 
 hbs.registerHelper("eq", function (a, b) {
-  // console.log(a,b,typeof a, typeof b, a.toString(), b.toString())
   if(typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined) {
     return a === b;
   }
-  // console.log("ab=>",a,b,a.toString(),b.toString())
   return a.toString() === b.toString();
+});
+
+hbs.registerHelper("neq", function (a, b) {
+  if(typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined) {
+    return a !== b;
+  }
+  return a.toString() !== b.toString();
 });
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -340,19 +345,19 @@ connectDB().then(() => {
 });
 
 
-// async function updateFieldForStudents() {
-//   try {
-//     // Update a specific field for all users where role is 'student'
-//     const result = await RegisterModel.updateMany(
-//       { },       // Condition
-//       { $set: { role: 'student' } } // Update operation: set the field with a new value
-//     );
+async function updateFieldForStudents() {
+  try {
+    // Update a specific field for all users where role is 'student'
+    const result = await RegisterModel.updateMany(
+      { },       // Condition
+      { $set: { course: 'btech' } } // Update operation: set the field with a new value
+    );
     
-//     // console.log(`Updated ${result.nModified} student records.`);
-//   } catch (err) {
-//     console.error('Error updating students:', err);
-//   }
-// }
+    // console.log(`Updated ${result.nModified} student records.`);
+  } catch (err) {
+    console.error('Error updating students:', err);
+  }
+}
 
-// // Call the function to update the field
+// Call the function to update the field
 // updateFieldForStudents();

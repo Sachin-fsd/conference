@@ -114,12 +114,17 @@ async function seachUser(event) {
         </div>
 
         <div class="caption">
-          <p>
-            <b>${user.school}</b>
-            | ${user.course} | <b>Section</b> ${user.section} |
-            <b>Roll No.</b>
-            ${user.rollno}
-          </p>
+        ${user.role === "student" ? (`
+        <p>
+          <b>${user.school}</b>
+          | ${user.course} | <b>Section</b> ${user.section} |
+          <b>Roll No.</b>
+          ${user.rollno}
+        </p>`) : (`
+          <b>Role: ${user.role}</b>
+          `
+        )
+        }
         </div>
           
       `;
