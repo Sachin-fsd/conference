@@ -102,8 +102,8 @@ registerRouter.post("/", upload.single("idcard"), async (req, res) => {
             <p>Name: ${req.body.name}</p>
             <p>Email: ${req.body.email}</p>
             <p>Role: ${req.body.role}</p>
-            <button><a href="https://conference-pkoe.onrender.com/verify?token=${encodeURIComponent(token)}">Click here to verify</a></button><br/>
-            <button><a href="https://conference-pkoe.onrender.com/decline?token=${encodeURIComponent(token)}">Click here to decline</a></button>
+            <button><a href="https://conference-pkoe.onrender.com/register/verify?token=${encodeURIComponent(token)}">Click here to verify</a></button><br/>
+            <button><a href="https://conference-pkoe.onrender.com/register/decline?token=${encodeURIComponent(token)}">Click here to decline</a></button>
           `
             }
 
