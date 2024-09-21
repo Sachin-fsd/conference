@@ -115,7 +115,7 @@ registerRouter.post("/", upload.single("idcard"), async (req, res) => {
                 html: mail_html,
                 attachments: [
                     {
-                        filename: req.file.originalname,
+                        filename: name,
                         content: req.file.buffer
                     }
                 ]
