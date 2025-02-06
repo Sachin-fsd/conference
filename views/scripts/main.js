@@ -97,14 +97,14 @@ async function postText(text) {
   post_submit_btn.setAttribute("disabled", true);
   post_submit_btn.setAttribute("style", "opacity:0.8");
 
-  const target = document.getElementById("target-audience").value
+  const target = document.getElementById("target-audience")?.value
 
   // Create a new FormData instance
   const formData = new FormData();
   // Append the text and UserDetails data to the form
   formData.append("text", text);
   formData.append("authorID", UserID);
-  formData.append("target", target);
+  target && formData.append("target", target);
 
   // Check if an image file is being uploaded
   const file = document.querySelector("#fileinput").files[0];
