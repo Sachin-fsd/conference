@@ -12,7 +12,7 @@ const { postRouter } = require("./routes/post.router.js");
 const { googleAuthRouter } = require('./auth/oauth.google')
 const path = require("path");
 const hbs = require("hbs");
-const registerRouter  = require("./routes/register.router");
+const registerRouter = require("./routes/register.router");
 const { loginRouter } = require("./routes/login.router");
 const { forgetRouter } = require("./routes/forget_pwd.route");
 const { Server } = require("socket.io");
@@ -74,14 +74,16 @@ hbs.registerHelper('or', function (a, b) {
 });
 
 hbs.registerHelper("eq", function (a, b) {
-  if(typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined) {
+  if (typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined) {
     return a === b;
   }
-  return a.toString() === b.toString();
+  if (a && b) {
+    return a.toString() === b.toString();
+  }
 });
 
 hbs.registerHelper("neq", function (a, b) {
-  if(typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined) {
+  if (typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined) {
     return a !== b;
   }
   return a.toString() !== b.toString();
@@ -149,22 +151,22 @@ app.get("/auth/github", async (req, res) => {
   // Check if user exists
   let user = await RegisterModel.findOne({ email: UserDetails.email });
   // console.log("user",user)
-  if(!user){
+  if (!user) {
     // console.log(UserDetails)
     await RegisterModel.create(UserDetails)
-      user = await RegisterModel.findOne({ email:UserDetails.email })
-      UserDetails = {
-        UserID: user._id,
-        UserName: user.name,
-        UserEmail: user.email,
-        UserDp: user.dp
-      }
-      
-      transporter.sendMail({
-        to: user.email,
-        from: process.env.mail_admin,
-        subject: 'Welcome to Conference!',
-        text: `Dear ${user.name},
+    user = await RegisterModel.findOne({ email: UserDetails.email })
+    UserDetails = {
+      UserID: user._id,
+      UserName: user.name,
+      UserEmail: user.email,
+      UserDp: user.dp
+    }
+
+    transporter.sendMail({
+      to: user.email,
+      from: process.env.mail_admin,
+      subject: 'Welcome to Conference!',
+      text: `Dear ${user.name},
       
       Thank you for registering at Conference! We're thrilled to have you on board.
       
@@ -177,30 +179,30 @@ app.get("/auth/github", async (req, res) => {
       Best,
       Sachin
       Founder and CEO`
-      })
-  }else{
-    const id = await BlackListTokenModel.findOne({id:user._id})
-      if(id){
-        await BlackListTokenModel.deleteOne({id:user._id})
-      }
-      UserDetails = {
-        UserID: user._id,
-        UserName: user.name,
-        UserEmail: user.email,
-        UserDp: user.dp,
-        UserSchool: user.school,
-        UserCourse: user.course,
-        UserSection: user.section,
-        UserRollno: user.rollno,
-        UserHandle: user.handle,
-      };
+    })
+  } else {
+    const id = await BlackListTokenModel.findOne({ id: user._id })
+    if (id) {
+      await BlackListTokenModel.deleteOne({ id: user._id })
+    }
+    UserDetails = {
+      UserID: user._id,
+      UserName: user.name,
+      UserEmail: user.email,
+      UserDp: user.dp,
+      UserSchool: user.school,
+      UserCourse: user.course,
+      UserSection: user.section,
+      UserRollno: user.rollno,
+      UserHandle: user.handle,
+    };
   }
   const token = jwt.sign(
     { UserDetails },
     process.env.secret_key,
     { expiresIn: "7 days" }
   )
-  res.cookie("token",token,{httpOnly: true, maxAge: 60 * 60 * 24 * 7 * 1000});
+  res.cookie("token", token, { httpOnly: true, maxAge: 60 * 60 * 24 * 7 * 1000 });
   res.cookie("UserDetails", UserDetails);
   res.status(201).redirect("/")
 });
@@ -209,23 +211,23 @@ app.get("/welcome", (req, res) => {
   res.render("landing");
 });
 
-app.use("/pic1",(req,res)=>{
+app.use("/pic1", (req, res) => {
   let filePath = path.join(__dirname, "views/images/pic1.png");
   res.sendFile(filePath);
 })
-app.use("/pic2",(req,res)=>{
+app.use("/pic2", (req, res) => {
   let filePath = path.join(__dirname, "views/images/pic2.png");
   res.sendFile(filePath);
 })
-app.use("/pic3",(req,res)=>{
+app.use("/pic3", (req, res) => {
   let filePath = path.join(__dirname, "views/images/pic3.png");
   res.sendFile(filePath);
 })
-app.use("/pic4",(req,res)=>{
+app.use("/pic4", (req, res) => {
   let filePath = path.join(__dirname, "views/images/pic4.png");
   res.sendFile(filePath);
 })
-app.use("/pic5",(req,res)=>{
+app.use("/pic5", (req, res) => {
   let filePath = path.join(__dirname, "views/images/pic5.png");
   res.sendFile(filePath);
 })
@@ -238,29 +240,29 @@ app.get("/favicon.ico", (req, res) => {
   res.sendFile(filePath);
 });
 
-app.get("/user",authenticator,(req,res)=>{
-  let {UserDetails} = req.body;
+app.get("/user", authenticator, (req, res) => {
+  let { UserDetails } = req.body;
   // console.log(req.user)
   res.send(req.user)
 })
-app.get("/contacts",authenticator,async(req,res)=>{
+app.get("/contacts", authenticator, async (req, res) => {
   // console.log(req.body,req.user)
   try {
     const messages = await MessageModel.find({
-    $or: [{ "sender.UserID": req.user.UserID }, { "receiver.UserID": req.user.UserID }],
-  }).sort({ updatedAt: -1 });
-  // Fetch the users
-  let users = [];
-  if (messages.length < 5) {
-    users = await RegisterModel.find({}, { _id: 1, name: 1, dp: 1 })
-      .sort({ CreatedAt: -1 })
-      .limit(5);
-  }
-  // console.log({messages,users})
-  res.send({messages,users})
+      $or: [{ "sender.UserID": req.user.UserID }, { "receiver.UserID": req.user.UserID }],
+    }).sort({ updatedAt: -1 });
+    // Fetch the users
+    let users = [];
+    if (messages.length < 5) {
+      users = await RegisterModel.find({}, { _id: 1, name: 1, dp: 1 })
+        .sort({ CreatedAt: -1 })
+        .limit(5);
+    }
+    // console.log({messages,users})
+    res.send({ messages, users })
   } catch (error) {
     console.log(error)
-    res.send({msg:error})
+    res.send({ msg: error })
   }
 })
 
@@ -270,10 +272,10 @@ app.use("/chat", authenticator, chatRouter);
 app.use("/message", authenticator, messageRouter);
 app.use("/follow", authenticator, followRouter);
 app.use("/settings", authenticator, settingsRouter);
-app.use("/profile",authenticator,profileRouter);
-app.use("/notification",authenticator,notificationRouter)
-app.use("/save",authenticator,saveRouter)
-app.use("/like",authenticator,likeRouter)
+app.use("/profile", authenticator, profileRouter);
+app.use("/notification", authenticator, notificationRouter)
+app.use("/save", authenticator, saveRouter)
+app.use("/like", authenticator, likeRouter)
 
 app.use("/", authenticator, postRouter);
 
@@ -322,7 +324,7 @@ io.on("connection", (socket) => {
     socket.leave(postID);
   });
 
-  socket.on("new comment",async (comment) => {
+  socket.on("new comment", async (comment) => {
     io.to(comment.postID).emit("new comment", comment);
   });
 
@@ -349,10 +351,10 @@ async function updateFieldForStudents() {
   try {
     // Update a specific field for all users where role is 'student'
     const result = await RegisterModel.updateMany(
-      { },       // Condition
+      {},       // Condition
       { $set: { course: 'btech' } } // Update operation: set the field with a new value
     );
-    
+
     // console.log(`Updated ${result.nModified} student records.`);
   } catch (err) {
     console.error('Error updating students:', err);
