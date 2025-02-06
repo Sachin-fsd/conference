@@ -141,13 +141,13 @@ postRouter.get("/", async (req, res) => {
     })
       .populate('senderID', '_id name dp handle') // fetch from sender
       .populate('receiverID', '_id name dp handle') // fetch from receiver
-      .sort({ CreatedAt: -1 }).limit(5);
+      .sort({ UpdatedAt: -1 }).limit(5);
 
     // Fetch the users if less than 5 messages
     let users = [];
     if (messages.length < 5) {
       users = await RegisterModel.find({}, { _id: 1, name: 1, dp: 1 })
-        .sort({ CreatedAt: -1 })
+        .sort({ UpdatedAt: -1 })
         .limit(5);
     }
     // console.log(posts)

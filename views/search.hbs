@@ -128,7 +128,7 @@
                 </div>
               </a>
 
-              
+
 
             </div>
             <a href="/comment/{{this._id}}">
@@ -161,7 +161,7 @@
             <div class="action-buttons">
               <div class="interaction-buttons">
                 <span><i class="uil uil-thumbs-up"></i></span>
-               
+
                 <span><a href="/comment/{{this._id}}"><i class="uil uil-comment-dots"
                       style="color: rgb(51, 100, 51);"></i></a></span>
                 <span><i class="uil uil-share-alt"></i></span>
@@ -203,7 +203,7 @@
                   </div>
                 </div>
               </a>
-              
+
             </div>
 
             <div class="caption">
@@ -240,72 +240,47 @@
           </div>
           <!-- MESSAGES CATEGORY -->
           <div class="category">
-            <h6 class="active">Primary</h6>
-            <h6>General</h6>
-            <h6 class="message-requests">Requests{3}</h6>
+            <!-- <h6 class="active">Primary</h6> -->
+            <h6 class="active">General</h6>
+            <!-- <h6 class="message-requests">Requests{3}</h6> -->
           </div>
           <!-- MESSAGE -->
+          {{#each messages}}
           <div class="message">
             <div class="profile-photo">
-              <img src="https://cdn.pixabay.com/photo/2023/11/19/14/10/hangzhou-8398789_640.jpg" />
+              <img
+                src="{{#if (eq this.senderID._id ../UserDetails.UserID)}}{{this.receiverID.dp}}{{else}}{{this.senderID.dp}}{{/if}}" />
             </div>
             <div class="message-body">
-              <h5>Eden Quist</h5>
-              <p class="text-muted">Just woke up, bruh</p>
+              <a href="/chat/{{#if (eq this.senderID._id ../UserDetails.UserID)}}{{this.receiverID._id}}{{else}}{{this.senderID._id}}{{/if}}"
+                class="profile users-profile">
+                <h5>{{#if (eq this.senderID._id ../UserDetails.UserID)}}{{this.receiverID.name}} {{else}}
+                  {{this.senderID.name}} {{/if}}</h5>
+                <p class="text-muted">in your chats</p>
+              </a>
             </div>
           </div>
+          {{/each}}
+          {{#if (eq SideUsers.length 0)}}{{else}}
+          <p class="text-muted">New Users</p>
+          {{#each SideUsers}}
           <div class="message">
             <div class="profile-photo">
-              <img src="https://cdn.pixabay.com/photo/2023/03/06/06/40/backpack-7832746_640.jpg" />
-              <div class="active"></div>
+              <img src="{{this.dp}}" />
             </div>
             <div class="message-body">
-              <h5>Lana Rose</h5>
-              <p class="text-bold">Well received! Thanks</p>
+              <a href="/{{this._id}}" class="profile users-profile">
+                <h5>{{this.name}}</h5>
+                <p class="text-muted">user at conference</p>
+              </a>
             </div>
           </div>
-          <div class="message">
-            <div class="profile-photo">
-              <img src="https://cdn.pixabay.com/photo/2023/09/29/07/58/mango-8283268_640.jpg" />
-            </div>
-            <div class="message-body">
-              <h5>John Doe</h5>
-              <p class="text-muted">Ok</p>
-            </div>
-          </div>
-          <div class="message">
-            <div class="profile-photo">
-              <img src="https://cdn.pixabay.com/photo/2024/01/07/14/12/man-8493244_640.jpg" />
-              <div class="active"></div>
-            </div>
-            <div class="message-body">
-              <h5>Daniela Jackson</h5>
-              <p class="text-muted">2 new messages</p>
-            </div>
-          </div>
-          <div class="message">
-            <div class="profile-photo">
-              <img src="https://cdn.pixabay.com/photo/2023/09/10/11/44/tulip-8244705_640.jpg" />
-            </div>
-            <div class="message-body">
-              <h5>Juliet Makarey</h5>
-              <p class="text-muted">Lol, u right</p>
-            </div>
-          </div>
-          <div class="message">
-            <div class="profile-photo">
-              <img src="https://cdn.pixabay.com/photo/2023/12/15/15/52/bird-8450958_640.png" />
-              <div class="active"></div>
-            </div>
-            <div class="message-body">
-              <h5>Chantal Msiza</h5>
-              <p class="text-bold">Birthday tomorrow!</p>
-            </div>
-          </div>
+          {{/each}}
+          {{/if}}
         </div>
         <!-- END OF MESSAGES -->
         <!-- FRIEND REQUSTS -->
-        <div class="friend-requests">
+        <!-- <div class="friend-requests">
           <h4>Requests</h4>
           <div class="request">
             <div class="info">
@@ -352,7 +327,7 @@
               <button class="btn">Decline</button>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <!-- END OF RIGHT -->
       <!-- THEME CUSTOMIZATION -->

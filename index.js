@@ -86,7 +86,9 @@ hbs.registerHelper("neq", function (a, b) {
   if (typeof a === 'boolean' || typeof a === 'number' || typeof a === null || typeof a === undefined) {
     return a !== b;
   }
-  return a.toString() !== b.toString();
+  if(a && b){
+    return a.toString() !== b.toString();
+  }
 });
 const transporter = nodemailer.createTransport({
   service: "gmail",
