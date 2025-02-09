@@ -1,6 +1,6 @@
 # workflow
 
-name: "Conference"
+name: "UniVerse"
 
 on:
     push:

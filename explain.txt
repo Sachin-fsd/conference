@@ -54,7 +54,7 @@ changs for react
               <div class="message-body">
                 <a href="/chat/{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserID}}{{else}}{{this.sender.UserID}}{{/if}}" class="profile unread users-profile">
                 <h5>{{#if (eq this.sender.UserID ../UserDetails.UserID)}}{{this.receiver.UserName}} {{else}} {{this.sender.UserName}} {{/if}}</h5>
-                <p class="text-muted">user at conference</p>
+                <p class="text-muted">user at UniVerse</p>
                 </a>
               </div>
             </div>
@@ -72,7 +72,7 @@ changs for react
             <div class="message-body">
               <a href="/{{this._id}}" class="profile unread users-profile">
               <h5>{{this.name}}</h5>
-              <p class="text-muted">user at conference</p>
+              <p class="text-muted">user at UniVerse</p>
               </a>
             </div>
           </div>
@@ -225,7 +225,7 @@ document.getElementById("right").innerHTML = `
               src="https://pbs.twimg.com/media/E_mOsqtXoAQLmN0?format=png&name=240x240"
               alt="Instragram logo; the text reads 'Instagram', written in the platform's iconic cursive font."
             /> -->
-            <h1 style="font-size: 30px;">CONFERENCE</h1>
+            <h1 style="font-size: 30px;">UniVerse</h1>
           </div>
           <div id="login">
             <form id="pwd_forget_form" >

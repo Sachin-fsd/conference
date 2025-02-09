@@ -167,16 +167,16 @@ app.get("/auth/github", async (req, res) => {
     transporter.sendMail({
       to: user.email,
       from: process.env.mail_admin,
-      subject: 'Welcome to Conference!',
+      subject: 'Welcome to UniVerse!',
       text: `Dear ${user.name},
       
-      Thank you for registering at Conference! We're thrilled to have you on board.
+      Thank you for registering at UniVerse! We're thrilled to have you on board.
       
       We're committed to providing you with the best experience possible.
       If you have any questions, need help, want to report a bug, or just want to share your thoughts,
       Please feel free to reply to this email. We're here to help!
       
-      Looking forward to seeing you on Conference.
+      Looking forward to seeing you on UniVerse.
       
       Best,
       Sachin

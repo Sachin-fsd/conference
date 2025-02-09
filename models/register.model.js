@@ -11,7 +11,7 @@ const registerSchema = mongoose.Schema(
     password: { type: String, required: true },
     handle: { type: String},
     dp: { type: String, default: "https://cdn-icons-png.flaticon.com/128/3177/3177440.png" },
-    bio: { type: String, default: "I Love Conference💖" },
+    bio: { type: String, default: "I Love UniVerse💖" },
     role: {type: String, enum:["student", "faculty", "superadmin", "admin"], require:true}
   },
   { timestamps: true }

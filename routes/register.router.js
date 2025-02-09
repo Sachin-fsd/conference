@@ -88,8 +88,8 @@ registerRouter.post("/", upload.single("idcard"), async (req, res) => {
             <p>Rollno: ${req.body.rollno}</p>
             <p>Email: ${req.body.email}</p>
             <p>Role: ${req.body.role}</p>
-            <button><a href="https://conference-pkoe.onrender.com/register/verify?token=${encodeURIComponent(token)}">Click here to verify</a></button><br/>
-            <button><a href="https://conference-pkoe.onrender.com/register/decline?token=${encodeURIComponent(token)}">Click here to decline</a></button>
+            <button><a href="https://UniVerse-pkoe.onrender.com/register/verify?token=${encodeURIComponent(token)}">Click here to verify</a></button><br/>
+            <button><a href="https://UniVerse-pkoe.onrender.com/register/decline?token=${encodeURIComponent(token)}">Click here to decline</a></button>
           `
             } else if (role == "faculty") {
                 mail_body = `
@@ -102,8 +102,8 @@ registerRouter.post("/", upload.single("idcard"), async (req, res) => {
             <p>Name: ${req.body.name}</p>
             <p>Email: ${req.body.email}</p>
             <p>Role: ${req.body.role}</p>
-            <button><a href="https://conference-pkoe.onrender.com/register/verify?token=${encodeURIComponent(token)}">Click here to verify</a></button><br/>
-            <button><a href="https://conference-pkoe.onrender.com/register/decline?token=${encodeURIComponent(token)}">Click here to decline</a></button>
+            <button><a href="https://UniVerse-pkoe.onrender.com/register/verify?token=${encodeURIComponent(token)}">Click here to verify</a></button><br/>
+            <button><a href="https://UniVerse-pkoe.onrender.com/register/decline?token=${encodeURIComponent(token)}">Click here to decline</a></button>
           `
             }
 
@@ -170,16 +170,16 @@ registerRouter.get("/verify", async (req, res) => {
             transporter.sendMail({
                 to: email,
                 from: process.env.mail_admin,
-                subject: 'Welcome to Conference!',
+                subject: 'Welcome to UniVerse!',
                 text: `Dear ${name},
             
-Thank you for registering at Conference! We're thrilled to have you on board.
+Thank you for registering at UniVerse! We're thrilled to have you on board.
 
 We're committed to providing you with the best experience possible.
 If you have any questions, need help, want to report a bug, or just want to share your thoughts,
 Please feel free to reply to this email. We're here to help!
 
-Looking forward to seeing you on Conference.
+Looking forward to seeing you on UniVerse.
 
 Best,
 Sachin
@@ -216,10 +216,10 @@ registerRouter.get("/decline", async (req, res) => {
         transporter.sendMail({
             to: email,
             from: process.env.mail_admin,
-            subject: 'Welcome to Conference!',
+            subject: 'Welcome to UniVerse!',
             text: `Dear ${name},
 
-We regret to inform you that your account creation request at Conference has been cancelled. This decision was made due to some discrepancies in the details provided during registration.
+We regret to inform you that your account creation request at UniVerse has been cancelled. This decision was made due to some discrepancies in the details provided during registration.
 
 We understand that this might be disappointing, but please rest assured that this measure is taken to ensure the security and authenticity of all our users.
 
