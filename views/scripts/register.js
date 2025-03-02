@@ -4,6 +4,17 @@ document.getElementById("yesButton").addEventListener("click", function () {
   window.location.href = "/welcome"
 });
 
+function updateFileName() {
+  const fileInput = document.getElementById("idcard");
+  const fileName = document.getElementById("file-name");
+
+  if (fileInput.files.length > 0) {
+    fileName.innerText = fileInput.files[0].name;
+  } else {
+    fileName.innerText = "No file chosen";
+  }
+}
+
 const role = document.getElementById("role");
 
 role.onchange = () => {
@@ -12,7 +23,7 @@ role.onchange = () => {
     document.getElementById("course").style.display = "none"
     document.getElementById("section").style.display = "none"
     document.getElementById("rollno").style.display = "none"
-  }else{
+  } else {
     document.getElementById("school").style.display = "block"
     document.getElementById("course").style.display = "block"
     document.getElementById("section").style.display = "block"
@@ -117,7 +128,7 @@ document.getElementById("register_form").addEventListener("submit", (event) => {
           window.location.href = "/welcome"
         });
         showPopup();
-        
+
       } else {
         myPopup.innerHTML = `
         <div class="popup-content">

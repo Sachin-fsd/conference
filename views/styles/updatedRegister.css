@@ -90,6 +90,7 @@ a:active {
 #footer-ctr {
   position: relative;
   padding: 0 2em;
+  margin-top: 10px;
 }
 
 #footer-ctr div {
@@ -150,33 +151,34 @@ a:active {
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
 
 
-.active{
+.active {
   border-radius: 15px;
   background: linear-gradient(90deg, #003A74, #006AD5);
   color: white;
 }
-.card{
-    width: auto;
-    height: auto;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
+
+.card {
+  width: auto;
+  height: auto;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
 }
 
-.card h2{
+.card h2 {
   margin-bottom: 10px;
 }
 
-.card a.fp{
+.card a.fp {
   width: 100%;
   display: flex;
   color: #5881D0;
 }
 
-.login_register{
+.login_register {
   display: flex;
   width: 100%;
   border: 1px solid rgba(221, 221, 221, 1);
@@ -184,26 +186,27 @@ a:active {
   margin: 20px 0;
 }
 
-.login_register a{
+.login_register a {
   font-size: 1em;
   padding: 10px 55px;
   border: none;
   width: 50%;
 }
 
-.login_register a.login{
+.login_register a.login {
   border-radius: 15px;
   background-color: transparent;
   color: black;
 }
 
-.form{
+.form {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.form input, .form select{
+.form input,
+.form select {
   margin-bottom: 15px;
   padding: 10px;
   border-radius: 5px;
@@ -213,19 +216,19 @@ a:active {
   box-shadow: 1px 5px 9px rgba(211, 211, 211, .7);
 }
 
-.form input.email{
+.form input.email {
   margin-bottom: 15px;
 }
 
-.form input.pass{
+.form input.pass {
   margin-bottom: 15px;
 }
 
-.form input.comfirm_pass{
+.form input.comfirm_pass {
   margin-bottom: 5px;
 }
 
-.login_btn{
+.login_btn {
   font-size: 20px;
   color: white;
   border-radius: 15px;
@@ -239,19 +242,49 @@ a:active {
   box-shadow: 1px 5px 9px rgba(211, 211, 211, .9);
 }
 
-.footer_card{
+.upload-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px;
+  border: 2px dashed #4CAF50;
+  border-radius: 8px;
+  color: #4CAF50;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.upload-label:hover {
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+.upload-label i {
+  font-size: 20px;
+}
+
+#file-name {
+  font-size: 14px;
+  color: #555;
+}
+
+
+.footer_card {
   display: flex;
   width: 100%;
   justify-content: center;
 }
 
-.footer_card p{
+.footer_card p {
   margin-right: 10px;
 }
 
-.footer_card a{
+.footer_card a {
   color: #5881D0;
 }
+
 /* ---------- MEDIA QUERIES ---------- */
 @media only screen and (max-width: 450px) {
   body {
@@ -386,6 +419,7 @@ a:active {
     z-index: 0;
   }
 }
-.login_btn{
+
+.login_btn {
   cursor: pointer;
 }

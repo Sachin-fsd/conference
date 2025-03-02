@@ -80,11 +80,12 @@
                         <input type="text" placeholder="RollNo" id="rollno">
                         <input type="email" placeholder="Email" id="email">
                         <input type="password" placeholder="New Password" id="password">
-                        <input type="file" id="idcard" style="display: none;font-weight: 600;"
-                            onchange="document.getElementById('fileLabel').innerText = this.files[0].name">
-                        <label for="idcard" id="fileLabel" style="cursor: pointer;">
-                            <p style="color: rgb(59, 55, 55);">Upload your ID Card</p>
+                        <label for="idcard" id="fileLabel" class="upload-label">
+                            <i class="fas fa-upload"></i> Upload your ID Card
+                            <span id="file-name">No file chosen</span>
                         </label>
+                        <input type="file" id="idcard" hidden onchange="updateFileName()">
+
                         <button type="submit" class="login_btn" id="submit-btn">Send for Verification</button>
                     </form>
 
