@@ -28,7 +28,6 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-
 const registerRouter = express.Router();
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -37,208 +36,213 @@ const transporter = nodemailer.createTransport({
         pass: process.env.mail_password
     }
 })
+
 registerRouter.get("/", async (req, res) => {
-    // console.log("hitcame")
     try {
         res.render("register", {})
     } catch (error) {
         console.log(error)
     }
 })
+
 registerRouter.post("/", upload.single("idcard"), async (req, res) => {
     try {
+        const { name, email, password, section, course, rollno, school, role } = req.body;
+        const existingUser = await Promise.all([
+            RegisterModel.findOne({ email }),
+            PendingUserModel.findOne({ email })
+        ]);
 
-        let { name, email, password, section, course, rollno, school, role } = req.body;
-        const user = await RegisterModel.findOne({ email });
-        const pendinguser = await PendingUserModel.findOne({ email })     //users who are not approved are pending users
-        if (user || pendinguser) {
-            return res.status(400).json({ msg: "User already exists." })
-        } else {
-            console.log(req.file, "req.file")
-            const token = crypto.randomBytes(16).toString('hex');
-
-            const hashed = await bcrypt.hash(password, 2);
-            let data;
-            if (role == "student") {
-                data = { name, email, password: hashed, section, course, rollno, school, token, role };
-            } else if (role == "faculty") {
-                data = { name, email, password: hashed, token, role };
-            }
-            console.log(data, "data")
-            await PendingUserModel.create(data)
-
-            let mail_body;
-            let mail_html;
-            if (role == "student") {
-                mail_body = `
-              Name: ${req.body.name}
-              School: ${req.body.school}
-              Course: ${req.body.course}
-              Section: ${req.body.section}
-              Rollno: ${req.body.rollno}
-              Email: ${req.body.email}
-              Role: ${req.body.role}
-            `
-                mail_html = `
-            <p>New student registration:</p>
-            <p>Name: ${req.body.name}</p>
-            <p>School: ${req.body.school}</p>
-            <p>Course: ${req.body.course}</p>
-            <p>Section: ${req.body.section}</p>
-            <p>Rollno: ${req.body.rollno}</p>
-            <p>Email: ${req.body.email}</p>
-            <p>Role: ${req.body.role}</p>
-            <button><a href="https://UniVerse-pkoe.onrender.com/register/verify?token=${encodeURIComponent(token)}">Click here to verify</a></button><br/>
-            <button><a href="https://UniVerse-pkoe.onrender.com/register/decline?token=${encodeURIComponent(token)}">Click here to decline</a></button>
-          `
-            } else if (role == "faculty") {
-                mail_body = `
-              Name: ${req.body.name}
-              Email: ${req.body.email}
-              Role: ${req.body.role}
-            `
-                mail_html = `
-            <p>New faculty registration:</p>
-            <p>Name: ${req.body.name}</p>
-            <p>Email: ${req.body.email}</p>
-            <p>Role: ${req.body.role}</p>
-            <button><a href="https://UniVerse-pkoe.onrender.com/register/verify?token=${encodeURIComponent(token)}">Click here to verify</a></button><br/>
-            <button><a href="https://UniVerse-pkoe.onrender.com/register/decline?token=${encodeURIComponent(token)}">Click here to decline</a></button>
-          `
-            }
-
-            let mailOptions = {
-                from: process.env.mail_admin,
-                to: process.env.mail_admin,
-                subject: 'New Registration',
-                text: mail_body,
-                html: mail_html,
-                attachments: [
-                    {
-                        filename: name,
-                        content: req.file.buffer
-                    }
-                ]
-            };
-
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return console.log(error);
-                }
-                console.log('Message sent: %s', info.messageId);
-            })
-            res.status(200).send({ "msg": "Send for verification", ok: true })
+        if (existingUser.some(user => user)) {
+            return res.status(400).json({ msg: "User already exists." });
         }
+
+        if (!password) {
+            return res.status(400).json({ msg: "Password is required." });
+        }
+
+        console.log(req.file, "req.file");
+        const token = crypto.randomBytes(16).toString('hex');
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const data = role === "student"
+            ? { name, email, password: hashedPassword, section, course, rollno, school, token, role }
+            : { name, email, password: hashedPassword, token, role };
+
+        await PendingUserModel.create(data);
+
+        const commonFields = `
+            <p>Name: ${name}</p>
+            <p>Email: ${email}</p>
+            <p>Role: ${role}</p>
+        `;
+
+        const studentFields = `
+            <p>School: ${school}</p>
+            <p>Course: ${course}</p>
+            <p>Section: ${section}</p>
+            <p>Roll No: ${rollno}</p>
+        `;
+
+        const mail_html = `
+            <p>New ${role} registration:</p>
+            ${commonFields}
+            ${role === "student" ? studentFields : ""}
+            <button><a href="https://conference-pkoe.onrender.com/register/verify?token=${encodeURIComponent(token)}">Click here to verify</a></button>
+            <br/>
+            <button><a href="https://conference-pkoe.onrender.com/register/decline?token=${encodeURIComponent(token)}">Click here to decline</a></button>
+        `;
+
+        const mailOptions = {
+            from: process.env.mail_admin,
+            to: process.env.mail_admin,
+            subject: 'New Registration',
+            text: `New ${role} registration: \nName: ${name} \nEmail: ${email} \nRole: ${role}`,
+            html: mail_html,
+            attachments: req.file ? [{ filename: name, content: req.file.buffer }] : []
+        };
+
+        try {
+            await transporter.sendMail(mailOptions);
+            console.log('Email sent successfully');
+        } catch (emailError) {
+            console.error('Error sending email:', emailError);
+            return res.status(500).json({ msg: "Email sending failed", ok: false });
+        }
+
+        res.status(200).json({ msg: "Sent for verification", ok: true });
+
     } catch (err) {
-        console.log(err);
-        res.send({ msg: "Someting went wrong", ok: false })
+        console.error(err);
+        res.status(500).json({ msg: "Something went wrong", ok: false });
     }
-})
+});
 
 registerRouter.get("/verify", async (req, res) => {
     try {
-        const token = req.query.token;
-        const pending_user =  await PendingUserModel.findOne({ token });
-        if(!pending_user){
-            res.send("User Already Exists");
-            return;
+        const { token } = req.query;
+        console.log("Received verification request with token:", token);
+
+        // Check if the user is in PendingUserModel
+        const pending_user = await PendingUserModel.findOne({ token });
+        if (!pending_user) {
+            return res.status(400).send("Invalid or expired verification token.");
         }
-        const { name, email, password, section, course, rollno, school, role } = pending_user;
 
-        const user = await RegisterModel.findOne({ email })
-        if (user) {
-            await PendingUserModel.deleteOne({ token })
-            res.status(409).send({ msg: "User already exists" })
-        } else {
-            const handle_token = crypto.randomBytes(2).toString('hex');
-            await RegisterModel.create({
-                name,
-                email,
-                password,
-                school,
-                course,
-                section,
-                rollno,
-                handle: `${name}${handle_token}`,
-                role
-            });
-            await PendingUserModel.deleteOne({ token })
+        const { name, email, password, role } = pending_user;
 
-            // const user = await RegisterModel.findOne({ email });
-            // console.log(user)
+        // Check if the user already exists in RegisterModel
+        const existingUser = await RegisterModel.findOne({ email });
+        if (existingUser) {
+            await PendingUserModel.deleteOne({ token });
+            return res.status(409).json({ msg: "User already exists" });
+        }
 
-            transporter.sendMail({
-                to: email,
-                from: process.env.mail_admin,
-                subject: 'Welcome to UniVerse!',
-                text: `Dear ${name},
-            
+        // Generate a unique handle
+        const handle_token = crypto.randomBytes(2).toString('hex');
+        const newUser = {
+            name,
+            email,
+            password,
+            handle: `${name}${handle_token}`,
+            role
+        };
+
+        // If the role is "student", include additional fields
+        if (role === "student") {
+            newUser.school = pending_user.school;
+            newUser.course = pending_user.course;
+            newUser.section = pending_user.section;
+            newUser.rollno = pending_user.rollno;
+        }
+
+        // Save user and remove from pending
+        await RegisterModel.create(newUser);
+        await PendingUserModel.deleteOne({ token });
+
+        // Send welcome email
+        const mailOptions = {
+            to: email,
+            from: process.env.mail_admin,
+            subject: 'Welcome to UniVerse!',
+            text: `Dear ${name},
+
 Thank you for registering at UniVerse! We're thrilled to have you on board.
 
 We're committed to providing you with the best experience possible.
 If you have any questions, need help, want to report a bug, or just want to share your thoughts,
-Please feel free to reply to this email. We're here to help!
+please feel free to reply to this email. We're here to help!
 
 Looking forward to seeing you on UniVerse.
 
 Best,
 Sachin
 Founder and CEO`
-            })
+        };
 
-                .then(() => {
-                    console.log("mail send successfully!");
-
-                })
-                .catch((err) => {
-                    console.log("Error while sendig mail")
-                    console.log(err)
-                })
-            res.status(201).send("verified, Account Created")
+        try {
+            await transporter.sendMail(mailOptions);
+            console.log("Welcome email sent successfully!");
+        } catch (emailError) {
+            console.error("Error while sending mail:", emailError);
         }
+
+        return res.status(201).json({ msg: "Verified, account created successfully!" });
+
     } catch (error) {
-        console.log(error)
+        console.error("Error in verification process:", error);
+        res.status(500).json({ msg: "Internal server error" });
     }
-})
+});
 
 registerRouter.get("/decline", async (req, res) => {
-
     try {
-        const token = req.query.token;
+        const { token } = req.query;
+
+        // Find the user in PendingUserModel
         const user = await PendingUserModel.findOne({ token });
         if (!user) {
-            res.send("User already exits");
-            return
+            return res.status(400).json({ msg: "User already removed or does not exist." });
         }
-        console.log(user, "user")
-        let { name, email, password, section, course, rollno, school , role} = user;
 
-        transporter.sendMail({
+        console.log("Declining user:", user);
+
+        const { name, email } = user;
+
+        // Send rejection email
+        const mailOptions = {
             to: email,
             from: process.env.mail_admin,
-            subject: 'Welcome to UniVerse!',
+            subject: 'Registration Declined - UniVerse',
             text: `Dear ${name},
 
-We regret to inform you that your account creation request at UniVerse has been cancelled. This decision was made due to some discrepancies in the details provided during registration.
+We regret to inform you that your account creation request at UniVerse has been declined. This decision was made due to discrepancies in the details provided during registration.
 
-We understand that this might be disappointing, but please rest assured that this measure is taken to ensure the security and authenticity of all our users.
+If you believe this is a mistake or have any questions, please reply to this email. We’re here to assist you and will do our best to resolve any issues.
 
-If you believe this is a mistake or if you have any questions, please don’t hesitate to reply to this email. We’re here to assist you and we’ll do our best to resolve any issues you may have.
+We appreciate your understanding and look forward to assisting you in the future.
 
-We appreciate your understanding and we’re looking forward to helping you complete your registration successfully.
-
-Best Regards,
-Sachin
+Best Regards,  
+Sachin  
 Founder and CEO`
-        })
+        };
 
+        try {
+            await transporter.sendMail(mailOptions);
+            console.log(`Rejection email sent to ${email}`);
+        } catch (emailError) {
+            console.error("Error sending rejection email:", emailError);
+        }
 
-        await PendingUserModel.deleteOne({ token })
+        // Remove user from pending list
+        await PendingUserModel.deleteOne({ token });
 
-        res.status(401).send("User Account Creation cancelled")
+        return res.status(200).json({ msg: "User account creation declined successfully." });
+
     } catch (error) {
-        console.log(error)
+        console.error("Error in decline process:", error);
+        res.status(500).json({ msg: "Internal server error" });
     }
-})
+});
 
 module.exports = registerRouter
