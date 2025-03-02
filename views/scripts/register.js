@@ -12,6 +12,11 @@ role.onchange = () => {
     document.getElementById("course").style.display = "none"
     document.getElementById("section").style.display = "none"
     document.getElementById("rollno").style.display = "none"
+  }else{
+    document.getElementById("school").style.display = "block"
+    document.getElementById("course").style.display = "block"
+    document.getElementById("section").style.display = "block"
+    document.getElementById("rollno").style.display = "block"
   }
 }
 
