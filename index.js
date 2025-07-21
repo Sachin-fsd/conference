@@ -37,6 +37,7 @@ const { likeRouter } = require("./routes/like.router.js");
 const { SaveModel } = require("./models/save.model.js");
 const { CommentModel } = require("./models/comment.model.js");
 const { BlackListTokenModel } = require("./models/blackListToken.model.js");
+const { createProxyMiddleware } = require('http-proxy-middleware');
 require("dotenv").config();
 
 const server = http.createServer(app);
@@ -209,9 +210,13 @@ app.get("/auth/github", async (req, res) => {
   res.status(201).redirect("/")
 });
 
-app.get("/welcome", (req, res) => {
-  res.render("landing");
-});
+// app.get("/welcome", (req, res) => {
+//   res.render("landing");
+// });
+app.use('/welcome', createProxyMiddleware({
+  target: 'https://uni-verse-landing.lovable.app',
+  changeOrigin: true
+}));
 
 app.use("/pic1", (req, res) => {
   let filePath = path.join(__dirname, "views/images/pic1.png");
