@@ -9,8 +9,8 @@
 <p align="center">
   <img src="https://img.shields.io/badge/status-complete-green?style=for-the-badge" alt="Status" />
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License" />
-  <img src="https://img.shields.io/github/stars/Sachin-fsd/Universe-Full-Stack-Unified-University-Ecosystem?style=for-the-badge&logo=github" alt="GitHub Stars" />
-  <img src="https://img.shields.io/github/forks/Sachin-fsd/Universe-Full-Stack-Unified-University-Ecosystem?style=for-the-badge&logo=github" alt="GitHub Forks" />
+  <img src="https://img.shields.io/github/stars/Sachin-fsd/conference?style=for-the-badge&logo=github" alt="GitHub Stars" />
+  <img src="https://img.shields.io/github/forks/Sachin-fsd/conference?style=for-the-badge&logo=github" alt="GitHub Forks" />
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
 ---
 
 <div align="center">
-  <img src="https://placehold.co/1200x600/1a1a2e/e0e0e0?text=Universe+Dashboard+Showcase" alt="Universe Platform Showcase"/>
+  <img src="https://github.com/Sachin-fsd/all-images/blob/main/conference-home.png?raw=true" alt="Universe Platform Showcase"/>
 </div>
 
 ---
@@ -43,10 +43,6 @@ Universe provides a robust set of features tailored to the unique needs of each 
 | ⚡ **Real-time Communication**| Powered by **Socket.io**, the platform features real-time notifications for announcements, new grades, and deadlines. | <img src="https://placehold.co/400x250/2d3748/ffffff?text=Real-time+Notifications" alt="Notifications"/>  |
 
 ---
-
-## 🚀 Live Demo & Screenshots
-
-**[➡️ View Live Demo](https://your-live-demo-link.com)**
 
 <details>
 <summary>📷 Click to view more screenshots</summary>
@@ -87,7 +83,7 @@ Make sure you have Node.js and npm installed on your machine.
 
 1.  **Clone the repository**
     ```sh
-    git clone [https://github.com/your-username/universe-platform.git](https://github.com/your-username/universe-platform.git)
+    git clone [https://github.com/sachin-fsd/conference.git](https://github.com/sachin-fsd/conference.git)
     ```
 2.  **Navigate to the project directory**
     ```sh
